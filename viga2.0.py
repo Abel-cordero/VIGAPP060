@@ -40,6 +40,7 @@ DIAM_CM = {
 
 class MomentApp(QMainWindow):
     def __init__(self):
+        """Initialize the main window and create the input widgets."""
         super().__init__()
         self.setWindowTitle("Parte 1 – Momentos y Diagramas (NTP E.060)")
         self.mn_corr = None
@@ -106,6 +107,7 @@ class MomentApp(QMainWindow):
         self.plot_original()
 
     def get_moments(self):
+        """Return negative and positive moment arrays from the input fields."""
         try:
             mn = np.array([float(ed.text()) for ed in self.m_neg_edits])
             mp = np.array([float(ed.text()) for ed in self.m_pos_edits])
@@ -117,6 +119,7 @@ class MomentApp(QMainWindow):
             raise
 
     def plot_original(self):
+        """Plot the original moment diagrams on the first axes."""
         mn, mp = self.get_moments()
         L = 1.0
         x_ctrl = np.array([0, 0.5, 1.0])
@@ -138,6 +141,7 @@ class MomentApp(QMainWindow):
         self.canvas.draw()
 
     def plot_corrected(self, mn_corr, mp_corr):
+        """Plot corrected moments on the second axes."""
         L = 1.0
         x_ctrl = np.array([0, 0.5, 1.0])
         xs = np.linspace(0, L, 200)
@@ -195,6 +199,20 @@ class MomentApp(QMainWindow):
         ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1), fontsize=8)
 
     def correct_moments(self, mn, mp, sys_t):
+        """Apply NTP E.060 correction rules.
+
+        Parameters
+        ----------
+        mn, mp : array-like
+            Original negative and positive moments.
+        sys_t : str
+            'dual1' or 'dual2' system type.
+
+        Returns
+        -------
+        tuple of ndarray
+            Corrected negative and positive moments.
+        """
         mn_k = np.abs(mn) * 100000
         mp_k = np.abs(mp) * 100000
         factor = 0.5 if sys_t == 'dual2' else 1/3
@@ -211,6 +229,7 @@ class MomentApp(QMainWindow):
         return mn_k / 100000, mp_k / 100000
 
     def on_calculate(self):
+        """Compute corrected moments and update both diagrams."""
         try:
             mn, mp = self.get_moments()
         except:
@@ -223,6 +242,7 @@ class MomentApp(QMainWindow):
         self.mp_corr = mp_c
 
     def on_next(self):
+        """Open the design window using the corrected moments."""
         if self.mn_corr is None or self.mp_corr is None:
             QMessageBox.warning(
                 self,
@@ -248,6 +268,7 @@ class DesignWindow(QMainWindow):
     """Ventana para la etapa de diseño de acero (solo interfaz gráfica)."""
 
     def __init__(self, mn_corr, mp_corr):
+        """Create the design window using corrected moments."""
         super().__init__()
         self.mn_corr = mn_corr
         self.mp_corr = mp_corr
@@ -437,6 +458,7 @@ class DesignWindow(QMainWindow):
         self.update_design_as()
 
     def draw_section(self):
+        """Draw a schematic beam section based on input dimensions."""
         try:
             b = float(self.edits["b (cm)"].text())
             h = float(self.edits["h (cm)"].text())
@@ -474,7 +496,7 @@ class DesignWindow(QMainWindow):
         self.update_design_as()
 
     def draw_required_distribution(self):
-        """Display required As along the beam."""
+        """Plot the required steel areas along the beam length."""
         x_ctrl = [0.0, 0.5, 1.0]
         areas_n, areas_p = self._required_areas()
 
@@ -495,6 +517,7 @@ class DesignWindow(QMainWindow):
         self.canvas_dist.draw()
 
     def update_design_as(self):
+        """Check selected reinforcement and update design area labels."""
         as_req_n, as_req_p = self._required_areas()
         as_reqs = list(as_req_n) + list(as_req_p)
         totals = []
@@ -559,6 +582,7 @@ class DesignWindow(QMainWindow):
         self.draw_design_distribution(totals)
 
     def draw_design_distribution(self, areas):
+        """Plot chosen reinforcement distribution along the beam."""
         x_ctrl = [0.0, 0.5, 1.0]
         areas_n = areas[:3]
         areas_p = areas[3:]
@@ -586,6 +610,7 @@ class DesignWindow(QMainWindow):
         )
 
     def show_memoria(self):
+        """Display a brief calculation summary in a dialog."""
         try:
             b = float(self.edits["b (cm)"].text())
             h = float(self.edits["h (cm)"].text())
