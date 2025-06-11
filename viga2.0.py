@@ -3,7 +3,7 @@ import logging
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QGridLayout, QLabel,
     QLineEdit, QPushButton, QRadioButton, QButtonGroup, QMessageBox,
-    QComboBox
+    QComboBox, QVBoxLayout, QTextEdit
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGuiApplication
@@ -398,10 +398,6 @@ class DesignWindow(QMainWindow):
 
         row_start = len(labels) + 2
 
-        layout.addWidget(QLabel("As total (cm²):"), row_start, 0)
-        self.as_total_label = QLabel("0.00")
-        layout.addWidget(self.as_total_label, row_start, 1)
-
         layout.addWidget(QLabel("As min (cm²):"), row_start, 2)
         self.as_min_label = QLabel("0.00")
         layout.addWidget(self.as_min_label, row_start, 3)
@@ -561,9 +557,6 @@ class DesignWindow(QMainWindow):
             lbl.setText(f"{total:.2f} {status}")
 
         self.as_total = sum(totals)
-        overall_ok = all(t >= r for t, r in zip(totals, as_reqs))
-        ov_status = "OK" if overall_ok else "NO OK"
-        self.as_total_label.setText(f"{self.as_total:.2f} {ov_status}")
 
         if totals:
             idx = int(np.argmax(totals))
@@ -618,22 +611,90 @@ class DesignWindow(QMainWindow):
         )
 
     def show_memoria(self):
-        """Display a brief calculation summary in a dialog."""
+        """Show a detailed calculation window."""
         try:
             b = float(self.edits["b (cm)"].text())
             h = float(self.edits["h (cm)"].text())
+            r = float(self.edits["r (cm)"].text())
+            fc = float(self.edits["f'c (kg/cm²)"].text())
+            fy = float(self.edits["fy (kg/cm²)"].text())
+            phi = float(self.edits["φ"].text())
+            de = DIAM_CM.get(self.cb_estribo.currentText(), 0)
+            db = DIAM_CM.get(self.cb_varilla.currentText(), 0)
         except ValueError:
-            b = h = 0
-        title = f"VIGA {int(b)}X{int(h)}"
-        text = (
-            "Memoria de c\u00e1lculo:\n"
-            "Mu corregido seg\u00fan NTP E.060.\n"
-            "As = Mu / (\u03c6 fy d (1-0.59\u03b2))\n"
-            "d = h - r - \u03c6_estribo - 0.5 \u03c6_barra\n"
-            "As_{min} = 0.7 \u221a(fc)/fy * b * d\n"
-            "As_{max} = p_{max} * b * d"
+            QMessageBox.warning(self, "Error", "Datos num\u00e9ricos inv\u00e1lidos")
+            return
+
+        d = h - r - de - 0.5 * db
+        beta1 = 0.85 if fc <= 280 else 0.85 - ((fc - 280) / 70) * 0.05
+        as_min, as_max = self._calc_as_limits(fc, fy, b, d)
+
+        as_n = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mn_corr]
+        as_p = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mp_corr]
+        as_n = np.clip(as_n, as_min, as_max)
+        as_p = np.clip(as_p, as_min, as_max)
+
+        lines = [
+            "DATOS INGRESADOS:",
+            f"b = {b} cm",
+            f"h = {h} cm",
+            f"r = {r} cm",
+            f"f'c = {fc} kg/cm²",
+            f"fy = {fy} kg/cm²",
+            f"φ = {phi}",
+            f"ϕ estribo = {de} cm",
+            f"ϕ varilla = {db} cm",
+            "",
+            "C\u00c1LCULOS:",
+            f"d = h - r - ϕ_estribo - 0.5 ϕ_barra = {d:.2f} cm",
+            f"β1 = {beta1:.3f}",
+            f"As_min = {as_min:.2f} cm²",
+            f"As_max = {as_max:.2f} cm²",
+            "",
+            "As requerido por momento:",
+            f"M1- = {as_n[0]:.2f} cm²",
+            f"M2- = {as_n[1]:.2f} cm²",
+            f"M3- = {as_n[2]:.2f} cm²",
+            f"M1+ = {as_p[0]:.2f} cm²",
+            f"M2+ = {as_p[1]:.2f} cm²",
+            f"M3+ = {as_p[2]:.2f} cm²",
+        ]
+
+        title = f"DISE\u00d1O DE VIGA {int(b)}X{int(h)}"
+        text = "\n".join(lines)
+        self.mem_win = MemoriaWindow(title, text)
+        self.mem_win.show()
+
+
+class MemoriaWindow(QMainWindow):
+    """Window showing detailed calculation memory."""
+
+    def __init__(self, title, text):
+        super().__init__()
+        self.setWindowTitle(title)
+        self.resize(700, 900)
+
+        central = QWidget()
+        self.setCentralWidget(central)
+        layout = QVBoxLayout(central)
+
+        self.text = QTextEdit()
+        self.text.setReadOnly(True)
+        self.text.setText(text)
+        layout.addWidget(self.text)
+
+        self.btn_capture = QPushButton("Capturar Memoria")
+        self.btn_capture.clicked.connect(self._capture)
+        layout.addWidget(self.btn_capture)
+
+    def _capture(self):
+        pix = self.centralWidget().grab()
+        QGuiApplication.clipboard().setPixmap(pix)
+        QMessageBox.information(
+            self,
+            "Captura",
+            "Memoria copiada al portapapeles.\nUsa Ctrl+V para pegar.",
         )
-        QMessageBox.information(self, title, text)
 
 
 
