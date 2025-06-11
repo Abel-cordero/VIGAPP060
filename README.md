@@ -189,3 +189,7 @@ Todo el código reside en `viga2.0.py`. A modo de referencia rápida se listan l
 
 Esta organización modular facilita la comunicación y coordinación dentro del equipo, ya que cada función se asocia a una tarea específica del flujo de trabajo.
 
+## Licencia
+
+Este proyecto se distribuye bajo los términos de la [Licencia MIT](LICENSE).
+
