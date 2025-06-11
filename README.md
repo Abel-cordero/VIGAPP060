@@ -128,10 +128,10 @@ Ventana 2: Visualización de viga con aceros → Selección de varillas → Resu
 ## Instalación de dependencias
 
 1. Se recomienda crear un entorno virtual con `venv` o herramienta similar.
-2. Instalar las bibliotecas necesarias:
+2. Instalar las bibliotecas necesarias a partir del archivo `requirements.txt`:
 
    ```bash
-   pip install PyQt5 matplotlib numpy scipy mplcursors
+   pip install -r requirements.txt
    ```
 
    Para funciones opcionales de captura o exportación a Word se pueden agregar
