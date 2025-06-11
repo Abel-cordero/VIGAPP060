@@ -606,7 +606,10 @@ class DesignWindow(QMainWindow):
         self.canvas_dist.draw()
 
     def _capture_design(self):
-        pix = self.centralWidget().grab()
+        rect = self.centralWidget().rect()
+        bottom = self.btn_capture.geometry().top()
+        rect.setHeight(bottom)
+        pix = self.centralWidget().grab(rect)
         QGuiApplication.clipboard().setPixmap(pix)
         QMessageBox.information(
             self,
