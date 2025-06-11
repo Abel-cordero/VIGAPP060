@@ -480,15 +480,15 @@ class DesignWindow(QMainWindow):
         self.ax_sec.annotate('', xy=(0, -5), xytext=(b, -5), arrowprops=dict(arrowstyle='<->'))
         self.ax_sec.text(b / 2, -6, 'b', ha='center', va='top')
 
-        self.ax_sec.annotate('', xy=(-5, 0), xytext=(-5, h),
+        # Cota de peralte pegada a la viga
+        self.ax_sec.annotate('', xy=(-5, h), xytext=(-5, y_d),
                              arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(-6, h / 2, 'h', ha='right', va='center', rotation=90)
+        self.ax_sec.text(-6, (h + y_d) / 2, 'd', ha='right', va='center', rotation=90)
 
-        # desplazamos la cota de d hacia la izquierda para no superponerla con h
-        self.ax_sec.annotate('', xy=(-12, h), xytext=(-12, y_d),
+        # Cota de altura total hacia la izquierda
+        self.ax_sec.annotate('', xy=(-12, 0), xytext=(-12, h),
                              arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(-13, (h + y_d) / 2, 'd', ha='right', va='center',
-                         rotation=90)
+        self.ax_sec.text(-13, h / 2, 'h', ha='right', va='center', rotation=90)
 
         self.ax_sec.set_xlim(-15, b + 10)
         self.ax_sec.set_ylim(-10, h + 10)
@@ -568,11 +568,6 @@ class DesignWindow(QMainWindow):
         self.as_total = sum(totals)
 
         if totals:
-            idx = int(np.argmax(totals))
-            a = n1_list[idx]
-            d1 = DIAM_CM.get(d1_list[idx], 0)
-            bq = n2_list[idx]
-            d2 = DIAM_CM.get(d2_list[idx], 0)
             try:
                 b_val = float(self.edits["b (cm)"].text())
                 r = float(self.edits["r (cm)"].text())
@@ -581,10 +576,16 @@ class DesignWindow(QMainWindow):
                 self.base_req_label.setText("-")
                 self.base_msg_label.setText("")
             else:
-                spacing = max(a + bq - 1, 0) * 2.5
-                base_req = 2 * r + 2 * de + a * d1 + bq * d2 + spacing
-                self.base_req_label.setText(f"{base_req:.1f}")
-                self.base_msg_label.setText("OK" if base_req <= b_val else "Aumentar base o capa")
+                base_reqs = []
+                for n1, d1_txt, n2, d2_txt in zip(n1_list, d1_list, n2_list, d2_list):
+                    d1 = DIAM_CM.get(d1_txt, 0)
+                    d2 = DIAM_CM.get(d2_txt, 0)
+                    spacing = max(n1 + n2 - 1, 0) * 2.5
+                    base_req = 2 * r + 2 * de + n1 * d1 + n2 * d2 + spacing
+                    base_reqs.append(base_req)
+                max_base = max(base_reqs)
+                self.base_req_label.setText(f"{max_base:.1f}")
+                self.base_msg_label.setText("OK" if max_base <= b_val else "Aumentar base o capa")
 
         self.draw_design_distribution(totals)
 
@@ -739,5 +740,6 @@ class MemoriaWindow(QMainWindow):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.ERROR)
     app = QApplication(sys.argv)
+    app.setStyle('Fusion')
     win = MomentApp()
     sys.exit(app.exec_())
