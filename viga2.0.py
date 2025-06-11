@@ -1,4 +1,5 @@
 import sys
+import logging
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QGridLayout, QLabel,
     QLineEdit, QPushButton, QRadioButton, QButtonGroup, QMessageBox,
@@ -213,7 +214,10 @@ class MomentApp(QMainWindow):
     def on_calculate(self):
         try:
             mn, mp = self.get_moments()
-        except:
+        except ValueError:
+            return
+        except Exception:
+            logging.exception("Unexpected error while obtaining moments")
             return
         sys_t = 'dual2' if self.rb_dual2.isChecked() else 'dual1'
         mn_c, mp_c = self.correct_moments(mn, mp, sys_t)
@@ -605,6 +609,7 @@ class DesignWindow(QMainWindow):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.ERROR)
     app = QApplication(sys.argv)
     win = MomentApp()
     sys.exit(app.exec_())
