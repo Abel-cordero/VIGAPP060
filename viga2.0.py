@@ -278,6 +278,7 @@ class DesignWindow(QMainWindow):
         self.mp_corr = mp_corr
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
+        self.resize(700, 900)
 
     def _calc_as_req(self, Mu, fc, b, d, fy, phi):
         """Calculate required steel area for a single moment."""
