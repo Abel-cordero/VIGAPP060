@@ -480,13 +480,17 @@ class DesignWindow(QMainWindow):
         self.ax_sec.annotate('', xy=(0, -5), xytext=(b, -5), arrowprops=dict(arrowstyle='<->'))
         self.ax_sec.text(b / 2, -6, 'b', ha='center', va='top')
 
-        self.ax_sec.annotate('', xy=(-5, 0), xytext=(-5, h), arrowprops=dict(arrowstyle='<->'))
+        self.ax_sec.annotate('', xy=(-5, 0), xytext=(-5, h),
+                             arrowprops=dict(arrowstyle='<->'))
         self.ax_sec.text(-6, h / 2, 'h', ha='right', va='center', rotation=90)
 
-        self.ax_sec.annotate('', xy=(-2, h), xytext=(-2, y_d), arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(-3, (h + y_d) / 2, 'd', ha='right', va='center', rotation=90)
+        # desplazamos la cota de d hacia la izquierda para no superponerla con h
+        self.ax_sec.annotate('', xy=(-12, h), xytext=(-12, y_d),
+                             arrowprops=dict(arrowstyle='<->'))
+        self.ax_sec.text(-13, (h + y_d) / 2, 'd', ha='right', va='center',
+                         rotation=90)
 
-        self.ax_sec.set_xlim(-10, b + 10)
+        self.ax_sec.set_xlim(-15, b + 10)
         self.ax_sec.set_ylim(-10, h + 10)
         self.ax_sec.axis('off')
         self.canvas_sec.draw()
@@ -629,10 +633,10 @@ class DesignWindow(QMainWindow):
         beta1 = 0.85 if fc <= 280 else 0.85 - ((fc - 280) / 70) * 0.05
         as_min, as_max = self._calc_as_limits(fc, fy, b, d)
 
-        as_n = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mn_corr]
-        as_p = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mp_corr]
-        as_n = np.clip(as_n, as_min, as_max)
-        as_p = np.clip(as_p, as_min, as_max)
+        as_n_raw = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mn_corr]
+        as_p_raw = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mp_corr]
+        as_n = np.clip(as_n_raw, as_min, as_max)
+        as_p = np.clip(as_p_raw, as_min, as_max)
 
         lines = [
             "DATOS INGRESADOS:",
@@ -646,19 +650,41 @@ class DesignWindow(QMainWindow):
             f"ϕ varilla = {db} cm",
             "",
             "C\u00c1LCULOS:",
-            f"d = h - r - ϕ_estribo - 0.5 ϕ_barra = {d:.2f} cm",
+            f"d = h - r - ϕ_estribo - 0.5 ϕ_barra = {h} - {r} - {de} - 0.5*{db} = {d:.2f} cm",
             f"β1 = {beta1:.3f}",
-            f"As_min = {as_min:.2f} cm²",
-            f"As_max = {as_max:.2f} cm²",
+            f"As_min = 0.7*√fc/fy*b*d = 0.7*√{fc}/{fy}*{b}*{d:.2f} = {as_min:.2f} cm²",
+            f"As_max = 0.75*(0.85*fc*β1/fy)*(6000/(6000+fy))*b*d = {as_max:.2f} cm²",
             "",
-            "As requerido por momento:",
-            f"M1- = {as_n[0]:.2f} cm²",
-            f"M2- = {as_n[1]:.2f} cm²",
-            f"M3- = {as_n[2]:.2f} cm²",
-            f"M1+ = {as_p[0]:.2f} cm²",
-            f"M2+ = {as_p[1]:.2f} cm²",
-            f"M3+ = {as_p[2]:.2f} cm²",
+            "F\u00d3RMULA GENERAL PARA As:",
+            "As = 1.7*fc*b*d/(2*fy) - 0.5*√((2.89*(fc*b*d)^2)/fy^2 - (6.8*fc*b*Mu)/(φ*fy^2))",
+            "",
+            "DETALLE DEL C\u00c1LCULO DE As POR MOMENTO:",
         ]
+
+        labels = ["M1-", "M2-", "M3-", "M1+", "M2+", "M3+"]
+        for lab, m, a_raw, a in zip(
+            labels,
+            list(self.mn_corr) + list(self.mp_corr),
+            as_n_raw + as_p_raw,
+            as_n.tolist() + as_p.tolist(),
+        ):
+            Mu_kgcm = abs(m) * 100000
+            term = 1.7 * fc * b * d / (2 * fy)
+            root = (
+                (2.89 * (fc * b * d) ** 2) / (fy ** 2)
+                - (6.8 * fc * b * Mu_kgcm) / (phi * (fy ** 2))
+            )
+            root = max(root, 0)
+            calc = term - 0.5 * np.sqrt(root)
+            lines.extend(
+                [
+                    f"{lab}: Mu = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm",
+                    f"    As_calc = {term:.2f} - 0.5*√({root:.2f}) = {calc:.2f} cm²",
+                    f"    As_req = {a:.2f} cm²",
+                ]
+            )
+
+        lines.append("")
 
         title = f"DISE\u00d1O DE VIGA {int(b)}X{int(h)}"
         text = "\n".join(lines)
@@ -680,6 +706,8 @@ class MemoriaWindow(QMainWindow):
 
         self.text = QTextEdit()
         self.text.setReadOnly(True)
+        self.text.setFontFamily("Courier New")
+        self.text.setFontPointSize(10)
         self.text.setText(text)
         layout.addWidget(self.text)
 
