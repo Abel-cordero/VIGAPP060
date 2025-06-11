@@ -38,6 +38,9 @@ DIAM_CM = {
     '1"': 2.54,
 }
 
+# Conversión de TN·m a kg·cm
+KGCM_PER_TNM = 100000
+
 class MomentApp(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -195,8 +198,8 @@ class MomentApp(QMainWindow):
         ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1), fontsize=8)
 
     def correct_moments(self, mn, mp, sys_t):
-        mn_k = np.abs(mn) * 100000
-        mp_k = np.abs(mp) * 100000
+        mn_k = np.abs(mn) * KGCM_PER_TNM
+        mp_k = np.abs(mp) * KGCM_PER_TNM
         factor = 0.5 if sys_t == 'dual2' else 1/3
 
         for j in (0, 2):  # extremos
@@ -208,7 +211,7 @@ class MomentApp(QMainWindow):
         mn_k[1] = max(mn_k[1], floor)
         mp_k[1] = max(mp_k[1], floor)
 
-        return mn_k / 100000, mp_k / 100000
+        return mn_k / KGCM_PER_TNM, mp_k / KGCM_PER_TNM
 
     def on_calculate(self):
         try:
@@ -256,7 +259,7 @@ class DesignWindow(QMainWindow):
 
     def _calc_as_req(self, Mu, fc, b, d, fy, phi):
         """Calculate required steel area for a single moment."""
-        Mu_kgcm = abs(Mu) * 100000  # convert TN·m to kg·cm
+        Mu_kgcm = abs(Mu) * KGCM_PER_TNM  # convert TN·m to kg·cm
         term = 1.7 * fc * b * d / (2 * fy)
         root = (2.89 * (fc * b * d) ** 2) / (fy ** 2) - (
             6.8 * fc * b * Mu_kgcm
