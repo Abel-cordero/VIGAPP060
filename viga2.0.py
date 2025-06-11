@@ -47,7 +47,7 @@ class MomentApp(QMainWindow):
         self.mn_corr = None
         self.mp_corr = None
         self._build_ui()
-        self.resize(1200, 800)
+        self.resize(700, 900)
         self.show()
 
     def _build_ui(self):
