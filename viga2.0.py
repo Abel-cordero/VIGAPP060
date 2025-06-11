@@ -509,12 +509,17 @@ class DesignWindow(QMainWindow):
         self.ax_req.plot([0, 1], [0, 0], 'k-', lw=6)
 
         y_off = 0.1 * max(np.max(areas_n), np.max(areas_p), 1)
-        for x, a_n in zip(x_ctrl, areas_n):
+        label_off = 0.2 * y_off
+        for idx, (x, a_n) in enumerate(zip(x_ctrl, areas_n), 1):
             self.ax_req.text(x, y_off, f"As- {a_n:.2f}", ha='center',
                              va='bottom', color='b', fontsize=9)
-        for x, a_p in zip(x_ctrl, areas_p):
+            self.ax_req.text(x, label_off, f"M{idx}-", ha='center',
+                             va='bottom', fontsize=7)
+        for idx, (x, a_p) in enumerate(zip(x_ctrl, areas_p), 1):
             self.ax_req.text(x, -y_off, f"As+ {a_p:.2f}", ha='center',
                              va='top', color='r', fontsize=9)
+            self.ax_req.text(x, -label_off, f"M{idx}+", ha='center',
+                             va='top', fontsize=7)
 
         self.ax_req.set_xlim(-0.05, 1.05)
         self.ax_req.set_ylim(-2*y_off, 2*y_off)
@@ -591,12 +596,17 @@ class DesignWindow(QMainWindow):
         self.ax_des.clear()
         self.ax_des.plot([0, 1], [0, 0], 'k-', lw=6)
         y_off = 0.1 * max(max(areas_n, default=0), max(areas_p, default=0), 1)
-        for x, a in zip(x_ctrl, areas_n):
+        label_off = 0.2 * y_off
+        for idx, (x, a) in enumerate(zip(x_ctrl, areas_n), 1):
             self.ax_des.text(x, y_off, f"Asd- {a:.2f}", ha='center',
                              va='bottom', color='g', fontsize=9)
-        for x, a in zip(x_ctrl, areas_p):
+            self.ax_des.text(x, label_off, f"M{idx}-", ha='center',
+                             va='bottom', fontsize=7)
+        for idx, (x, a) in enumerate(zip(x_ctrl, areas_p), 1):
             self.ax_des.text(x, -y_off, f"Asd+ {a:.2f}", ha='center',
                              va='top', color='g', fontsize=9)
+            self.ax_des.text(x, -label_off, f"M{idx}+", ha='center',
+                             va='top', fontsize=7)
         self.ax_des.set_xlim(-0.05, 1.05)
         self.ax_des.set_ylim(-2 * y_off, 2 * y_off)
         self.ax_des.axis('off')
