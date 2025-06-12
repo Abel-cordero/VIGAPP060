@@ -24,14 +24,6 @@ DIAM_CM = {
     '1"': 2.54,
 }
 
-# Colors used to differentiate bar layers (1–4)
-LAYER_COLORS = {
-    1: "red",
-    2: "blue",
-    3: "yellow",
-    4: "green",
-}
-
 # Simple color mapping per diameter key using primary colors
 COLOR_MAP = {
     key: ["red", "blue", "yellow"][i % 3]
@@ -100,16 +92,18 @@ class View3DWindow(QMainWindow):
         for idx, (ax, neg, pos, tit) in enumerate(zip(self.ax_sections, neg_layers, pos_layers, titles)):
             self._plot_section(ax, neg, pos, b, h, r, de, tit, idx)
 
-        used_layers = set()
+        used_diams = set()
         for layers in neg_layers + pos_layers:
-            used_layers.update(layers.keys())
+            for bars in layers.values():
+                for _, key in bars:
+                    used_diams.add(key)
         handles = [
-            plt.Line2D([], [], marker='o', color=LAYER_COLORS.get(l, 'black'),
-                       linestyle='', label=f'Capa {l}')
-            for l in sorted(used_layers)
+            plt.Line2D([], [], marker='o', color=COLOR_MAP.get(d, 'black'),
+                       linestyle='', label=f"\u00f8{d}")
+            for d in sorted(used_diams)
         ]
         if handles:
-            self.fig.legend(handles=handles, title="Capas",
+            self.fig.legend(handles=handles, title="Di\u00e1metros",
                             loc='lower center', ncol=len(handles))
 
         self.canvas.draw()
@@ -271,7 +265,7 @@ class View3DWindow(QMainWindow):
                 circ = plt.Circle(
                     (x, y),
                     d / 2,
-                    facecolor=LAYER_COLORS.get(layer, COLOR_MAP.get(key, 'b')),
+                    facecolor=COLOR_MAP.get(key, 'b'),
                     edgecolor="k",
                     lw=0.6,
                     alpha=0.6,
@@ -292,7 +286,7 @@ class View3DWindow(QMainWindow):
                 circ = plt.Circle(
                     (x, y),
                     d / 2,
-                    facecolor=LAYER_COLORS.get(layer, COLOR_MAP.get(key, 'r')),
+                    facecolor=COLOR_MAP.get(key, 'r'),
                     edgecolor="k",
                     lw=0.6,
                     alpha=0.6,
@@ -303,8 +297,8 @@ class View3DWindow(QMainWindow):
                 ax.add_patch(circ)
             start += len(bars)
 
-        neg_desc = " + ".join(orders_neg)
-        pos_desc = " + ".join(orders_pos)
+        neg_desc = self._bars_summary(neg_layers)
+        pos_desc = self._bars_summary(pos_layers)
         ax.text(b / 2, h + 1.5, f"{title}- ({neg_desc})", ha="center", va="bottom", fontsize=8, color="b")
         ax.text(b / 2, -1.5, f"{title}+ ({pos_desc})", ha="center", va="top", fontsize=8, color="r")
         ax.set_xlim(-5, b + 5)
