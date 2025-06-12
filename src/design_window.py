@@ -220,10 +220,22 @@ class DesignWindow(QMainWindow):
             cell.addWidget(QLabel(label), alignment=Qt.AlignCenter)
 
             header = QGridLayout()
-            header.addWidget(QLabel("cant."), 0, 0, alignment=Qt.AlignCenter)
-            header.addWidget(QLabel("\u00f8 varill"), 0, 1, alignment=Qt.AlignCenter)
-            header.addWidget(QLabel("n\u00b0 capas"), 0, 2, alignment=Qt.AlignCenter)
-            header.addWidget(QLabel("capas"), 0, 3, 1, 2, alignment=Qt.AlignCenter)
+
+            lbl_qty = QLabel("cant.")
+            lbl_qty.setAlignment(Qt.AlignCenter)
+            header.addWidget(lbl_qty, 0, 0)
+
+            lbl_dia = QLabel("\u00f8 varill")
+            lbl_dia.setAlignment(Qt.AlignCenter)
+            header.addWidget(lbl_dia, 0, 1)
+
+            lbl_ncapas = QLabel("n\u00b0 capas")
+            lbl_ncapas.setAlignment(Qt.AlignCenter)
+            header.addWidget(lbl_ncapas, 0, 2)
+
+            lbl_capas = QLabel("capas")
+            lbl_capas.setAlignment(Qt.AlignCenter)
+            header.addWidget(lbl_capas, 0, 3, 1, 2)
             cell.addLayout(header)
 
             rows_layout = QVBoxLayout()
@@ -404,31 +416,39 @@ class DesignWindow(QMainWindow):
 
         for idx, rows in enumerate(self.rebar_rows):
             total = 0
-            n_tot = 0
-            dia_max = 0
+            layers = {
+                1: {"n": 0, "sum_d": 0.0},
+                2: {"n": 0, "sum_d": 0.0},
+            }
+
             for row in rows:
                 try:
-                    n = int(row['qty'].currentText()) if row['qty'].currentText() else 0
+                    n = int(row["qty"].currentText()) if row["qty"].currentText() else 0
                 except ValueError:
                     n = 0
-                dia_key = row['dia'].currentText()
+                dia_key = row["dia"].currentText()
                 dia = DIAM_CM.get(dia_key, 0)
                 area = BAR_DATA.get(dia_key, 0)
-                layer = int(row['capa'].currentText()) if row['capa'].currentText() else 1
+                layer = int(row["capa"].currentText()) if row["capa"].currentText() else 1
                 total += n * area
-                n_tot += n
-                dia_max = max(dia_max, dia)
+                if layer in layers:
+                    layers[layer]["n"] += n
+                    layers[layer]["sum_d"] += n * dia
             totals.append(total)
 
             try:
                 r = float(self.edits["r (cm)"].text())
                 de = DIAM_CM.get(self.cb_estribo.currentText(), 0)
-                b_val = float(self.edits["b (cm)"].text())
             except ValueError:
                 continue
-            spacing = max(n_tot - 1, 0) * 2.5
-            base_req = 2 * r + 2 * de + n_tot * dia_max + spacing
-            base_reqs.append(base_req)
+
+            b_layers = []
+            for ldata in layers.values():
+                n_l = ldata["n"]
+                spacing = max(n_l - 1, 0) * 2.5
+                b_l = 2 * r + 2 * de + spacing + ldata["sum_d"]
+                b_layers.append(b_l)
+            base_reqs.append(max(b_layers))
 
         self.as_total = sum(totals)
 
