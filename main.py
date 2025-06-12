@@ -3,6 +3,7 @@
 import logging
 import os
 import sys
+import ctypes
 from PyQt5.QtWidgets import QApplication, QMessageBox, QInputDialog
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
@@ -13,6 +14,8 @@ from src.activation import check_activation, activate
 def main():
     """Start the Qt application."""
     logging.basicConfig(level=logging.ERROR)
+    if os.name == "nt":
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("VigApp060")
     app = QApplication(sys.argv)
     icon_path = os.path.join(
         os.path.dirname(__file__), "icon", "vigapp060.png")
