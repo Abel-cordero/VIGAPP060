@@ -43,11 +43,15 @@ class View3DWindow(QMainWindow):
     def __init__(self, design):
         super().__init__()
         self.design = design
+        self.neg_orders = []
+        self.pos_orders = []
+        self.selected = None
         self.setWindowTitle("Desarrollo de Refuerzo")
         self.resize(800, 400)
 
         rng = np.random.default_rng(0)
-        self.texture = rng.normal(loc=0.7, scale=0.1, size=(64, 64))
+        # Slightly darker texture for a gray concrete look
+        self.texture = rng.normal(loc=0.6, scale=0.1, size=(64, 64))
         self.texture = np.clip(self.texture, 0, 1)
 
         central = QWidget()
@@ -67,6 +71,9 @@ class View3DWindow(QMainWindow):
         self.canvas = FigureCanvas(self.fig)
         layout.addWidget(self.canvas)
 
+        self.canvas.mpl_connect("pick_event", self._on_pick)
+        self.canvas.mpl_connect("key_press_event", self._on_key)
+
         self.draw_views()
 
     def draw_views(self):
@@ -83,10 +90,14 @@ class View3DWindow(QMainWindow):
 
         neg_layers = [self._collect_bars(i) for i in range(3)]
         pos_layers = [self._collect_bars(i + 3) for i in range(3)]
+        if not self.neg_orders:
+            self.neg_orders = [self._collect_order(i) for i in range(3)]
+        if not self.pos_orders:
+            self.pos_orders = [self._collect_order(i + 3) for i in range(3)]
         titles = ["M1", "M2", "M3"]
 
-        for ax, neg, pos, tit in zip(self.ax_sections, neg_layers, pos_layers, titles):
-            self._plot_section(ax, neg, pos, b, h, r, de, tit)
+        for idx, (ax, neg, pos, tit) in enumerate(zip(self.ax_sections, neg_layers, pos_layers, titles)):
+            self._plot_section(ax, neg, pos, b, h, r, de, tit, idx)
 
         used_diams = set()
         for layers in neg_layers + pos_layers:
@@ -119,6 +130,20 @@ class View3DWindow(QMainWindow):
             layer = int(row["capa"].currentText()) if row["capa"].currentText() else 1
             layers.setdefault(layer, []).extend([(dia, dia_key)] * qty)
         return layers
+
+    def _collect_order(self, idx):
+        """Return a list of diameter keys respecting input order."""
+        order = []
+        for row in self.design.rebar_rows[idx]:
+            try:
+                qty = int(row["qty"].currentText()) if row["qty"].currentText() else 0
+            except ValueError:
+                qty = 0
+            dia_key = row["dia"].currentText()
+            if qty <= 0 or dia_key not in DIAM_CM:
+                continue
+            order.extend([dia_key] * qty)
+        return order
 
     def _distribute_x(self, n, b, r, de, db1=0.0):
         """Return X coordinates for ``n`` bars within the clear width."""
@@ -162,12 +187,12 @@ class View3DWindow(QMainWindow):
         parts = [f"{n}\u00f8{key}" for key, n in counts.items()]
         return " + ".join(parts)
 
-    def _plot_section(self, ax, neg_layers, pos_layers, b, h, r, de, title):
+    def _plot_section(self, ax, neg_layers, pos_layers, b, h, r, de, title, idx):
         ax.clear()
         ax.set_aspect("equal")
         if self.texture is not None:
-            ax.imshow(self.texture, extent=(0, b, 0, h), origin='lower', alpha=0.3)
-        rect_bg = patches.Rectangle((0, 0), b, h, facecolor='lightgray', alpha=0.2)
+            ax.imshow(self.texture, extent=(0, b, 0, h), origin='lower', alpha=0.2)
+        rect_bg = patches.Rectangle((0, 0), b, h, facecolor='gray', alpha=0.15)
         ax.add_patch(rect_bg)
         ax.plot([0, b, b, 0, 0], [0, 0, h, h, 0], "k-")
         ax.plot([r, b - r, b - r, r, r], [r, r, h - r, h - r, r], color="0.6", ls="--", lw=0.8)
@@ -179,31 +204,75 @@ class View3DWindow(QMainWindow):
             lw=0.8,
         )
 
-        db1_pos = max((d for d, _ in pos_layers.get(1, [])), default=0)
-        db1_neg = max((d for d, _ in neg_layers.get(1, [])), default=0)
-        db1 = max(db1_pos, db1_neg)
+        orders_pos = self.pos_orders[idx] if idx < len(self.pos_orders) else []
+        orders_neg = self.neg_orders[idx] if idx < len(self.neg_orders) else []
 
-        bot_pos = self._layer_positions_bottom(pos_layers, r, de)
-        for layer, bars in pos_layers.items():
-            xs = self._distribute_x(len(bars), b, r, de, db1)
-            y = bot_pos.get(layer, r + de)
-            for x, (d, key) in zip(xs, bars):
-                circ = plt.Circle((x, y), d / 2, color=COLOR_MAP.get(key, "b"), fill=False)
-                ax.add_patch(circ)
+        xs_pos = self._distribute_x(len(orders_pos), b, r, de)
+        for j, (x, key) in enumerate(zip(xs_pos, orders_pos)):
+            d = DIAM_CM.get(key, 0)
+            circ = plt.Circle(
+                (x, r + de + d / 2),
+                d / 2,
+                color=COLOR_MAP.get(key, "b"),
+                alpha=0.5,
+                fill=True,
+                picker=True,
+            )
+            circ.set_gid(f"pos-{idx}-{j}")
+            ax.add_patch(circ)
 
-        top_pos = self._layer_positions_top(neg_layers, r, de, h)
-        for layer, bars in neg_layers.items():
-            xs = self._distribute_x(len(bars), b, r, de, db1)
-            y = top_pos.get(layer, h - r - de)
-            for x, (d, key) in zip(xs, bars):
-                circ = plt.Circle((x, y), d / 2, color=COLOR_MAP.get(key, "r"), fill=False)
-                ax.add_patch(circ)
-        # Place labels above and below the section instead of using the title
-        neg_desc = self._bars_summary(neg_layers)
-        pos_desc = self._bars_summary(pos_layers)
+        xs_neg = self._distribute_x(len(orders_neg), b, r, de)
+        for j, (x, key) in enumerate(zip(xs_neg, orders_neg)):
+            d = DIAM_CM.get(key, 0)
+            circ = plt.Circle(
+                (x, h - (r + de + d / 2)),
+                d / 2,
+                color=COLOR_MAP.get(key, "r"),
+                alpha=0.5,
+                fill=True,
+                picker=True,
+            )
+            circ.set_gid(f"neg-{idx}-{j}")
+            ax.add_patch(circ)
+
+        neg_desc = " + ".join(orders_neg)
+        pos_desc = " + ".join(orders_pos)
         ax.text(b / 2, h + 1.5, f"{title}- ({neg_desc})", ha="center", va="bottom", fontsize=8, color="b")
         ax.text(b / 2, -1.5, f"{title}+ ({pos_desc})", ha="center", va="top", fontsize=8, color="r")
         ax.set_xlim(-5, b + 5)
         ax.set_ylim(-5, h + 5)
         ax.axis("off")
+
+    # ------------------------------------------------------------------
+    def _on_pick(self, event):
+        artist = event.artist
+        gid = getattr(artist, "get_gid", lambda: None)()
+        if not gid:
+            return
+        try:
+            sign, sec, idx = gid.split("-")
+            sec = int(sec)
+            idx = int(idx)
+        except ValueError:
+            return
+        self.selected = (sign, sec, idx)
+
+    def _on_key(self, event):
+        if not self.selected:
+            return
+        sign, sec, idx = self.selected
+        if sign == "pos":
+            lst = self.pos_orders[sec]
+        else:
+            lst = self.neg_orders[sec]
+
+        if event.key == "left" and idx > 0:
+            lst[idx - 1], lst[idx] = lst[idx], lst[idx - 1]
+            self.selected = (sign, sec, idx - 1)
+        elif event.key == "right" and idx < len(lst) - 1:
+            lst[idx + 1], lst[idx] = lst[idx], lst[idx + 1]
+            self.selected = (sign, sec, idx + 1)
+        else:
+            return
+        self.draw_views()
 
