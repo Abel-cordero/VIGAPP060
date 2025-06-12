@@ -156,8 +156,8 @@ class View3DWindow(QMainWindow):
             lw=0.8,
         )
 
-        extra = 3.0 if title == "M3" else 0.0
-        bot_pos = self._layer_positions_bottom(pos_layers, r, de, offset=extra)
+        # Do not offset layers so the first layer depth is displayed correctly
+        bot_pos = self._layer_positions_bottom(pos_layers, r, de)
         for layer, bars in pos_layers.items():
             xs = self._distribute_x(len(bars), b, r, de)
             y = bot_pos.get(layer, r + de)
@@ -165,17 +165,20 @@ class View3DWindow(QMainWindow):
                 circ = plt.Circle((x, y), d / 2, color=COLOR_MAP.get(key, "b"), fill=False)
                 ax.add_patch(circ)
 
-        top_pos = self._layer_positions_top(neg_layers, r, de, h, offset=extra)
+        top_pos = self._layer_positions_top(neg_layers, r, de, h)
         for layer, bars in neg_layers.items():
             xs = self._distribute_x(len(bars), b, r, de)
             y = top_pos.get(layer, h - r - de)
             for x, (d, key) in zip(xs, bars):
                 circ = plt.Circle((x, y), d / 2, color=COLOR_MAP.get(key, "r"), fill=False)
                 ax.add_patch(circ)
+        # Place labels above and below the section instead of using the title
         neg_desc = self._bars_summary(neg_layers)
         pos_desc = self._bars_summary(pos_layers)
-        label = f"{title}- ({neg_desc})\n{title}+ ({pos_desc})"
-        ax.set_title(label, fontsize=9)
+        ax.text(b / 2, h + 1.5, f"{title}- ({neg_desc})", ha="center", va="bottom", fontsize=8, color="b")
+        ax.text(b / 2, -1.5, f"{title}+ ({pos_desc})", ha="center", va="top", fontsize=8, color="r")
+        ax.set_xlim(-5, b + 5)
+        ax.set_ylim(-5, h + 5)
         ax.axis("off")
 
     def _plot_3d(self, b, h, r, de, L, pos_layers, neg_layers):
