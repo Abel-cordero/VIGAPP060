@@ -3,7 +3,7 @@ import logging
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QGridLayout, QLabel,
     QLineEdit, QPushButton, QRadioButton, QButtonGroup, QMessageBox,
-    QComboBox, QVBoxLayout, QTextEdit
+    QComboBox, QVBoxLayout, QHBoxLayout, QTextEdit
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGuiApplication
@@ -120,7 +120,7 @@ class MomentApp(QMainWindow):
             raise
 
     def plot_original(self):
-        """Plot the original moment diagrams on the first axes."""
+        """Plot the original moment diagrams on the first axes with shading."""
         mn, mp = self.get_moments()
         L = 1.0
         x_ctrl = np.array([0, 0.5, 1.0])
@@ -134,15 +134,21 @@ class MomentApp(QMainWindow):
             ax.plot([0, L], [0, 0], 'k-', lw=6)
 
         self.ax1.plot(xs, csn(xs), 'b-', label='Neg original')
+        self.ax1.fill_between(xs, csn(xs), 0, color='b', alpha=0.2)
         self.ax1.plot(xs, csp(xs), 'r-', label='Pos original')
+        self.ax1.fill_between(xs, csp(xs), 0, color='r', alpha=0.2)
         self._draw_verticals(self.ax1, csn, csp, x_ctrl)
         self._label_points(self.ax1, csn, csp, x_ctrl)
         self._enable_hover(self.ax1, csn, csp)
         self._format(self.ax1)
         self.canvas.draw()
 
-    def plot_corrected(self, mn_corr, mp_corr):
-        """Plot corrected moments on the second axes."""
+    def plot_corrected(self, mn_corr, mp_corr, mn_orig=None, mp_orig=None):
+        """Plot corrected moments on the second axes.
+
+        If original moments are provided they are shown with lower alpha
+        for comparison.
+        """
         L = 1.0
         x_ctrl = np.array([0, 0.5, 1.0])
         xs = np.linspace(0, L, 200)
@@ -151,8 +157,19 @@ class MomentApp(QMainWindow):
 
         self.ax2.clear()
         self.ax2.plot([0, L], [0, 0], 'k-', lw=6)
-        self.ax2.plot(xs, csn(xs), 'b--', label='Neg corregido')
-        self.ax2.plot(xs, csp(xs), 'r--', label='Pos corregido')
+
+        if mn_orig is not None and mp_orig is not None:
+            csn_o = CubicSpline(x_ctrl, mn_orig)
+            csp_o = CubicSpline(x_ctrl, -mp_orig)
+            self.ax2.plot(xs, csn_o(xs), 'b-', alpha=0.3, label='Neg original')
+            self.ax2.fill_between(xs, csn_o(xs), 0, color='b', alpha=0.1)
+            self.ax2.plot(xs, csp_o(xs), 'r-', alpha=0.3, label='Pos original')
+            self.ax2.fill_between(xs, csp_o(xs), 0, color='r', alpha=0.1)
+
+        self.ax2.plot(xs, csn(xs), 'b--', lw=2, label='Neg corregido')
+        self.ax2.fill_between(xs, csn(xs), 0, color='b', alpha=0.4)
+        self.ax2.plot(xs, csp(xs), 'r--', lw=2, label='Pos corregido')
+        self.ax2.fill_between(xs, csp(xs), 0, color='r', alpha=0.4)
         self._draw_verticals(self.ax2, csn, csp, x_ctrl, dashed=True)
         self._label_points(self.ax2, csn, csp, x_ctrl)
         self._enable_hover(self.ax2, csn, csp)
@@ -241,7 +258,7 @@ class MomentApp(QMainWindow):
         sys_t = 'dual2' if self.rb_dual2.isChecked() else 'dual1'
         mn_c, mp_c = self.correct_moments(mn, mp, sys_t)
         self.plot_original()
-        self.plot_corrected(mn_c, mp_c)
+        self.plot_corrected(mn_c, mp_c, mn_orig=mn, mp_orig=mp)
         self.mn_corr = mn_c
         self.mp_corr = mp_c
 
@@ -260,12 +277,7 @@ class MomentApp(QMainWindow):
     def _capture_diagram(self):
         pix = self.canvas.grab()
         QGuiApplication.clipboard().setPixmap(pix)
-        QMessageBox.information(
-            self,
-            "Captura",
-            "Diagramas copiados al portapapeles.\n"
-            "Usa Ctrl+V para pegar."
-        )
+        # Silenciar cualquier mensaje de confirmación
 
 
 class DesignWindow(QMainWindow):
@@ -303,7 +315,7 @@ class DesignWindow(QMainWindow):
         except ValueError:
             return np.zeros(3), np.zeros(3)
 
-        d = h - r - de - 0.5 * db
+        d = self.calc_effective_depth()
 
         self.as_min, self.as_max = self._calc_as_limits(fc, fy, b, d)
         self.as_min_label.setText(f"{self.as_min:.2f}")
@@ -324,6 +336,69 @@ class DesignWindow(QMainWindow):
         as_max = pmax * b * d
         return as_min, as_max
 
+    def calc_effective_depth(self):
+        """Return effective depth based on detected layers."""
+        try:
+            h = float(self.edits["h (cm)"].text())
+            r = float(self.edits["r (cm)"].text())
+            de = DIAM_CM.get(self.cb_estribo.currentText(), 0)
+            db = DIAM_CM.get(self.cb_varilla.currentText(), 0)
+        except ValueError:
+            return 0.0
+
+        layer_areas = {1: 0, 2: 0, 3: 0, 4: 0}
+        layer_diams = {1: db, 2: db, 3: db, 4: db}
+        for rows in self.rebar_rows:
+            for row in rows:
+                try:
+                    n = int(row['qty'].currentText()) if row['qty'].currentText() else 0
+                except ValueError:
+                    n = 0
+                dia_key = row['dia'].currentText()
+                area = n * BAR_DATA.get(dia_key, 0)
+                layer = int(row['capa'].currentText()) if row['capa'].currentText() else 1
+                if area > layer_areas[layer]:
+                    layer_areas[layer] = area
+                    layer_diams[layer] = DIAM_CM.get(dia_key, 0)
+
+        max_layer = 1
+        for l in range(1, 5):
+            if layer_areas[l] > 0:
+                max_layer = max(max_layer, l)
+        self.layer_combo.setCurrentText(str(max_layer))
+
+        db1 = layer_diams[1]
+        d1 = h - r - de - 0.5 * db1
+        if max_layer == 1:
+            d = d1
+        else:
+            db2 = layer_diams[2]
+            d2 = h - r - de - db1 - 2.5 - 0.5 * db2
+            if max_layer == 2:
+                As1 = layer_areas[1]
+                As2 = layer_areas[2]
+                d = (d1 * As1 + d2 * As2) / (As1 + As2) if (As1 + As2) else d1
+            else:
+                db3 = layer_diams[3]
+                d3 = h - r - de - db1 - 2.5 - db2 - 2.5 - 0.5 * db3
+                if max_layer == 3:
+                    As1 = layer_areas[1]
+                    As2 = layer_areas[2]
+                    As3 = layer_areas[3]
+                    s = As1 + As2 + As3
+                    d = (d1*As1 + d2*As2 + d3*As3) / s if s else d1
+                else:
+                    d4 = d3 - 3
+                    As1 = layer_areas[1]
+                    As2 = layer_areas[2]
+                    As3 = layer_areas[3]
+                    As4 = layer_areas[4]
+                    s = As1 + As2 + As3 + As4
+                    d = (d1*As1 + d2*As2 + d3*As3 + d4*As4) / s if s else d1
+
+        self.edits["d (cm)"].setText(f"{d:.2f}")
+        return d
+
     def _build_ui(self):
         central = QWidget()
         self.setCentralWidget(central)
@@ -333,6 +408,7 @@ class DesignWindow(QMainWindow):
             ("b (cm)", "30"),
             ("h (cm)", "50"),
             ("r (cm)", "4"),
+            ("d (cm)", ""),
             ("f'c (kg/cm²)", "210"),
             ("fy (kg/cm²)", "4200"),
             ("φ", "0.9"),
@@ -344,6 +420,8 @@ class DesignWindow(QMainWindow):
             ed = QLineEdit(val)
             ed.setAlignment(Qt.AlignRight)
             ed.setFixedWidth(70)
+            if text == "d (cm)":
+                ed.setReadOnly(True)
             layout.addWidget(ed, row, 1)
             self.edits[text] = ed
 
@@ -360,13 +438,13 @@ class DesignWindow(QMainWindow):
         self.cb_varilla.setCurrentText('5/8"')
         layout.addWidget(self.cb_varilla, len(labels)+1, 1)
 
-        qty_opts = [""] + [str(i) for i in range(1, 11)]
-        dia_opts = ["", "1/2\"", "5/8\"", "3/4\"", "1\""]
+        layout.addWidget(QLabel("N\u00b0 capas"), len(labels)+2, 0)
+        self.layer_combo = QComboBox(); self.layer_combo.addItems(["1", "2", "3", "4"])
+        layout.addWidget(self.layer_combo, len(labels)+2, 1)
 
         pos_labels = ["M1-", "M2-", "M3-", "M1+", "M2+", "M3+"]
-        self.qty1_boxes, self.dia1_boxes = [], []
-        self.qty2_boxes, self.dia2_boxes = [], []
-        self.as_total_labels = []
+        self.rebar_rows = [[] for _ in range(6)]
+        self.rows_layouts = []
 
         self.combo_grid = QGridLayout()
 
@@ -374,29 +452,24 @@ class DesignWindow(QMainWindow):
             row = 0 if i < 3 else 1
             col = i % 3
 
-            q1 = QComboBox(); q1.addItems(qty_opts); q1.setCurrentIndex(0)
-            d1 = QComboBox(); d1.addItems(dia_opts); d1.setCurrentIndex(0)
-            q2 = QComboBox(); q2.addItems(qty_opts); q2.setCurrentIndex(0)
-            d2 = QComboBox(); d2.addItems(dia_opts); d2.setCurrentIndex(0)
-            lbl = QLabel("0.00")
+            cell = QVBoxLayout()
+            cell.addWidget(QLabel(label), alignment=Qt.AlignCenter)
 
-            cell = QGridLayout()
-            cell.addWidget(QLabel(label), 0, 0, 1, 2, alignment=Qt.AlignCenter)
-            cell.addWidget(q1, 1, 0)
-            cell.addWidget(d1, 1, 1)
-            cell.addWidget(q2, 2, 0)
-            cell.addWidget(d2, 2, 1)
-            cell.addWidget(lbl, 3, 0, 1, 2, alignment=Qt.AlignCenter)
+            header = QGridLayout()
+            header.addWidget(QLabel("Cant."), 0, 0)
+            header.addWidget(QLabel("\u03c6"), 0, 1)
+            header.addWidget(QLabel("Capa"), 0, 2)
+            cell.addLayout(header)
+
+            rows_layout = QVBoxLayout()
+            cell.addLayout(rows_layout)
+            self.rows_layouts.append(rows_layout)
 
             self.combo_grid.addLayout(cell, row, col)
 
-            self.qty1_boxes.append(q1)
-            self.dia1_boxes.append(d1)
-            self.qty2_boxes.append(q2)
-            self.dia2_boxes.append(d2)
-            self.as_total_labels.append(lbl)
+            self._add_rebar_row(i)
 
-        row_start = len(labels) + 2
+        row_start = len(labels) + 3
 
         layout.addWidget(QLabel("As min (cm²):"), row_start, 2)
         self.as_min_label = QLabel("0.00")
@@ -414,7 +487,7 @@ class DesignWindow(QMainWindow):
 
         self.fig_sec, self.ax_sec = plt.subplots(figsize=(3, 3), constrained_layout=True)
         self.canvas_sec = FigureCanvas(self.fig_sec)
-        layout.addWidget(self.canvas_sec, 0, 2, len(labels) + 2, 4)
+        layout.addWidget(self.canvas_sec, 0, 2, len(labels) + 3, 4)
 
         self.fig_dist, (self.ax_req, self.ax_des) = plt.subplots(
             2, 1, figsize=(5, 6), constrained_layout=True
@@ -441,14 +514,10 @@ class DesignWindow(QMainWindow):
         for cb in (self.cb_estribo, self.cb_varilla):
             cb.currentIndexChanged.connect(self._redraw)
 
-        for widgets in (
-            self.qty1_boxes,
-            self.dia1_boxes,
-            self.qty2_boxes,
-            self.dia2_boxes,
-        ):
-            for w in widgets:
-                w.currentIndexChanged.connect(self.update_design_as)
+        for rows in self.rebar_rows:
+            for row in rows:
+                for box in (row['qty'], row['dia'], row['capa']):
+                    box.currentIndexChanged.connect(self.update_design_as)
 
         self.as_min = 0.0
         self.as_max = 0.0
@@ -456,6 +525,38 @@ class DesignWindow(QMainWindow):
 
         self.draw_section()
         self.draw_required_distribution()
+        self.update_design_as()
+
+    def _add_rebar_row(self, idx):
+        if len(self.rebar_rows[idx]) >= 4:
+            return
+        qty_opts = [""] + [str(i) for i in range(1, 11)]
+        dia_opts = ["", "1/2\"", "5/8\"", "3/4\"", "1\""]
+        row_layout = QHBoxLayout()
+        q = QComboBox(); q.addItems(qty_opts); q.setCurrentIndex(0)
+        d = QComboBox(); d.addItems(dia_opts); d.setCurrentIndex(0)
+        c = QComboBox(); c.addItems(["1", "2", "3", "4"])
+        btn_add = QPushButton("+")
+        btn_rem = QPushButton("-")
+        row_layout.addWidget(q)
+        row_layout.addWidget(d)
+        row_layout.addWidget(c)
+        row_layout.addWidget(btn_add)
+        row_layout.addWidget(btn_rem)
+        widget = QWidget()
+        widget.setLayout(row_layout)
+        self.rows_layouts[idx].addWidget(widget)
+        self.rebar_rows[idx].append({"qty": q, "dia": d, "capa": c, "widget": widget})
+        btn_add.clicked.connect(lambda: self._add_rebar_row(idx))
+        btn_rem.clicked.connect(lambda: self._remove_rebar_row(idx, widget))
+        for box in (q, d, c):
+            box.currentIndexChanged.connect(self.update_design_as)
+
+    def _remove_rebar_row(self, idx, widget):
+        if len(self.rebar_rows[idx]) <= 1:
+            return
+        widget.setParent(None)
+        self.rebar_rows[idx] = [r for r in self.rebar_rows[idx] if r["widget"] != widget]
         self.update_design_as()
 
     def draw_section(self):
@@ -469,8 +570,8 @@ class DesignWindow(QMainWindow):
         except ValueError:
             return
 
-        d = h - r - de - 0.5 * db
-        y_d = r + de + 0.5 * db
+        d = self.calc_effective_depth()
+        y_d = h - d
 
         self.ax_sec.clear()
         self.ax_sec.set_aspect('equal')
@@ -531,65 +632,53 @@ class DesignWindow(QMainWindow):
         as_req_n, as_req_p = self._required_areas()
         as_reqs = list(as_req_n) + list(as_req_p)
         totals = []
-        n1_list = []
-        d1_list = []
-        n2_list = []
-        d2_list = []
-        for q1, d1, q2, d2, lbl in zip(
-            self.qty1_boxes,
-            self.dia1_boxes,
-            self.qty2_boxes,
-            self.dia2_boxes,
-            self.as_total_labels,
-        ):
-            try:
-                n1 = int(q1.currentText()) if q1.currentText() else 0
-            except ValueError:
-                n1 = 0
-            a1 = BAR_DATA.get(d1.currentText(), 0)
+        base_reqs = []
 
-            try:
-                n2 = int(q2.currentText()) if q2.currentText() else 0
-            except ValueError:
-                n2 = 0
-            a2 = BAR_DATA.get(d2.currentText(), 0)
-
-            total = n1 * a1 + n2 * a2
+        for idx, rows in enumerate(self.rebar_rows):
+            total = 0
+            n_tot = 0
+            dia_max = 0
+            for row in rows:
+                try:
+                    n = int(row['qty'].currentText()) if row['qty'].currentText() else 0
+                except ValueError:
+                    n = 0
+                dia_key = row['dia'].currentText()
+                dia = DIAM_CM.get(dia_key, 0)
+                area = BAR_DATA.get(dia_key, 0)
+                layer = int(row['capa'].currentText()) if row['capa'].currentText() else 1
+                total += n * area
+                n_tot += n
+                dia_max = max(dia_max, dia)
             totals.append(total)
-            n1_list.append(n1)
-            d1_list.append(d1.currentText())
-            n2_list.append(n2)
-            d2_list.append(d2.currentText())
 
-        for lbl, total, req in zip(self.as_total_labels, totals, as_reqs):
-            status = "OK" if total >= req else "NO OK"
-            lbl.setText(f"{total:.2f} {status}")
+            try:
+                r = float(self.edits["r (cm)"].text())
+                de = DIAM_CM.get(self.cb_estribo.currentText(), 0)
+                b_val = float(self.edits["b (cm)"].text())
+            except ValueError:
+                continue
+            spacing = max(n_tot - 1, 0) * 2.5
+            base_req = 2 * r + 2 * de + n_tot * dia_max + spacing
+            base_reqs.append(base_req)
 
         self.as_total = sum(totals)
 
-        if totals:
+        if base_reqs:
+            max_base = max(base_reqs)
+            self.base_req_label.setText(f"{max_base:.1f}")
             try:
                 b_val = float(self.edits["b (cm)"].text())
-                r = float(self.edits["r (cm)"].text())
-                de = DIAM_CM.get(self.cb_estribo.currentText(), 0)
             except ValueError:
-                self.base_req_label.setText("-")
                 self.base_msg_label.setText("")
             else:
-                base_reqs = []
-                for n1, d1_txt, n2, d2_txt in zip(n1_list, d1_list, n2_list, d2_list):
-                    d1 = DIAM_CM.get(d1_txt, 0)
-                    d2 = DIAM_CM.get(d2_txt, 0)
-                    spacing = max(n1 + n2 - 1, 0) * 2.5
-                    base_req = 2 * r + 2 * de + n1 * d1 + n2 * d2 + spacing
-                    base_reqs.append(base_req)
-                max_base = max(base_reqs)
-                self.base_req_label.setText(f"{max_base:.1f}")
                 self.base_msg_label.setText("OK" if max_base <= b_val else "Aumentar base o capa")
 
-        self.draw_design_distribution(totals)
+        statuses = ["OK" if t >= req else "NO OK" for t, req in zip(totals, as_reqs)]
 
-    def draw_design_distribution(self, areas):
+        self.draw_design_distribution(totals, statuses)
+
+    def draw_design_distribution(self, areas, statuses):
         """Plot chosen reinforcement distribution along the beam."""
         x_ctrl = [0.0, 0.5, 1.0]
         areas_n = areas[:3]
@@ -598,13 +687,13 @@ class DesignWindow(QMainWindow):
         self.ax_des.plot([0, 1], [0, 0], 'k-', lw=6)
         y_off = 0.1 * max(max(areas_n, default=0), max(areas_p, default=0), 1)
         label_off = 0.2 * y_off
-        for idx, (x, a) in enumerate(zip(x_ctrl, areas_n), 1):
-            self.ax_des.text(x, y_off, f"Asd- {a:.2f}", ha='center',
+        for idx, (x, a, st) in enumerate(zip(x_ctrl, areas_n, statuses[:3]), 1):
+            self.ax_des.text(x, y_off, f"Asd- {a:.2f} {st}", ha='center',
                              va='bottom', color='g', fontsize=9)
             self.ax_des.text(x, label_off, f"M{idx}-", ha='center',
                              va='bottom', fontsize=7)
-        for idx, (x, a) in enumerate(zip(x_ctrl, areas_p), 1):
-            self.ax_des.text(x, -y_off, f"Asd+ {a:.2f}", ha='center',
+        for idx, (x, a, st) in enumerate(zip(x_ctrl, areas_p, statuses[3:]), 1):
+            self.ax_des.text(x, -y_off, f"Asd+ {a:.2f} {st}", ha='center',
                              va='top', color='g', fontsize=9)
             self.ax_des.text(x, -label_off, f"M{idx}+", ha='center',
                              va='top', fontsize=7)
@@ -614,16 +703,9 @@ class DesignWindow(QMainWindow):
         self.canvas_dist.draw()
 
     def _capture_design(self):
-        rect = self.centralWidget().rect()
-        bottom = self.btn_capture.geometry().top()
-        rect.setHeight(bottom)
-        pix = self.centralWidget().grab(rect)
+        pix = self.grab()
         QGuiApplication.clipboard().setPixmap(pix)
-        QMessageBox.information(
-            self,
-            "Captura",
-            "Dise\u00f1o copiado al portapapeles.\nUsa Ctrl+V para pegar.",
-        )
+        # Sin mensaje emergente
 
     def show_memoria(self):
         """Show a detailed calculation window."""
@@ -729,11 +811,7 @@ class MemoriaWindow(QMainWindow):
     def _capture(self):
         pix = self.centralWidget().grab()
         QGuiApplication.clipboard().setPixmap(pix)
-        QMessageBox.information(
-            self,
-            "Captura",
-            "Memoria copiada al portapapeles.\nUsa Ctrl+V para pegar.",
-        )
+        # Sin mensaje emergente
 
 
 
