@@ -87,6 +87,12 @@ class MomentApp(QMainWindow):
         layout.addWidget(self.rb_dual1, 2, 1)
         layout.addWidget(self.rb_dual2, 2, 2)
 
+        layout.addWidget(QLabel("L (m):"), 2, 3)
+        self.length_edit = QLineEdit("1.0")
+        self.length_edit.setAlignment(Qt.AlignRight)
+        self.length_edit.setFixedWidth(60)
+        layout.addWidget(self.length_edit, 2, 4)
+
         # ── Botones ────────────────────────────────────
         btn_calc    = QPushButton("Calcular Diagramas")
         btn_next    = QPushButton("Ir a Diseño de Acero")
@@ -94,16 +100,16 @@ class MomentApp(QMainWindow):
         btn_calc.clicked.connect(self.on_calculate)
         btn_next.clicked.connect(self.on_next)
         btn_capture.clicked.connect(self._capture_diagram)
-        layout.addWidget(btn_calc,    2, 3)
-        layout.addWidget(btn_next,    2, 4)
-        layout.addWidget(btn_capture, 2, 5)
+        layout.addWidget(btn_calc,    3, 3)
+        layout.addWidget(btn_next,    3, 4)
+        layout.addWidget(btn_capture, 3, 5)
 
         # ── Canvas con diagramas ─────────────────────────
         self.fig, (self.ax1, self.ax2) = plt.subplots(
             2, 1, figsize=(6, 5), constrained_layout=True
         )
         self.canvas = FigureCanvas(self.fig)
-        layout.addWidget(self.canvas, 3, 0, 1, 6)
+        layout.addWidget(self.canvas, 4, 0, 1, 6)
 
         self.plot_original()
 
@@ -119,10 +125,18 @@ class MomentApp(QMainWindow):
             )
             raise
 
+    def get_length(self):
+        """Return beam length from the input field."""
+        try:
+            return float(self.length_edit.text())
+        except ValueError:
+            QMessageBox.warning(self, "Error", "Longitud L inválida")
+            return 1.0
+
     def plot_original(self):
         """Plot the original moment diagrams on the first axes with shading."""
         mn, mp = self.get_moments()
-        L = 1.0
+        L = self.get_length()
         x_ctrl = np.array([0, 0.5, 1.0])
         xs = np.linspace(0, L, 200)
         csn = CubicSpline(x_ctrl, mn)
@@ -151,7 +165,7 @@ class MomentApp(QMainWindow):
         If original moments are provided they are shown with lower alpha
         for comparison.
         """
-        L = 1.0
+        L = self.get_length()
         x_ctrl = np.array([0, 0.5, 1.0])
         xs = np.linspace(0, L, 200)
         csn = CubicSpline(x_ctrl, mn_corr)
@@ -281,7 +295,7 @@ class MomentApp(QMainWindow):
                 "Primero calcule los momentos corregidos",
             )
             return
-        self.design_win = DesignWindow(self.mn_corr, self.mp_corr)
+        self.design_win = DesignWindow(self.mn_corr, self.mp_corr, self.get_length())
         self.design_win.show()
 
     def _capture_diagram(self):
@@ -295,11 +309,12 @@ class MomentApp(QMainWindow):
 class DesignWindow(QMainWindow):
     """Ventana para la etapa de diseño de acero (solo interfaz gráfica)."""
 
-    def __init__(self, mn_corr, mp_corr):
+    def __init__(self, mn_corr, mp_corr, length):
         """Create the design window using corrected moments."""
         super().__init__()
         self.mn_corr = mn_corr
         self.mp_corr = mp_corr
+        self.length = length
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
         self.resize(700, 900)
@@ -469,8 +484,8 @@ class DesignWindow(QMainWindow):
 
             header = QGridLayout()
             header.addWidget(QLabel("Cant. varill."), 0, 0)
-            header.addWidget(QLabel("\u03c6 varill."), 0, 1)
-            header.addWidget(QLabel("Capa"), 0, 2)
+            header.addWidget(QLabel("\u00f8 varill."), 0, 1)
+            header.addWidget(QLabel("N\u00b0 capa"), 0, 2)
             cell.addLayout(header)
 
             rows_layout = QVBoxLayout()
@@ -511,15 +526,18 @@ class DesignWindow(QMainWindow):
 
         self.btn_capture = QPushButton("Capturar Diseño")
         self.btn_memoria = QPushButton("Memoria de Cálculo")
+        self.btn_view3d = QPushButton("Vista 3D")
         self.btn_salir = QPushButton("Salir")
 
         self.btn_capture.clicked.connect(self._capture_design)
         self.btn_memoria.clicked.connect(self.show_memoria)
+        self.btn_view3d.clicked.connect(self.show_view3d)
         self.btn_salir.clicked.connect(QApplication.instance().quit)
 
         layout.addWidget(self.btn_capture, row_start + 4, 0, 1, 2)
         layout.addWidget(self.btn_memoria, row_start + 4, 2, 1, 2)
-        layout.addWidget(self.btn_salir,   row_start + 4, 4, 1, 2)
+        layout.addWidget(self.btn_view3d, row_start + 4, 4, 1, 2)
+        layout.addWidget(self.btn_salir,   row_start + 4, 6, 1, 2)
 
         for ed in self.edits.values():
             ed.editingFinished.connect(self._redraw)
@@ -545,9 +563,9 @@ class DesignWindow(QMainWindow):
         qty_opts = [""] + [str(i) for i in range(1, 11)]
         dia_opts = ["", "1/2\"", "5/8\"", "3/4\"", "1\""]
         row_layout = QHBoxLayout()
-        q = QComboBox(); q.addItems(qty_opts); q.setCurrentIndex(0)
-        d = QComboBox(); d.addItems(dia_opts); d.setCurrentIndex(0)
-        c = QComboBox(); c.addItems(["1", "2", "3", "4"])
+        q = QComboBox(); q.addItems(qty_opts); q.setCurrentText("2")
+        d = QComboBox(); d.addItems(dia_opts); d.setCurrentText('1/2"')
+        c = QComboBox(); c.addItems(["1", "2", "3", "4"]); c.setCurrentText("1")
         btn_add = QPushButton("+")
         btn_rem = QPushButton("-")
         row_layout.addWidget(q)
@@ -721,6 +739,11 @@ class DesignWindow(QMainWindow):
         QGuiApplication.clipboard().setPixmap(pix)
         # Sin mensaje emergente
 
+    def show_view3d(self):
+        """Open a simple 2D/3D visualization window."""
+        self.view3d = View3DWindow(self)
+        self.view3d.show()
+
     def show_memoria(self):
         """Show a detailed calculation window."""
         try:
@@ -797,6 +820,71 @@ class DesignWindow(QMainWindow):
         text = "\n".join(lines)
         self.mem_win = MemoriaWindow(title, text)
         self.mem_win.show()
+
+
+class View3DWindow(QMainWindow):
+    """Simple window showing 2D and 3D views of the beam."""
+
+    def __init__(self, design):
+        super().__init__()
+        self.design = design
+        self.setWindowTitle("Vista 3D")
+
+        central = QWidget()
+        self.setCentralWidget(central)
+        layout = QVBoxLayout(central)
+
+        self.fig = plt.figure(figsize=(8, 4), constrained_layout=True)
+        self.ax2d = self.fig.add_subplot(1, 2, 1)
+        self.ax3d = self.fig.add_subplot(1, 2, 2, projection='3d')
+        self.canvas = FigureCanvas(self.fig)
+        layout.addWidget(self.canvas)
+
+        self.draw_views()
+
+    def draw_views(self):
+        try:
+            b = float(self.design.edits["b (cm)"].text())
+            h = float(self.design.edits["h (cm)"].text())
+            r = float(self.design.edits["r (cm)"].text())
+            L = float(self.design.length) * 100
+        except ValueError:
+            return
+        de = DIAM_CM.get(self.design.cb_estribo.currentText(), 0)
+        db = DIAM_CM.get(self.design.cb_varilla.currentText(), 0)
+
+        self.ax2d.clear()
+        self.ax2d.set_aspect('equal')
+        self.ax2d.plot([0, b, b, 0, 0], [0, 0, h, h, 0], 'k-')
+        yb = r + de + db / 2
+        xs = [r + de + db / 2, b - r - de - db / 2]
+        for x in xs:
+            circ = plt.Circle((x, yb), db / 2, color='b', fill=False)
+            self.ax2d.add_patch(circ)
+        self.ax2d.axis('off')
+
+        self.ax3d.clear()
+        verts = [
+            (0, 0, 0), (b, 0, 0), (b, h, 0), (0, h, 0),
+            (0, 0, 0), (0, 0, L), (b, 0, L), (b, 0, 0),
+            (b, h, 0), (b, h, L), (b, 0, L), (0, 0, L),
+            (0, h, L), (0, h, 0)
+        ]
+        for i in range(0, len(verts)-1, 2):
+            x1, y1, z1 = verts[i]
+            x2, y2, z2 = verts[i+1]
+            self.ax3d.plot([x1, x2], [y1, y2], [z1, z2], 'k-', lw=0.5)
+
+        for x in xs:
+            self.ax3d.plot([x, x], [yb, yb], [0, L], 'r-', lw=2)
+
+        self.ax3d.set_xlim(0, b)
+        self.ax3d.set_ylim(0, h)
+        self.ax3d.set_zlim(0, L)
+        self.ax3d.set_box_aspect((b, h, L))
+        self.ax3d.axis('off')
+
+        self.canvas.draw()
 
 
 class MemoriaWindow(QMainWindow):
