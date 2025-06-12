@@ -14,6 +14,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import CubicSpline
 import mplcursors
+from src.beam_model import BeamModel
+from src.section2d_view import Section2DView
 
 # Tabla de diámetros y áreas (cm²) para barras de refuerzo
 BAR_DATA = {
@@ -307,6 +309,7 @@ class DesignWindow(QMainWindow):
         self.mn_corr = mn_corr
         self.mp_corr = mp_corr
         self.length = length
+        self.model = BeamModel()
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
         self.resize(700, 900)
@@ -424,6 +427,7 @@ class DesignWindow(QMainWindow):
             self.length = float(self.edits["L (m)"].text())
         except ValueError:
             self.length = 1.0
+        self.model.length = self.length * 100
 
     def _build_ui(self):
         central = QWidget()
@@ -515,9 +519,8 @@ class DesignWindow(QMainWindow):
         self.base_msg_label = QLabel("")
         layout.addWidget(self.base_msg_label, row_start + 1, 4, 1, 2)
 
-        self.fig_sec, self.ax_sec = plt.subplots(figsize=(3, 3), constrained_layout=True)
-        self.canvas_sec = FigureCanvas(self.fig_sec)
-        layout.addWidget(self.canvas_sec, 0, 2, len(labels) + 3, 4)
+        self.section_view = Section2DView()
+        layout.addWidget(self.section_view, 0, 2, len(labels) + 3, 4)
 
         self.fig_dist, (self.ax_req, self.ax_des) = plt.subplots(
             2, 1, figsize=(5, 6), constrained_layout=True
@@ -603,31 +606,14 @@ class DesignWindow(QMainWindow):
         except ValueError:
             return
 
-        d = self.calc_effective_depth()
-        y_d = h - d
+        self.model.set_geometry(b, h, self.length * 100, r + de)
+        self.model.clear_rebars()
+        diam = DIAM_CM.get(self.cb_varilla.currentText(), 0)
+        self.model.add_rebar(self.model.cover, self.model.cover, diam)
+        self.model.add_rebar(b - self.model.cover, self.model.cover, diam)
 
-        self.ax_sec.clear()
-        self.ax_sec.set_aspect('equal')
-        self.ax_sec.plot([0, b, b, 0, 0], [0, 0, h, h, 0], 'k-')
-        self.ax_sec.plot([r, b - r, b - r, r, r], [r, r, h - r, h - r, r], 'r--')
-
-        self.ax_sec.annotate('', xy=(0, -5), xytext=(b, -5), arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(b / 2, -6, 'b', ha='center', va='top')
-
-        # Cota de peralte pegada a la viga
-        self.ax_sec.annotate('', xy=(-5, h), xytext=(-5, y_d),
-                             arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(-6, (h + y_d) / 2, 'd', ha='right', va='center', rotation=90)
-
-        # Cota de altura total hacia la izquierda
-        self.ax_sec.annotate('', xy=(-12, 0), xytext=(-12, h),
-                             arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(-13, h / 2, 'h', ha='right', va='center', rotation=90)
-
-        self.ax_sec.set_xlim(-15, b + 10)
-        self.ax_sec.set_ylim(-10, h + 10)
-        self.ax_sec.axis('off')
-        self.canvas_sec.draw()
+        self.section_view.set_section(b, h, r + de)
+        self.section_view.set_bars([diam, diam])
 
     def _redraw(self):
         self.draw_section()

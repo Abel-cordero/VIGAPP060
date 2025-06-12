@@ -181,15 +181,8 @@ Los diagramas y resultados se actualizan cada vez que se modifican los datos o s
 
 El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.py`. La interfaz original de `viga2.0.py` continúa disponible como base. Los módulos principales son:
 
-- **`beam_model.py`** — clase `BeamModel` con geometría, barras y lógicas de cálculo.
-- **`rebar_editor_widget.py`** — panel lateral para editar rápidamente las barras.
-- **`length_input_toolbar.py`** — barra de entrada de longitud con atajos `L/3`, `L/2` y `L`.
-- **`section2d_view.py`** — vista 2D interactiva que permite arrastrar varillas.
-- **`section3d_view.py`** — ventana 3D para inspeccionar la viga y su refuerzo.
-- **`bar_properties_panel.py`** — diálogo con propiedades detalladas de cada barra.
-- **`project_manager.py`** — gestor opcional para guardar o cargar configuraciones.
-- **`summary_view.py`** — previsualización dinámica de la memoria de cálculo.
-- **`utils.py`** — constantes y funciones auxiliares.
+- **`beam_model.py`** — clase `BeamModel` con geometría y barras.
+- **`section2d_view.py`** — vista 2D básica para inspeccionar la sección.
 
 A modo de referencia rápida se listan las clases existentes en `viga2.0.py`:
 

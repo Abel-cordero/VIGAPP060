@@ -26,6 +26,8 @@ class Section2DView(QWidget):
         self.h = 50
         self.cover = 4
 
+    # ------------------------------------------------------------------
+
     def set_section(self, b, h, cover):
         """Configure dimensions of the drawn section."""
         self.b = b
@@ -68,3 +70,19 @@ class Section2DView(QWidget):
         idx = points[0].data()
         self._selected = idx
         self.barraSeleccionada.emit(idx)
+
+    # Qt event handlers ------------------------------------------------
+    def mouseMoveEvent(self, event):
+        if self._selected is None:
+            super().mouseMoveEvent(event)
+            return
+        vb = self.plot.getViewBox()
+        pos = vb.mapSceneToView(event.pos())
+        x = max(self.cover, min(pos.x(), self.b - self.cover))
+        item = self._bars[self._selected]
+        item.setData([x], [self.cover])
+        self.barraMovida.emit(self._selected, x)
+
+    def mouseReleaseEvent(self, event):
+        self._selected = None
+        super().mouseReleaseEvent(event)
