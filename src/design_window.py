@@ -590,10 +590,18 @@ class DesignWindow(QMainWindow):
             )
             root = max(root, 0)
             calc = term - 0.5 * np.sqrt(root)
+            term_html = frac(f"1.7×{fc}×{b}×{d:.2f}", f"2×{fy}")
+            root_html = (
+                f"{frac(f'2.89×({fc}×{b}×{d:.2f})²', f'{fy}²')} - "
+                f"{frac(f'6.8×{fc}×{b}×{Mu_kgcm:.0f}', f'{phi}×{fy}²')}"
+            )
             lines.extend(
                 [
                     f"<p><b>{lab}</b>: M<sub>u</sub> = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm</p>",
-                    f"<p class='eq'>A<sub>s,calc</sub> = {term:.2f} - 0.5√({root:.2f}) = <b>{calc:.2f} cm²</b></p>",
+                    (
+                        "<p class='eq'>A<sub>s,calc</sub> = "
+                        f"{term_html} - 0.5 √({root_html}) = {term:.2f} - 0.5√({root:.2f}) = <b>{calc:.2f} cm²</b></p>"
+                    ),
                     f"<p>A<sub>s,req</sub> = <b>{a:.2f} cm²</b></p>",
                 ]
             )
