@@ -179,7 +179,7 @@ Los diagramas y resultados se actualizan cada vez que se modifican los datos o s
 
 ## Estructura del código y objetos principales
 
-El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.py`. La interfaz original de `viga2.0.py` continúa disponible como base. Los módulos principales son:
+El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.py`. El archivo `viga2.0.py` solo actúa como envoltorio y las clases principales residen en `src/`. Los módulos principales son:
 
 - **`beam_model.py`** — clase `BeamModel` con geometría, barras y lógicas de cálculo.
 - **`rebar_editor_widget.py`** — panel lateral para editar rápidamente las barras.
@@ -191,9 +191,11 @@ El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.
 - **`summary_view.py`** — previsualización dinámica de la memoria de cálculo.
 - **`utils.py`** — constantes y funciones auxiliares.
 
-A modo de referencia rápida se listan las clases existentes en `viga2.0.py`:
+- **`moment_app.py`** — ventana de ingreso de momentos y corrección.
+- **`design_window.py`** — etapa de diseño, incluye `View3DWindow` y `MemoriaWindow`.
+Las clases principales son:
 
-- **`MomentApp`**
+- **`MomentApp`** (en `src/moment_app.py`)
   - `get_moments()` — lee los valores ingresados.
   - `get_length()` — obtiene la longitud de la viga.
   - `correct_moments(mn, mp, sys_t)` — aplica la corrección de la NTP E.060.
@@ -201,7 +203,7 @@ A modo de referencia rápida se listan las clases existentes en `viga2.0.py`:
   - `on_calculate()` — coordina lectura y graficado.
   - `on_next()` — abre la ventana de diseño con los momentos corregidos.
 
-- **`DesignWindow`**
+- **`DesignWindow`** (en `src/design_window.py`)
   - `_calc_as_req()` y `_calc_as_limits()` — cálculos de acero requerido y límites.
   - `_required_areas()` — devuelve las áreas necesarias por posición.
   - `draw_section()`, `draw_required_distribution()` y `draw_design_distribution()` — funciones de representación gráfica.
