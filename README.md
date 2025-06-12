@@ -183,6 +183,7 @@ Todo el código reside en `viga2.0.py`. A modo de referencia rápida se listan l
 
 - **`MomentApp`**
   - `get_moments()` — lee los valores ingresados.
+  - `get_length()` — obtiene la longitud de la viga.
   - `correct_moments(mn, mp, sys_t)` — aplica la corrección de la NTP E.060.
   - `plot_original()` y `plot_corrected()` — generan los diagramas.
   - `on_calculate()` — coordina lectura y graficado.
@@ -194,6 +195,7 @@ Todo el código reside en `viga2.0.py`. A modo de referencia rápida se listan l
   - `draw_section()`, `draw_required_distribution()` y `draw_design_distribution()` — funciones de representación gráfica.
   - `update_design_as()` — calcula el refuerzo propuesto y verifica la base.
   - `_capture_design()` — copia la vista al portapapeles.
+  - `show_view3d()` — abre una vista 3D simplificada.
 
 Esta organización modular facilita la comunicación y coordinación dentro del equipo, ya que cada función se asocia a una tarea específica del flujo de trabajo.
 
@@ -201,17 +203,14 @@ Esta organización modular facilita la comunicación y coordinación dentro del 
 
 Consulta el archivo [DESARROLLO.md](DESARROLLO.md) para pautas sobre configuración del entorno y aportes al código.
 
-## Interfaz 3D (plan futuro)
+## Vista 3D básica
 
-Para complementar el diseño en 2D se planea una ventana opcional de
-visualización tridimensional. Esta integración permitirá manipular la
-viga y sus refuerzos de manera interactiva usando librerías como
-`PyOpenGL` o enlazando con herramientas de modelado 3D (por ejemplo
-Blender a través de su API de Python). El objetivo es que el usuario
-pueda ajustar diametros y posiciones en un entorno 3D antes de volver al
-diseño tradicional.
-
-Los detalles de implementación y dependencias se encuentran en
+Se añadió un botón **Vista 3D** en la ventana de diseño que abre una
+representación simple de la viga. Esta ventana muestra una sección 2D y
+una vista tridimensional generada con Matplotlib. La longitud de la viga
+corresponde al valor ingresado en el campo **L (m)** de la primera
+ventana. Es una funcionalidad experimental que sirve como paso previo a
+la integración más completa descrita en
 [DESARROLLO_3D.md](DESARROLLO_3D.md).
 
 ## Licencia
