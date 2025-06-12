@@ -24,12 +24,18 @@ DIAM_CM = {
     '1"': 2.54,
 }
 
-# Simple color mapping per diameter key
+# Colors used to differentiate bar layers (1–4)
+LAYER_COLORS = {
+    1: "red",
+    2: "blue",
+    3: "yellow",
+    4: "green",
+}
+
+# Simple color mapping per diameter key using primary colors
 COLOR_MAP = {
-    key: color for key, color in zip(
-        DIAM_CM.keys(),
-        list(mcolors.TABLEAU_COLORS.values())
-    )
+    key: ["red", "blue", "yellow"][i % 3]
+    for i, key in enumerate(DIAM_CM.keys())
 }
 
 # Pre-generated noise texture for concrete-like appearance
@@ -94,17 +100,16 @@ class View3DWindow(QMainWindow):
         for idx, (ax, neg, pos, tit) in enumerate(zip(self.ax_sections, neg_layers, pos_layers, titles)):
             self._plot_section(ax, neg, pos, b, h, r, de, tit, idx)
 
-        used_diams = set()
+        used_layers = set()
         for layers in neg_layers + pos_layers:
-            for bars in layers.values():
-                used_diams.update(key for _, key in bars)
+            used_layers.update(layers.keys())
         handles = [
-            plt.Line2D([], [], marker='o', color=COLOR_MAP.get(d), linestyle='',
-                       label=d)
-            for d in used_diams
+            plt.Line2D([], [], marker='o', color=LAYER_COLORS.get(l, 'black'),
+                       linestyle='', label=f'Capa {l}')
+            for l in sorted(used_layers)
         ]
         if handles:
-            self.fig.legend(handles=handles, title="Diámetros",
+            self.fig.legend(handles=handles, title="Capas",
                             loc='lower center', ncol=len(handles))
 
         self.canvas.draw()
@@ -250,37 +255,53 @@ class View3DWindow(QMainWindow):
         orders_pos = self.pos_orders[idx] if idx < len(self.pos_orders) else []
         orders_neg = self.neg_orders[idx] if idx < len(self.neg_orders) else []
 
-        xs_pos = self._distribute_x(len(orders_pos), b, r, de)
-        for j, (x, key) in enumerate(zip(xs_pos, orders_pos)):
-            d = DIAM_CM.get(key, 0)
-            circ = plt.Circle(
-                (x, r + de + d / 2),
-                d / 2,
-                facecolor=COLOR_MAP.get(key, "b"),
-                edgecolor="k",
-                lw=0.6,
-                alpha=0.6,
-                fill=True,
-                picker=True,
-            )
-            circ.set_gid(f"pos-{idx}-{j}")
-            ax.add_patch(circ)
+        pos_counts = [len(pos_layers.get(l, [])) for l in sorted(pos_layers)]
+        neg_counts = [len(neg_layers.get(l, [])) for l in sorted(neg_layers)]
 
-        xs_neg = self._distribute_x(len(orders_neg), b, r, de)
-        for j, (x, key) in enumerate(zip(xs_neg, orders_neg)):
-            d = DIAM_CM.get(key, 0)
-            circ = plt.Circle(
-                (x, h - (r + de + d / 2)),
-                d / 2,
-                facecolor=COLOR_MAP.get(key, "r"),
-                edgecolor="k",
-                lw=0.6,
-                alpha=0.6,
-                fill=True,
-                picker=True,
-            )
-            circ.set_gid(f"neg-{idx}-{j}")
-            ax.add_patch(circ)
+        pos_y = self._layer_positions_bottom(pos_layers, r, de)
+        neg_y = self._layer_positions_top(neg_layers, r, de, h)
+
+        start = 0
+        for layer in sorted(pos_layers):
+            bars = orders_pos[start:start + pos_counts.pop(0)] or [key for _, key in pos_layers[layer]]
+            xs = self._distribute_x(len(bars), b, r, de)
+            y = pos_y.get(layer, r + de)
+            for j, (x, key) in enumerate(zip(xs, bars)):
+                d = DIAM_CM.get(key, 0)
+                circ = plt.Circle(
+                    (x, y),
+                    d / 2,
+                    facecolor=LAYER_COLORS.get(layer, COLOR_MAP.get(key, 'b')),
+                    edgecolor="k",
+                    lw=0.6,
+                    alpha=0.6,
+                    fill=True,
+                    picker=True,
+                )
+                circ.set_gid(f"pos-{idx}-{start + j}")
+                ax.add_patch(circ)
+            start += len(bars)
+
+        start = 0
+        for layer in sorted(neg_layers):
+            bars = orders_neg[start:start + neg_counts.pop(0)] or [key for _, key in neg_layers[layer]]
+            xs = self._distribute_x(len(bars), b, r, de)
+            y = neg_y.get(layer, h - (r + de))
+            for j, (x, key) in enumerate(zip(xs, bars)):
+                d = DIAM_CM.get(key, 0)
+                circ = plt.Circle(
+                    (x, y),
+                    d / 2,
+                    facecolor=LAYER_COLORS.get(layer, COLOR_MAP.get(key, 'r')),
+                    edgecolor="k",
+                    lw=0.6,
+                    alpha=0.6,
+                    fill=True,
+                    picker=True,
+                )
+                circ.set_gid(f"neg-{idx}-{start + j}")
+                ax.add_patch(circ)
+            start += len(bars)
 
         neg_desc = " + ".join(orders_neg)
         pos_desc = " + ".join(orders_pos)
