@@ -14,7 +14,7 @@ Este documento reúne pautas básicas para contribuir al proyecto y mantener una
 
 ## Organización del código
 
-- El archivo principal es `viga2.0.py`. Procura mantener cada función centrada en una tarea específica.
+- El archivo principal es `main.py`. Procura mantener cada función centrada en una tarea específica.
 - Si añades módulos nuevos colócalos en una carpeta `src/` y mantenla limpia.
 - Documenta las funciones utilizando docstrings de una sola línea.
 

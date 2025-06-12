@@ -1,12 +1,21 @@
-import logging
-import sys
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QGridLayout, QLabel,
-    QLineEdit, QPushButton, QRadioButton, QButtonGroup, QMessageBox,
-    QComboBox, QVBoxLayout, QHBoxLayout, QTextEdit
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QGridLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QMessageBox,
+    QComboBox,
+    QVBoxLayout,
+    QHBoxLayout,
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGuiApplication
+
+from .view3d_window import View3DWindow
+from .memoria_window import MemoriaWindow
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import numpy as np
@@ -560,98 +569,4 @@ class DesignWindow(QMainWindow):
         text = "\n".join(lines)
         self.mem_win = MemoriaWindow(title, text)
         self.mem_win.show()
-
-
-class View3DWindow(QMainWindow):
-    """Simple window showing 2D and 3D views of the beam."""
-
-    def __init__(self, design):
-        super().__init__()
-        self.design = design
-        self.setWindowTitle("Vista 3D")
-
-        central = QWidget()
-        self.setCentralWidget(central)
-        layout = QVBoxLayout(central)
-
-        self.fig = plt.figure(figsize=(8, 4), constrained_layout=True)
-        self.ax2d = self.fig.add_subplot(1, 2, 1)
-        self.ax3d = self.fig.add_subplot(1, 2, 2, projection='3d')
-        self.canvas = FigureCanvas(self.fig)
-        layout.addWidget(self.canvas)
-
-        self.draw_views()
-
-    def draw_views(self):
-        try:
-            b = float(self.design.edits["b (cm)"].text())
-            h = float(self.design.edits["h (cm)"].text())
-            r = float(self.design.edits["r (cm)"].text())
-            L = float(self.design.edits["L (m)"].text()) * 100
-        except ValueError:
-            return
-        de = DIAM_CM.get(self.design.cb_estribo.currentText(), 0)
-        db = DIAM_CM.get(self.design.cb_varilla.currentText(), 0)
-
-        self.ax2d.clear()
-        self.ax2d.set_aspect('equal')
-        self.ax2d.plot([0, b, b, 0, 0], [0, 0, h, h, 0], 'k-')
-        yb = r + de + db / 2
-        xs = [r + de + db / 2, b - r - de - db / 2]
-        for x in xs:
-            circ = plt.Circle((x, yb), db / 2, color='b', fill=False)
-            self.ax2d.add_patch(circ)
-        self.ax2d.axis('off')
-
-        self.ax3d.clear()
-        verts = [
-            (0, 0, 0), (b, 0, 0), (b, h, 0), (0, h, 0),
-            (0, 0, 0), (0, 0, L), (b, 0, L), (b, 0, 0),
-            (b, h, 0), (b, h, L), (b, 0, L), (0, 0, L),
-            (0, h, L), (0, h, 0)
-        ]
-        for i in range(0, len(verts)-1, 2):
-            x1, y1, z1 = verts[i]
-            x2, y2, z2 = verts[i+1]
-            self.ax3d.plot([x1, x2], [y1, y2], [z1, z2], 'k-', lw=0.5)
-
-        for x in xs:
-            self.ax3d.plot([x, x], [yb, yb], [0, L], 'r-', lw=2)
-
-        self.ax3d.set_xlim(0, b)
-        self.ax3d.set_ylim(0, h)
-        self.ax3d.set_zlim(0, L)
-        self.ax3d.set_box_aspect((b, h, L))
-        self.ax3d.axis('off')
-
-        self.canvas.draw()
-
-
-class MemoriaWindow(QMainWindow):
-    """Window showing detailed calculation memory."""
-
-    def __init__(self, title, text):
-        super().__init__()
-        self.setWindowTitle(title)
-        self.resize(700, 900)
-
-        central = QWidget()
-        self.setCentralWidget(central)
-        layout = QVBoxLayout(central)
-
-        self.text = QTextEdit()
-        self.text.setReadOnly(True)
-        self.text.setFontFamily("Courier New")
-        self.text.setFontPointSize(10)
-        self.text.setText(text)
-        layout.addWidget(self.text)
-
-        self.btn_capture = QPushButton("Capturar Memoria")
-        self.btn_capture.clicked.connect(self._capture)
-        layout.addWidget(self.btn_capture)
-
-    def _capture(self):
-        pix = self.centralWidget().grab()
-        QGuiApplication.clipboard().setPixmap(pix)
-        # Sin mensaje emergente
 

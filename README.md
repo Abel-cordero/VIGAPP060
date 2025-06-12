@@ -179,7 +179,7 @@ Los diagramas y resultados se actualizan cada vez que se modifican los datos o s
 
 ## Estructura del código y objetos principales
 
-El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.py`. El archivo `viga2.0.py` solo actúa como envoltorio y las clases principales residen en `src/`. Los módulos principales son:
+El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.py`. El antiguo archivo `viga2.0.py` se eliminó en favor de `main.py` como punto de entrada. Los módulos principales son:
 
 - **`beam_model.py`** — clase `BeamModel` con geometría, barras y lógicas de cálculo.
 - **`rebar_editor_widget.py`** — panel lateral para editar rápidamente las barras.
@@ -192,7 +192,9 @@ El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.
 - **`utils.py`** — constantes y funciones auxiliares.
 
 - **`moment_app.py`** — ventana de ingreso de momentos y corrección.
-- **`design_window.py`** — etapa de diseño, incluye `View3DWindow` y `MemoriaWindow`.
+- **`design_window.py`** — etapa de diseño principal.
+- **`view3d_window.py`** — vista tridimensional simplificada.
+- **`memoria_window.py`** — ventana con memoria de cálculo detallada.
 Las clases principales son:
 
 - **`MomentApp`** (en `src/moment_app.py`)
@@ -210,6 +212,12 @@ Las clases principales son:
   - `update_design_as()` — calcula el refuerzo propuesto y verifica la base.
   - `_capture_design()` — copia la vista al portapapeles.
   - `show_view3d()` — abre una vista 3D simplificada.
+
+- **`View3DWindow`** (en `src/view3d_window.py`)
+  - `draw_views()` — genera la visualización 2D y 3D de la viga.
+
+- **`MemoriaWindow`** (en `src/memoria_window.py`)
+  - `_capture()` — guarda una captura de la memoria de cálculo.
 
 Esta organización modular facilita la comunicación y coordinación dentro del equipo, ya que cada función se asocia a una tarea específica del flujo de trabajo.
 
