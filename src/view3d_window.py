@@ -44,6 +44,8 @@ class View3DWindow(QMainWindow):
         self.neg_orders = []
         self.pos_orders = []
         self.selected = None
+        self.selected_patch = None
+        self.dragging = False
         self.setWindowTitle("Desarrollo de Refuerzo")
         self.resize(800, 500)
 
@@ -65,6 +67,8 @@ class View3DWindow(QMainWindow):
 
         self.canvas.mpl_connect("pick_event", self._on_pick)
         self.canvas.mpl_connect("key_press_event", self._on_key)
+        self.canvas.mpl_connect("motion_notify_event", self._on_motion)
+        self.canvas.mpl_connect("button_release_event", self._on_release)
 
         self.draw_views()
 
@@ -150,8 +154,42 @@ class View3DWindow(QMainWindow):
             self.neg_orders[section] = list(new_order)
         self.draw_views()
 
+    def swap_bars(self, sign, section, i, j):
+        """Swap two bars and redraw the view."""
+        if sign not in ("pos", "neg"):
+            return
+        if not 0 <= section < 3:
+            return
+        orders = self.pos_orders if sign == "pos" else self.neg_orders
+        if not orders:
+            orders[:] = [self._collect_order(k + (3 if sign == "pos" else 0)) for k in range(3)]
+        lst = orders[section]
+        if not (0 <= i < len(lst) and 0 <= j < len(lst)):
+            return
+        lst[i], lst[j] = lst[j], lst[i]
+        self.draw_views()
+
+    def move_bar(self, sign, section, idx, new_idx):
+        """Move a bar to a new index and redraw."""
+        if sign not in ("pos", "neg"):
+            return
+        if not 0 <= section < 3:
+            return
+        orders = self.pos_orders if sign == "pos" else self.neg_orders
+        if not orders:
+            orders[:] = [self._collect_order(k + (3 if sign == "pos" else 0)) for k in range(3)]
+        lst = orders[section]
+        if not (0 <= idx < len(lst)):
+            return
+        new_idx = max(0, min(new_idx, len(lst) - 1))
+        if idx == new_idx:
+            return
+        val = lst.pop(idx)
+        lst.insert(new_idx, val)
+        self.draw_views()
+
     def _distribute_x(self, n, b, r, de, db1=0.0):
-        """Return X coordinates for ``n`` bars within the clear width."""
+        """Return X coordinates using blibre = b - 2*(r + de) - db1."""
         if n == 1:
             return [b / 2]
         width = b - 2 * (r + de) - db1
@@ -265,23 +303,57 @@ class View3DWindow(QMainWindow):
         except ValueError:
             return
         self.selected = (sign, sec, idx)
+        self.selected_patch = artist
+        self.dragging = True
 
     def _on_key(self, event):
         if not self.selected:
             return
         sign, sec, idx = self.selected
-        if sign == "pos":
-            lst = self.pos_orders[sec]
-        else:
-            lst = self.neg_orders[sec]
+        orders = self.pos_orders if sign == "pos" else self.neg_orders
+        lst = orders[sec]
 
         if event.key == "left" and idx > 0:
-            lst[idx - 1], lst[idx] = lst[idx], lst[idx - 1]
+            self.swap_bars(sign, sec, idx, idx - 1)
             self.selected = (sign, sec, idx - 1)
         elif event.key == "right" and idx < len(lst) - 1:
-            lst[idx + 1], lst[idx] = lst[idx], lst[idx + 1]
+            self.swap_bars(sign, sec, idx, idx + 1)
             self.selected = (sign, sec, idx + 1)
         else:
             return
-        self.draw_views()
+        # redraw handled by swap_bars
+
+    def _on_motion(self, event):
+        if not self.dragging or self.selected_patch is None or event.xdata is None:
+            return
+        if event.inaxes not in self.ax_sections:
+            return
+        x, y = self.selected_patch.center
+        self.selected_patch.center = (event.xdata, y)
+        self.canvas.draw_idle()
+
+    def _on_release(self, event):
+        if not self.dragging or self.selected_patch is None or not self.selected:
+            return
+        if event.xdata is None:
+            self.dragging = False
+            self.selected_patch = None
+            return
+        sign, sec, idx = self.selected
+        orders = self.pos_orders if sign == "pos" else self.neg_orders
+        lst = orders[sec]
+        try:
+            b = float(self.design.edits["b (cm)"].text())
+            r = float(self.design.edits["r (cm)"].text())
+            de = DIAM_CM.get(self.design.cb_estribo.currentText(), 0)
+        except ValueError:
+            b = 0
+            r = 0
+            de = 0
+        xs = self._distribute_x(len(lst), b, r, de)
+        new_idx = min(range(len(xs)), key=lambda i: abs(xs[i] - event.xdata))
+        self.move_bar(sign, sec, idx, new_idx)
+        self.selected = (sign, sec, new_idx)
+        self.dragging = False
+        self.selected_patch = None
 
