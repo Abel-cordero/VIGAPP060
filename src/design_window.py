@@ -536,27 +536,43 @@ class DesignWindow(QMainWindow):
         as_n = np.clip(as_n_raw, as_min, as_max)
         as_p = np.clip(as_p_raw, as_min, as_max)
 
+        def frac(num: str, den: str) -> str:
+            return (
+                '<span style="display:inline-block; text-align:center; line-height:1;">'
+                f'<span style="border-bottom:1px solid; display:block">{num}</span>'
+                f'<span style="display:block">{den}</span></span>'
+            )
+
         lines = [
-            "DATOS INGRESADOS:",
-            f"b = {b} cm",
-            f"h = {h} cm",
-            f"r = {r} cm",
-            f"f'c = {fc} kg/cm²",
-            f"fy = {fy} kg/cm²",
-            f"φ = {phi}",
-            f"ϕ estribo = {de} cm",
-            f"ϕ varilla = {db} cm",
-            "",
-            "C\u00c1LCULOS:",
-            f"d = h - r - ϕ_estribo - 0.5 ϕ_barra = {h} - {r} - {de} - 0.5*{db} = {d:.2f} cm",
-            f"β1 = {beta1:.3f}",
-            f"As_min = 0.7*√fc/fy*b*d = 0.7*√{fc}/{fy}*{b}*{d:.2f} = {as_min:.2f} cm²",
-            f"As_max = 0.75*(0.85*fc*β1/fy)*(6000/(6000+fy))*b*d = {as_max:.2f} cm²",
-            "",
-            "F\u00d3RMULA GENERAL PARA As:",
-            "As = 1.7*fc*b*d/(2*fy) - 0.5*√((2.89*(fc*b*d)^2)/fy^2 - (6.8*fc*b*Mu)/(φ*fy^2))",
-            "",
-            "DETALLE DEL C\u00c1LCULO DE As POR MOMENTO:",
+            "<h2>DATOS INGRESADOS</h2>",
+            f"<p>b = {b} cm</p>",
+            f"<p>h = {h} cm</p>",
+            f"<p>r = {r} cm</p>",
+            f"<p>f'c = {fc} kg/cm²</p>",
+            f"<p>fy = {fy} kg/cm²</p>",
+            f"<p>φ = {phi}</p>",
+            f"<p>ϕ estribo = {de} cm</p>",
+            f"<p>ϕ varilla = {db} cm</p>",
+            "<h2>CÁLCULOS</h2>",
+            "<h3>Cálculo del peralte efectivo d</h3>",
+            (
+                f"<p class='eq'>d = h - r - ϕ_estribo - 0.5 ϕ_barra = {h} - {r} - {de} - 0.5×{db} = <b>{d:.2f} cm</b></p>"
+            ),
+            "<h3>Cálculo de β<sub>1</sub></h3>",
+            f"<p class='eq'>β<sub>1</sub> = {beta1:.3f}</p>",
+            "<h3>Cálculo de As_min</h3>",
+            (
+                f"<p class='eq'>A<sub>s,min</sub> = 0.7 × {frac('√f\'c', 'fy')} × b × d = 0.7 × {frac(f'√{fc}', str(fy))} × {b} × {d:.2f} = <b>{as_min:.2f} cm²</b></p>"
+            ),
+            "<h3>Cálculo de As_max</h3>",
+            (
+                f"<p class='eq'>A<sub>s,max</sub> = 0.75 × {frac('0.85 f\'c β<sub>1</sub>', 'fy')} × {frac('6000', f'6000+{fy}')} × b × d = <b>{as_max:.2f} cm²</b></p>"
+            ),
+            "<h3>Fórmula general para As</h3>",
+            (
+                f"<p class='eq'>A<sub>s</sub> = {frac('1.7 f\'c b d', '2 fy')} - 0.5 √({frac('2.89 (f\'c b d)^2', 'fy^2')} - {frac('6.8 f\'c b M_u', 'φ fy^2')})</p>"
+            ),
+            "<h3>Detalle del cálculo de As por momento</h3>",
         ]
 
         labels = ["M1-", "M2-", "M3-", "M1+", "M2+", "M3+"]
@@ -576,16 +592,21 @@ class DesignWindow(QMainWindow):
             calc = term - 0.5 * np.sqrt(root)
             lines.extend(
                 [
-                    f"{lab}: Mu = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm",
-                    f"    As_calc = {term:.2f} - 0.5*√({root:.2f}) = {calc:.2f} cm²",
-                    f"    As_req = {a:.2f} cm²",
+                    f"<p><b>{lab}</b>: M<sub>u</sub> = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm</p>",
+                    f"<p class='eq'>A<sub>s,calc</sub> = {term:.2f} - 0.5√({root:.2f}) = <b>{calc:.2f} cm²</b></p>",
+                    f"<p>A<sub>s,req</sub> = <b>{a:.2f} cm²</b></p>",
                 ]
             )
 
-        lines.append("")
-
+        html = (
+            "<html><head>"
+            "<style>p{margin:6px 0;} .eq{margin-left:20px;}</style>"
+            "</head><body>"
+            + "\n".join(lines) +
+            "</body></html>"
+        )
         title = f"DISE\u00d1O DE VIGA {int(b)}X{int(h)}"
-        text = "\n".join(lines)
+        text = html
         self.mem_win = MemoriaWindow(title, text)
         self.mem_win.show()
 

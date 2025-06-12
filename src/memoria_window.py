@@ -20,7 +20,8 @@ class MemoriaWindow(QMainWindow):
         self.text.setReadOnly(True)
         self.text.setFontFamily("Courier New")
         self.text.setFontPointSize(10)
-        self.text.setText(text)
+        # Text is provided as HTML to allow richer formatting
+        self.text.setHtml(text)
         layout.addWidget(self.text)
 
         self.btn_capture = QPushButton("Capturar Memoria")
