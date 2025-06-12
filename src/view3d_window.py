@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import (
 )
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
+from matplotlib import colors as mcolors
 
 
 DIAM_CM = {
@@ -23,6 +24,14 @@ DIAM_CM = {
     '1"': 2.54,
 }
 
+# Simple color mapping per diameter key
+COLOR_MAP = {
+    key: color for key, color in zip(
+        DIAM_CM.keys(),
+        list(mcolors.TABLEAU_COLORS.values())
+    )
+}
+
 
 class View3DWindow(QMainWindow):
     """Simple window showing 2D and 3D views of the beam."""
@@ -31,6 +40,7 @@ class View3DWindow(QMainWindow):
         super().__init__()
         self.design = design
         self.setWindowTitle("Desarrollo de Refuerzo")
+        self.resize(700, 900)
 
         central = QWidget()
         self.setCentralWidget(central)
@@ -44,15 +54,17 @@ class View3DWindow(QMainWindow):
         input_layout.addWidget(self.le_length)
         layout.addLayout(input_layout)
 
-        self.fig = plt.figure(figsize=(8, 4), constrained_layout=True)
-        self.ax2d = self.fig.add_subplot(1, 2, 1)
-        self.ax3d = self.fig.add_subplot(1, 2, 2, projection="3d")
+        self.fig = plt.figure(figsize=(8, 8), constrained_layout=True)
+        gs = self.fig.add_gridspec(2, 3, height_ratios=[1, 2])
+        self.ax_sections = [self.fig.add_subplot(gs[0, i]) for i in range(3)]
+        self.ax3d = self.fig.add_subplot(gs[1, :], projection="3d")
         self.canvas = FigureCanvas(self.fig)
         layout.addWidget(self.canvas)
 
         self.draw_views()
 
     def draw_views(self):
+        """Redraw the three sections and the 3D view."""
         try:
             b = float(self.design.edits["b (cm)"].text())
             h = float(self.design.edits["h (cm)"].text())
@@ -60,19 +72,99 @@ class View3DWindow(QMainWindow):
             L = float(self.le_length.text()) * 100
         except ValueError:
             return
+
         de = DIAM_CM.get(self.design.cb_estribo.currentText(), 0)
-        db = DIAM_CM.get(self.design.cb_varilla.currentText(), 0)
 
-        self.ax2d.clear()
-        self.ax2d.set_aspect("equal")
-        self.ax2d.plot([0, b, b, 0, 0], [0, 0, h, h, 0], "k-")
-        yb = r + de + db / 2
-        xs = [r + de + db / 2, b - r - de - db / 2]
-        for x in xs:
-            circ = plt.Circle((x, yb), db / 2, color="b", fill=False)
-            self.ax2d.add_patch(circ)
-        self.ax2d.axis("off")
+        neg_layers = [self._collect_bars(i) for i in range(3)]
+        pos_layers = [self._collect_bars(i + 3) for i in range(3)]
+        titles = ["M1", "M2", "M3"]
 
+        for ax, neg, pos, tit in zip(self.ax_sections, neg_layers, pos_layers, titles):
+            self._plot_section(ax, neg, pos, b, h, r, de, tit)
+
+        self._plot_3d(b, h, r, de, L, pos_layers[0], neg_layers[0])
+
+        self.canvas.draw()
+
+    # ------------------------------------------------------------------
+    def _collect_bars(self, idx):
+        """Return a dict of bars grouped by layer for a given index."""
+        layers = {}
+        for row in self.design.rebar_rows[idx]:
+            try:
+                qty = int(row["qty"].currentText()) if row["qty"].currentText() else 0
+            except ValueError:
+                qty = 0
+            dia_key = row["dia"].currentText()
+            dia = DIAM_CM.get(dia_key, 0)
+            if qty <= 0 or dia == 0:
+                continue
+            layer = int(row["capa"].currentText()) if row["capa"].currentText() else 1
+            layers.setdefault(layer, []).extend([(dia, dia_key)] * qty)
+        return layers
+
+    def _distribute_x(self, n, b, r, de):
+        if n == 1:
+            return [b / 2]
+        width = b - 2 * (r + de)
+        spacing = width / (n - 1)
+        return [r + de + i * spacing for i in range(n)]
+
+    def _layer_positions_bottom(self, layers, r, de):
+        positions = {}
+        base = r + de
+        prev_d = 0
+        for layer in sorted(layers):
+            diam_layer = max(d for d, _ in layers[layer])
+            base += prev_d + (2.5 if layer > 1 else 0)
+            positions[layer] = base + diam_layer / 2
+            prev_d = diam_layer
+        return positions
+
+    def _layer_positions_top(self, layers, r, de, h):
+        positions = {}
+        base = h - (r + de)
+        prev_d = 0
+        for layer in sorted(layers):
+            diam_layer = max(d for d, _ in layers[layer])
+            base -= prev_d + (2.5 if layer > 1 else 0)
+            positions[layer] = base - diam_layer / 2
+            prev_d = diam_layer
+        return positions
+
+    def _plot_section(self, ax, neg_layers, pos_layers, b, h, r, de, title):
+        ax.clear()
+        ax.set_aspect("equal")
+        ax.plot([0, b, b, 0, 0], [0, 0, h, h, 0], "k-")
+        ax.plot([r, b - r, b - r, r, r], [r, r, h - r, h - r, r], color="0.6", ls="--", lw=0.8)
+        ax.plot(
+            [r + de, b - r - de, b - r - de, r + de, r + de],
+            [r + de, r + de, h - r - de, h - r - de, r + de],
+            color="0.6",
+            ls=":" ,
+            lw=0.8,
+        )
+
+        bot_pos = self._layer_positions_bottom(pos_layers, r, de)
+        for layer, bars in pos_layers.items():
+            xs = self._distribute_x(len(bars), b, r, de)
+            y = bot_pos.get(layer, r + de)
+            for x, (d, key) in zip(xs, bars):
+                circ = plt.Circle((x, y), d / 2, color=COLOR_MAP.get(key, "b"), fill=False)
+                ax.add_patch(circ)
+
+        top_pos = self._layer_positions_top(neg_layers, r, de, h)
+        for layer, bars in neg_layers.items():
+            xs = self._distribute_x(len(bars), b, r, de)
+            y = top_pos.get(layer, h - r - de)
+            for x, (d, key) in zip(xs, bars):
+                circ = plt.Circle((x, y), d / 2, color=COLOR_MAP.get(key, "r"), fill=False)
+                ax.add_patch(circ)
+
+        ax.set_title(title)
+        ax.axis("off")
+
+    def _plot_3d(self, b, h, r, de, L, pos_layers, neg_layers):
         self.ax3d.clear()
         verts = [
             (0, 0, 0),
@@ -95,14 +187,23 @@ class View3DWindow(QMainWindow):
             x2, y2, z2 = verts[i + 1]
             self.ax3d.plot([x1, x2], [y1, y2], [z1, z2], "k-", lw=0.5)
 
-        for x in xs:
-            self.ax3d.plot([x, x], [yb, yb], [0, L], "r-", lw=2)
+        bot_pos = self._layer_positions_bottom(pos_layers, r, de)
+        for layer, bars in pos_layers.items():
+            xs = self._distribute_x(len(bars), b, r, de)
+            y = bot_pos.get(layer, r + de)
+            for x, (d, key) in zip(xs, bars):
+                self.ax3d.plot([x, x], [y, y], [0, L], color=COLOR_MAP.get(key, "r"), lw=2)
+
+        top_pos = self._layer_positions_top(neg_layers, r, de, h)
+        for layer, bars in neg_layers.items():
+            xs = self._distribute_x(len(bars), b, r, de)
+            y = top_pos.get(layer, h - r - de)
+            for x, (d, key) in zip(xs, bars):
+                self.ax3d.plot([x, x], [y, y], [0, L], color=COLOR_MAP.get(key, "b"), lw=2)
 
         self.ax3d.set_xlim(0, b)
         self.ax3d.set_ylim(0, h)
         self.ax3d.set_zlim(0, L)
         self.ax3d.set_box_aspect((b, h, L))
         self.ax3d.axis("off")
-
-        self.canvas.draw()
 
