@@ -5,7 +5,10 @@ from PyQt5.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QLabel,
+    QPushButton,
+    QApplication,
 )
+from PyQt5.QtGui import QGuiApplication
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 from matplotlib import colors as mcolors
@@ -62,6 +65,9 @@ class View3DWindow(QMainWindow):
         self.ax_sections = [self.fig.add_subplot(1, 3, i + 1) for i in range(3)]
         self.canvas = FigureCanvas(self.fig)
         layout.addWidget(self.canvas)
+        self.btn_capture = QPushButton("Capturar Vista")
+        self.btn_capture.clicked.connect(self._capture_view)
+        layout.addWidget(self.btn_capture)
 
         self.canvas.mpl_connect("pick_event", self._on_pick)
         self.canvas.mpl_connect("key_press_event", self._on_key)
@@ -371,4 +377,11 @@ class View3DWindow(QMainWindow):
         self.selected = (sign, sec, new_idx)
         self.dragging = False
         self.selected_patch = None
+
+    def _capture_view(self):
+        """Copy the canvas to the clipboard."""
+        self.canvas.repaint()
+        QApplication.processEvents()
+        pix = self.canvas.grab()
+        QGuiApplication.clipboard().setPixmap(pix)
 
