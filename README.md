@@ -241,6 +241,13 @@ Esta organización modular facilita la comunicación y coordinación dentro del 
 
 Consulta el archivo [DESARROLLO.md](DESARROLLO.md) para pautas sobre configuración del entorno y aportes al código.
 
+### Icono de la aplicación
+
+Los archivos de icono se almacenan en la carpeta `icon/`. Coloca tu imagen PNG en
+ese directorio con el nombre `vigapp060.png` para que la interfaz lo utilice
+automáticamente. La imagen original debe tener un tamaño de `1024x1024` y la
+aplicación la escalará internamente a `256x256` cuando se inicie.
+
 ## Desarrollo de Refuerzo
 
 Se añadió un botón **Desarrollo de Refuerzo** en la ventana de diseño que abre

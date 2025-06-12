@@ -1,8 +1,11 @@
 """Entry point launching the beam design application."""
 
 import logging
+import os
 import sys
 from PyQt5.QtWidgets import QApplication, QMessageBox, QInputDialog
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import Qt
 from src.moment_app import MomentApp
 from src.activation import check_activation, activate
 
@@ -11,6 +14,12 @@ def main():
     """Start the Qt application."""
     logging.basicConfig(level=logging.ERROR)
     app = QApplication(sys.argv)
+    icon_path = os.path.join(
+        os.path.dirname(__file__), "icon", "vigapp060.png")
+    if os.path.exists(icon_path):
+        pix = QPixmap(icon_path).scaled(
+            256, 256, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        app.setWindowIcon(QIcon(pix))
     if not check_activation():
         key, ok = QInputDialog.getText(
             None, "Activar VIGAPP 060", "Ingrese la clave:")
