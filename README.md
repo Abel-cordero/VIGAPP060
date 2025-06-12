@@ -170,7 +170,9 @@ diagramas correspondientes.
 
 Al ejecutarse por primera vez, la aplicación solicita una clave de licencia.
 Si la clave coincide con la esperada, se almacena una huella del equipo en
-`key.dat` y los siguientes inicios se validan de forma automática.
+`key.dat` dentro de la carpeta de datos de la aplicación (por ejemplo
+`%APPDATA%/vigapp060` en Windows) y los siguientes inicios se validan de
+forma automática.
 
 
 ## Formulario de datos y flujos

@@ -27,7 +27,15 @@ def main():
         key, ok = QInputDialog.getText(
             None, "Activar VIGAPP 060", "Ingrese la clave:")
         if not ok or not activate(key):
-            QMessageBox.critical(None, "Licencia", "Clave inv\xE1lida")
+            QMessageBox.critical(
+                None,
+                "Licencia",
+                (
+                    "COMUNICARSE AL SIGUIENTE CORREO PARA SOLICTAR LA CLAVE DE "
+                    "ACTIVACION: abelcorderotineo99@gmail.com  cel y wsp : "
+                    "922148420"
+                ),
+            )
             return
 
     app.setStyle("Fusion")
