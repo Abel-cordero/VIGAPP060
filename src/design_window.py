@@ -503,7 +503,7 @@ class DesignWindow(QMainWindow):
         # Sin mensaje emergente
 
     def show_view3d(self):
-        """Open a simple 2D/3D visualization window."""
+        """Open a window with cross-section views."""
         self.view3d = View3DWindow(self)
         self.view3d.show()
 
