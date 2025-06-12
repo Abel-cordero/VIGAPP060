@@ -248,6 +248,12 @@ ese directorio con el nombre `vigapp060.png` para que la interfaz lo utilice
 automáticamente. La imagen original debe tener un tamaño de `1024x1024` y la
 aplicación la escalará internamente a `256x256` cuando se inicie.
 
+### Generar ejecutable en Windows
+
+Para que el mismo icono aparezca en la barra de tareas y en el archivo `.exe`,
+primero convierte `vigapp060.png` a formato `.ico`. Luego usa
+`auto-py-to-exe` o `pyinstaller` indicando esa ruta en la opción `--icon`.
+
 ## Desarrollo de Refuerzo
 
 Se añadió un botón **Desarrollo de Refuerzo** en la ventana de diseño que abre
