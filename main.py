@@ -3,7 +3,7 @@
 import logging
 import sys
 from PyQt5.QtWidgets import QApplication
-from viga2.0 import MomentApp
+from src.moment_app import MomentApp
 
 
 def main():
