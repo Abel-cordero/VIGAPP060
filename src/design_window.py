@@ -358,18 +358,23 @@ class DesignWindow(QMainWindow):
         self.ax_sec.plot([0, b, b, 0, 0], [0, 0, h, h, 0], 'k-')
         self.ax_sec.plot([r, b - r, b - r, r, r], [r, r, h - r, h - r, r], 'r--')
 
-        self.ax_sec.annotate('', xy=(0, -5), xytext=(b, -5), arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(b / 2, -6, 'b', ha='center', va='top')
+        self.ax_sec.annotate('', xy=(0, -5), xytext=(b, -5),
+                             arrowprops=dict(arrowstyle='<->'))
+        self.ax_sec.text(b / 2, -6, f"b = {b:.0f} cm",
+                         ha='center', va='top')
 
         # Cota de peralte pegada a la viga
         self.ax_sec.annotate('', xy=(-5, h), xytext=(-5, y_d),
                              arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(-6, (h + y_d) / 2, 'd', ha='right', va='center', rotation=90)
+        self.ax_sec.text(-6, (h + y_d) / 2,
+                         f"d = {d:.1f} cm",
+                         ha='right', va='center', rotation=90)
 
         # Cota de altura total hacia la izquierda
         self.ax_sec.annotate('', xy=(-12, 0), xytext=(-12, h),
                              arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(-13, h / 2, 'h', ha='right', va='center', rotation=90)
+        self.ax_sec.text(-13, h / 2, f"h = {h:.0f} cm",
+                         ha='right', va='center', rotation=90)
 
         self.ax_sec.set_xlim(-15, b + 10)
         self.ax_sec.set_ylim(-10, h + 10)
