@@ -1,8 +1,23 @@
 """Interactive 2D view of the beam section using pyqtgraph."""
 
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QInputDialog
 import pyqtgraph as pg
+
+
+class BarROI(pg.CircleROI):
+    """Draggable circular ROI representing a single bar."""
+
+    clicked = pyqtSignal(object)
+
+    def __init__(self, pos, size, index, **kw):
+        super().__init__(pos, size, movable=True, **kw)
+        self.bar_index = index
+
+    def mouseClickEvent(self, ev):
+        if ev.button() == Qt.LeftButton and ev.isFinish():
+            self.clicked.emit(self)
+        super().mouseClickEvent(ev)
 
 
 class Section2DView(QWidget):
@@ -22,6 +37,7 @@ class Section2DView(QWidget):
         self.plot.hideAxis('bottom')
         self._bars = []
         self._selected = None
+        self._dragging = None
         self.b = 30
         self.h = 50
         self.cover = 4
@@ -43,12 +59,11 @@ class Section2DView(QWidget):
         spacing = (self.b - 2 * self.cover) / max(len(diams) - 1, 1)
         xs = [self.cover + i * spacing for i in range(len(diams))]
         for idx, (x, d) in enumerate(zip(xs, diams)):
-            item = pg.ScatterPlotItem([x], [self.cover], size=8 + d * 3,
-                                       brush=pg.mkBrush('b'))
-            item.opts['data'] = idx
-            item.sigClicked.connect(self._on_clicked)
-            self.plot.addItem(item)
-            self._bars.append(item)
+            roi = BarROI([x - d/2, self.cover - d/2], [d, d], idx, pen=pg.mkPen('b'), brush=pg.mkBrush('b'))
+            roi.sigRegionChangeFinished.connect(lambda r=roi: self._on_drag_finished(r))
+            roi.clicked.connect(self._on_bar_clicked)
+            self.plot.addItem(roi)
+            self._bars.append(roi)
 
     # internal helpers -------------------------------------------------
     def _draw_section(self):
@@ -62,9 +77,18 @@ class Section2DView(QWidget):
         inner.setPen(pg.mkPen('r', style=Qt.DashLine))
         self.plot.addItem(inner)
 
-    def _on_clicked(self, plot, points):
-        if not points:
-            return
-        idx = points[0].data()
+    def _on_bar_clicked(self, roi):
+        idx = roi.bar_index
         self._selected = idx
         self.barraSeleccionada.emit(idx)
+        value, ok = QInputDialog.getDouble(self, "Longitud", "L (m):", decimals=2)
+        if ok:
+            self.longitudCambiada.emit(idx, value)
+
+    def _on_drag_finished(self, roi):
+        idx = roi.bar_index
+        center_x = roi.pos()[0] + roi.size()[0] / 2
+        self._bars.sort(key=lambda r: r.pos()[0])
+        for i, r in enumerate(self._bars):
+            r.bar_index = i
+        self.barraMovida.emit(roi.bar_index, center_x)

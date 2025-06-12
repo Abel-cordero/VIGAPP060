@@ -40,7 +40,7 @@ class View3DWindow(QMainWindow):
         super().__init__()
         self.design = design
         self.setWindowTitle("Desarrollo de Refuerzo")
-        self.resize(700, 900)
+        self.resize(800, 900)
 
         central = QWidget()
         self.setCentralWidget(central)
@@ -110,9 +110,10 @@ class View3DWindow(QMainWindow):
         spacing = width / (n - 1)
         return [r + de + i * spacing for i in range(n)]
 
-    def _layer_positions_bottom(self, layers, r, de):
+    def _layer_positions_bottom(self, layers, r, de, offset=0.0):
+        """Return Y positions of each layer from the bottom."""
         positions = {}
-        base = r + de
+        base = r + de + offset
         prev_d = 0
         for layer in sorted(layers):
             diam_layer = max(d for d, _ in layers[layer])
@@ -121,9 +122,10 @@ class View3DWindow(QMainWindow):
             prev_d = diam_layer
         return positions
 
-    def _layer_positions_top(self, layers, r, de, h):
+    def _layer_positions_top(self, layers, r, de, h, offset=0.0):
+        """Return Y positions of each layer from the top."""
         positions = {}
-        base = h - (r + de)
+        base = h - (r + de + offset)
         prev_d = 0
         for layer in sorted(layers):
             diam_layer = max(d for d, _ in layers[layer])
@@ -131,6 +133,15 @@ class View3DWindow(QMainWindow):
             positions[layer] = base - diam_layer / 2
             prev_d = diam_layer
         return positions
+
+    def _bars_summary(self, layers):
+        """Return a short text description of bars in all layers."""
+        counts = {}
+        for bars in layers.values():
+            for _, key in bars:
+                counts[key] = counts.get(key, 0) + 1
+        parts = [f"{n}\u00f8{key}" for key, n in counts.items()]
+        return " + ".join(parts)
 
     def _plot_section(self, ax, neg_layers, pos_layers, b, h, r, de, title):
         ax.clear()
@@ -145,7 +156,8 @@ class View3DWindow(QMainWindow):
             lw=0.8,
         )
 
-        bot_pos = self._layer_positions_bottom(pos_layers, r, de)
+        extra = 3.0 if title == "M3" else 0.0
+        bot_pos = self._layer_positions_bottom(pos_layers, r, de, offset=extra)
         for layer, bars in pos_layers.items():
             xs = self._distribute_x(len(bars), b, r, de)
             y = bot_pos.get(layer, r + de)
@@ -153,15 +165,17 @@ class View3DWindow(QMainWindow):
                 circ = plt.Circle((x, y), d / 2, color=COLOR_MAP.get(key, "b"), fill=False)
                 ax.add_patch(circ)
 
-        top_pos = self._layer_positions_top(neg_layers, r, de, h)
+        top_pos = self._layer_positions_top(neg_layers, r, de, h, offset=extra)
         for layer, bars in neg_layers.items():
             xs = self._distribute_x(len(bars), b, r, de)
             y = top_pos.get(layer, h - r - de)
             for x, (d, key) in zip(xs, bars):
                 circ = plt.Circle((x, y), d / 2, color=COLOR_MAP.get(key, "r"), fill=False)
                 ax.add_patch(circ)
-
-        ax.set_title(title)
+        neg_desc = self._bars_summary(neg_layers)
+        pos_desc = self._bars_summary(pos_layers)
+        label = f"{title}- ({neg_desc})\n{title}+ ({pos_desc})"
+        ax.set_title(label, fontsize=9)
         ax.axis("off")
 
     def _plot_3d(self, b, h, r, de, L, pos_layers, neg_layers):
@@ -187,19 +201,19 @@ class View3DWindow(QMainWindow):
             x2, y2, z2 = verts[i + 1]
             self.ax3d.plot([x1, x2], [y1, y2], [z1, z2], "k-", lw=0.5)
 
-        bot_pos = self._layer_positions_bottom(pos_layers, r, de)
+        bot_pos = self._layer_positions_bottom(pos_layers, r, de, offset=3.0)
         for layer, bars in pos_layers.items():
             xs = self._distribute_x(len(bars), b, r, de)
             y = bot_pos.get(layer, r + de)
             for x, (d, key) in zip(xs, bars):
-                self.ax3d.plot([x, x], [y, y], [0, L], color=COLOR_MAP.get(key, "r"), lw=2)
+                self.ax3d.plot([x, x], [y, y], [0, L], color=COLOR_MAP.get(key, "r"), lw=3)
 
-        top_pos = self._layer_positions_top(neg_layers, r, de, h)
+        top_pos = self._layer_positions_top(neg_layers, r, de, h, offset=3.0)
         for layer, bars in neg_layers.items():
             xs = self._distribute_x(len(bars), b, r, de)
             y = top_pos.get(layer, h - r - de)
             for x, (d, key) in zip(xs, bars):
-                self.ax3d.plot([x, x], [y, y], [0, L], color=COLOR_MAP.get(key, "b"), lw=2)
+                self.ax3d.plot([x, x], [y, y], [0, L], color=COLOR_MAP.get(key, "b"), lw=3)
 
         self.ax3d.set_xlim(0, b)
         self.ax3d.set_ylim(0, h)
