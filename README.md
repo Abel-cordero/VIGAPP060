@@ -150,7 +150,7 @@ Ventana 2: Visualización de viga con aceros → Selección de varillas → Resu
 Desde la raíz del repositorio ejecutar:
 
 ```bash
-python viga2.0.py
+python main.py
 ```
 
 Se abrirá la interfaz gráfica donde se ingresan los momentos y se generan los
@@ -179,7 +179,19 @@ Los diagramas y resultados se actualizan cada vez que se modifican los datos o s
 
 ## Estructura del código y objetos principales
 
-Todo el código reside en `viga2.0.py`. A modo de referencia rápida se listan las clases y funciones más relevantes:
+El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.py`. La interfaz original de `viga2.0.py` continúa disponible como base. Los módulos principales son:
+
+- **`beam_model.py`** — clase `BeamModel` con geometría, barras y lógicas de cálculo.
+- **`rebar_editor_widget.py`** — panel lateral para editar rápidamente las barras.
+- **`length_input_toolbar.py`** — barra de entrada de longitud con atajos `L/3`, `L/2` y `L`.
+- **`section2d_view.py`** — vista 2D interactiva que permite arrastrar varillas.
+- **`section3d_view.py`** — ventana 3D para inspeccionar la viga y su refuerzo.
+- **`bar_properties_panel.py`** — diálogo con propiedades detalladas de cada barra.
+- **`project_manager.py`** — gestor opcional para guardar o cargar configuraciones.
+- **`summary_view.py`** — previsualización dinámica de la memoria de cálculo.
+- **`utils.py`** — constantes y funciones auxiliares.
+
+A modo de referencia rápida se listan las clases existentes en `viga2.0.py`:
 
 - **`MomentApp`**
   - `get_moments()` — lee los valores ingresados.
