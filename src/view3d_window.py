@@ -4,8 +4,6 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QWidget,
     QVBoxLayout,
-    QHBoxLayout,
-    QLineEdit,
     QLabel,
 )
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -47,7 +45,7 @@ class View3DWindow(QMainWindow):
         self.pos_orders = []
         self.selected = None
         self.setWindowTitle("Desarrollo de Refuerzo")
-        self.resize(800, 400)
+        self.resize(800, 500)
 
         rng = np.random.default_rng(0)
         # Slightly darker texture for a gray concrete look
@@ -58,13 +56,7 @@ class View3DWindow(QMainWindow):
         self.setCentralWidget(central)
         layout = QVBoxLayout(central)
 
-        input_layout = QHBoxLayout()
-        input_layout.addWidget(QLabel("L (m)"))
-        self.le_length = QLineEdit("1.0")
-        self.le_length.setFixedWidth(60)
-        self.le_length.editingFinished.connect(self.draw_views)
-        input_layout.addWidget(self.le_length)
-        layout.addLayout(input_layout)
+
 
         self.fig = plt.figure(figsize=(8, 3), constrained_layout=True)
         self.ax_sections = [self.fig.add_subplot(1, 3, i + 1) for i in range(3)]
@@ -82,7 +74,6 @@ class View3DWindow(QMainWindow):
             b = float(self.design.edits["b (cm)"].text())
             h = float(self.design.edits["h (cm)"].text())
             r = float(self.design.edits["r (cm)"].text())
-            _ = float(self.le_length.text())  # L is no longer used
         except ValueError:
             return
 
@@ -144,6 +135,20 @@ class View3DWindow(QMainWindow):
                 continue
             order.extend([dia_key] * qty)
         return order
+
+    def change_order(self, sign, section, new_order):
+        """Set a new bar order for a given section and redraw."""
+        if sign not in ("pos", "neg"):
+            return
+        if not 0 <= section < 3:
+            return
+        if sign == "pos":
+            self.pos_orders = self.pos_orders or [self._collect_order(i + 3) for i in range(3)]
+            self.pos_orders[section] = list(new_order)
+        else:
+            self.neg_orders = self.neg_orders or [self._collect_order(i) for i in range(3)]
+            self.neg_orders[section] = list(new_order)
+        self.draw_views()
 
     def _distribute_x(self, n, b, r, de, db1=0.0):
         """Return X coordinates for ``n`` bars within the clear width."""
@@ -213,8 +218,10 @@ class View3DWindow(QMainWindow):
             circ = plt.Circle(
                 (x, r + de + d / 2),
                 d / 2,
-                color=COLOR_MAP.get(key, "b"),
-                alpha=0.5,
+                facecolor=COLOR_MAP.get(key, "b"),
+                edgecolor="k",
+                lw=0.6,
+                alpha=0.6,
                 fill=True,
                 picker=True,
             )
@@ -227,8 +234,10 @@ class View3DWindow(QMainWindow):
             circ = plt.Circle(
                 (x, h - (r + de + d / 2)),
                 d / 2,
-                color=COLOR_MAP.get(key, "r"),
-                alpha=0.5,
+                facecolor=COLOR_MAP.get(key, "r"),
+                edgecolor="k",
+                lw=0.6,
+                alpha=0.6,
                 fill=True,
                 picker=True,
             )
