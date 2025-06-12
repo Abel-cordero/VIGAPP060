@@ -10,7 +10,7 @@ class Section3DView(QMainWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Vista 3D")
+        self.setWindowTitle("Desarrollo de Refuerzo")
         central = QWidget()
         self.setCentralWidget(central)
         layout = QVBoxLayout(central)

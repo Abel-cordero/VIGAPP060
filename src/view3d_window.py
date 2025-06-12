@@ -1,6 +1,13 @@
 """Simplified 2D/3D visualization for the beam design."""
 
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import (
+    QMainWindow,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QLineEdit,
+    QLabel,
+)
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 
@@ -23,11 +30,19 @@ class View3DWindow(QMainWindow):
     def __init__(self, design):
         super().__init__()
         self.design = design
-        self.setWindowTitle("Vista 3D")
+        self.setWindowTitle("Desarrollo de Refuerzo")
 
         central = QWidget()
         self.setCentralWidget(central)
         layout = QVBoxLayout(central)
+
+        input_layout = QHBoxLayout()
+        input_layout.addWidget(QLabel("L (m)"))
+        self.le_length = QLineEdit("1.0")
+        self.le_length.setFixedWidth(60)
+        self.le_length.editingFinished.connect(self.draw_views)
+        input_layout.addWidget(self.le_length)
+        layout.addLayout(input_layout)
 
         self.fig = plt.figure(figsize=(8, 4), constrained_layout=True)
         self.ax2d = self.fig.add_subplot(1, 2, 1)
@@ -42,7 +57,7 @@ class View3DWindow(QMainWindow):
             b = float(self.design.edits["b (cm)"].text())
             h = float(self.design.edits["h (cm)"].text())
             r = float(self.design.edits["r (cm)"].text())
-            L = float(self.design.edits["L (m)"].text()) * 100
+            L = float(self.le_length.text()) * 100
         except ValueError:
             return
         de = DIAM_CM.get(self.design.cb_estribo.currentText(), 0)
