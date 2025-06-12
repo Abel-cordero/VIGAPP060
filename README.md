@@ -228,11 +228,14 @@ Consulta el archivo [DESARROLLO.md](DESARROLLO.md) para pautas sobre configuraci
 ## Desarrollo de Refuerzo
 
 Se añadió un botón **Desarrollo de Refuerzo** en la ventana de diseño que abre
-una representación simple de la viga. Actualmente solo se muestran los cortes de
+una representación simple de la viga. Actualmente se muestran los cortes de
 sección en M1, M2 y M3. La longitud de la viga se ingresa en esta ventana
-mediante el campo **L (m)** (sin efecto por ahora). Es una funcionalidad
-experimental que sirve como paso previo a la integración más completa descrita
-en [DESARROLLO_3D.md](DESARROLLO_3D.md).
+mediante el campo **L (m)** (sin efecto por ahora). Esta vista incluye una
+textura grisácea semitransparente para el concreto y las barras se sombrean con
+transparencia. Además es posible reordenar las barras de cada sección haciendo
+clic en una barra y utilizando las flechas izquierda/derecha del teclado.
+Es una funcionalidad experimental que sirve como paso previo a la integración
+más completa descrita en [DESARROLLO_3D.md](DESARROLLO_3D.md).
 
 ## Licencia
 
