@@ -1,5 +1,13 @@
+# Diseño de Vigas NTP E.060
+
+Esta aplicación implementa una interfaz gráfica para el cálculo y diseño de refuerzos en vigas de concreto armado siguiendo la Norma Técnica Peruana E.060.
+
+Para más detalles de configuración revisa [DESARROLLO.md](DESARROLLO.md).
+
+# Alcance:
+
 INSTRUCCIÓN PARA GENERAR UNA APLICACIÓN EN PYTHON – DISEÑO DE VIGAS SEGÚN NTP E.060 (PERÚ)
-Objetivo del proyecto:
+## Objetivo del proyecto
 
 Crear una aplicación completa en Python con interfaz gráfica que permita:
 
@@ -188,6 +196,23 @@ Todo el código reside en `viga2.0.py`. A modo de referencia rápida se listan l
   - `_capture_design()` — copia la vista al portapapeles.
 
 Esta organización modular facilita la comunicación y coordinación dentro del equipo, ya que cada función se asocia a una tarea específica del flujo de trabajo.
+
+## Guía de desarrollo
+
+Consulta el archivo [DESARROLLO.md](DESARROLLO.md) para pautas sobre configuración del entorno y aportes al código.
+
+## Interfaz 3D (plan futuro)
+
+Para complementar el diseño en 2D se planea una ventana opcional de
+visualización tridimensional. Esta integración permitirá manipular la
+viga y sus refuerzos de manera interactiva usando librerías como
+`PyOpenGL` o enlazando con herramientas de modelado 3D (por ejemplo
+Blender a través de su API de Python). El objetivo es que el usuario
+pueda ajustar diametros y posiciones en un entorno 3D antes de volver al
+diseño tradicional.
+
+Los detalles de implementación y dependencias se encuentran en
+[DESARROLLO_3D.md](DESARROLLO_3D.md).
 
 ## Licencia
 
