@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QLabel,
     QPushButton,
     QApplication,
+    QLineEdit,
 )
 from PyQt5.QtGui import QGuiApplication
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -33,6 +34,9 @@ COLOR_MAP = {
     for i, key in enumerate(DIAM_CM.keys())
 }
 
+# Clearance (cm) so bars do not overlap stirrups in the drawings
+CLEARANCE = 0.2
+
 # Pre-generated noise texture for concrete-like appearance
 
 
@@ -47,8 +51,14 @@ class View3DWindow(QMainWindow):
         self.selected = None
         self.selected_patch = None
         self.dragging = False
-        self.setWindowTitle("Desarrollo de Refuerzo")
-        self.resize(800, 500)
+        try:
+            b = float(self.design.edits["b (cm)"].text())
+            h = float(self.design.edits["h (cm)"].text())
+        except ValueError:
+            b = h = 0
+        default_title = f"SECCION DE VIGA {int(b)}X{int(h)}" if b and h else "SECCION DE VIGA"
+        self.setWindowTitle(default_title)
+        self.resize(800, 600)
 
         rng = np.random.default_rng(0)
         # Slightly darker texture for a gray concrete look
@@ -58,6 +68,11 @@ class View3DWindow(QMainWindow):
         central = QWidget()
         self.setCentralWidget(central)
         layout = QVBoxLayout(central)
+
+        # Editable title shown inside the window
+        self.title_edit = QLineEdit(default_title)
+        self.title_edit.textChanged.connect(self.setWindowTitle)
+        layout.addWidget(self.title_edit)
 
 
 
@@ -193,19 +208,25 @@ class View3DWindow(QMainWindow):
         lst.insert(new_idx, val)
         self.draw_views()
 
-    def _distribute_x(self, n, b, r, de, db1=0.0):
-        """Return X coordinates using blibre = b - 2*(r + de) - db1."""
+    def _distribute_x(self, diams, b, r, de):
+        """Return X coordinates ensuring bars stay inside stirrups."""
+        n = len(diams)
         if n == 1:
             return [b / 2]
-        width = b - 2 * (r + de) - db1
+
+        left = r + de + diams[0] / 2 + CLEARANCE
+        right = b - (r + de) - diams[-1] / 2 - CLEARANCE
+        if n == 2:
+            return [left, right]
+
+        width = right - left
         spacing = width / (n - 1)
-        start = r + de + db1 / 2
-        return [start + i * spacing for i in range(n)]
+        return [left + i * spacing for i in range(n)]
 
     def _layer_positions_bottom(self, layers, r, de, offset=0.0):
         """Return Y positions of each layer from the bottom."""
         positions = {}
-        base = r + de + offset
+        base = r + de + CLEARANCE + offset
         prev_d = 0
         for layer in sorted(layers):
             diam_layer = max(d for d, _ in layers[layer])
@@ -217,7 +238,7 @@ class View3DWindow(QMainWindow):
     def _layer_positions_top(self, layers, r, de, h, offset=0.0):
         """Return Y positions of each layer from the top."""
         positions = {}
-        base = h - (r + de + offset)
+        base = h - (r + de + CLEARANCE + offset)
         prev_d = 0
         for layer in sorted(layers):
             diam_layer = max(d for d, _ in layers[layer])
@@ -264,7 +285,8 @@ class View3DWindow(QMainWindow):
         start = 0
         for layer in sorted(pos_layers):
             bars = orders_pos[start:start + pos_counts.pop(0)] or [key for _, key in pos_layers[layer]]
-            xs = self._distribute_x(len(bars), b, r, de)
+            diams = [DIAM_CM.get(k, 0) for k in bars]
+            xs = self._distribute_x(diams, b, r, de)
             y = pos_y.get(layer, r + de)
             for j, (x, key) in enumerate(zip(xs, bars)):
                 d = DIAM_CM.get(key, 0)
@@ -285,7 +307,8 @@ class View3DWindow(QMainWindow):
         start = 0
         for layer in sorted(neg_layers):
             bars = orders_neg[start:start + neg_counts.pop(0)] or [key for _, key in neg_layers[layer]]
-            xs = self._distribute_x(len(bars), b, r, de)
+            diams = [DIAM_CM.get(k, 0) for k in bars]
+            xs = self._distribute_x(diams, b, r, de)
             y = neg_y.get(layer, h - (r + de))
             for j, (x, key) in enumerate(zip(xs, bars)):
                 d = DIAM_CM.get(key, 0)
@@ -371,7 +394,8 @@ class View3DWindow(QMainWindow):
             b = 0
             r = 0
             de = 0
-        xs = self._distribute_x(len(lst), b, r, de)
+        diams = [DIAM_CM.get(k, 0) for k in lst]
+        xs = self._distribute_x(diams, b, r, de)
         new_idx = min(range(len(xs)), key=lambda i: abs(xs[i] - event.xdata))
         self.move_bar(sign, sec, idx, new_idx)
         self.selected = (sign, sec, new_idx)
