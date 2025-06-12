@@ -47,12 +47,11 @@ DIAM_CM = {
 class DesignWindow(QMainWindow):
     """Ventana para la etapa de diseño de acero (solo interfaz gráfica)."""
 
-    def __init__(self, mn_corr, mp_corr, length=1.0):
+    def __init__(self, mn_corr, mp_corr):
         """Create the design window using corrected moments."""
         super().__init__()
         self.mn_corr = mn_corr
         self.mp_corr = mp_corr
-        self.length = length
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
         self.resize(700, 900)
@@ -164,20 +163,12 @@ class DesignWindow(QMainWindow):
         self.edits["d (cm)"].setText(f"{d:.2f}")
         return d
 
-    def _on_length_changed(self):
-        """Update stored length when the user edits the L field."""
-        try:
-            self.length = float(self.edits["L (m)"].text())
-        except ValueError:
-            self.length = 1.0
-
     def _build_ui(self):
         central = QWidget()
         self.setCentralWidget(central)
         layout = QGridLayout(central)
 
         labels = [
-            ("L (m)", str(self.length)),
             ("b (cm)", "30"),
             ("h (cm)", "50"),
             ("r (cm)", "4"),
@@ -197,8 +188,6 @@ class DesignWindow(QMainWindow):
                 ed.setReadOnly(True)
             layout.addWidget(ed, row, 1)
             self.edits[text] = ed
-            if text == "L (m)":
-                ed.editingFinished.connect(self._on_length_changed)
 
         # Combos para diámetro de estribo y de varilla
         estribo_opts = ["8mm", "3/8\"", "1/2\""]
@@ -232,9 +221,9 @@ class DesignWindow(QMainWindow):
 
             header = QGridLayout()
             header.addWidget(QLabel("cant."), 0, 0, alignment=Qt.AlignCenter)
-            header.addWidget(QLabel("\u00f8''"), 0, 1, alignment=Qt.AlignCenter)
+            header.addWidget(QLabel("\u00f8 varill"), 0, 1, alignment=Qt.AlignCenter)
             header.addWidget(QLabel("n\u00b0 capas"), 0, 2, alignment=Qt.AlignCenter)
-            header.addWidget(QLabel("capas"), 0, 3, alignment=Qt.AlignCenter)
+            header.addWidget(QLabel("capas"), 0, 3, 1, 2, alignment=Qt.AlignCenter)
             cell.addLayout(header)
 
             rows_layout = QVBoxLayout()
@@ -275,7 +264,7 @@ class DesignWindow(QMainWindow):
 
         self.btn_capture = QPushButton("Capturar Diseño")
         self.btn_memoria = QPushButton("Memoria de Cálculo")
-        self.btn_view3d = QPushButton("Vista 3D")
+        self.btn_view3d = QPushButton("Desarrollo de Refuerzo")
         self.btn_salir = QPushButton("Salir")
 
         self.btn_capture.clicked.connect(self._capture_design)
@@ -315,8 +304,8 @@ class DesignWindow(QMainWindow):
         q = QComboBox(); q.addItems(qty_opts); q.setCurrentText("2")
         d = QComboBox(); d.addItems(dia_opts); d.setCurrentText('1/2"')
         c = QComboBox(); c.addItems(["1", "2", "3", "4"]); c.setCurrentText("1")
-        btn_add = QPushButton("+")
-        btn_rem = QPushButton("-")
+        btn_add = QPushButton("+"); btn_add.setFixedWidth(20)
+        btn_rem = QPushButton("-"); btn_rem.setFixedWidth(20)
         row_layout.addWidget(q)
         row_layout.addWidget(d)
         row_layout.addWidget(c)
