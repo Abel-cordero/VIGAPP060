@@ -15,7 +15,17 @@ Ingresar momentos flectores en 3 secciones de una viga (6 valores: + y − en ca
 
 Generar y mostrar diagramas de momentos originales y corregidos
 
+
 Aplicar corrección de momentos automáticamente según el tipo de sistema estructural (dual 1 o 2), según Norma Técnica Peruana E.060
+
+## Corrección de momentos
+
+Las reglas de la NTP E.060 se aplican de forma automática a los seis valores ingresados:
+
+- Para **Dual 2 y pórticos** el momento positivo en cada cara del nudo no puede ser menor que la mitad del momento negativo proporcionado en esa misma cara.
+- En **Dual 1** dicha relación mínima es un tercio.
+- Además, en cualquier sección de la viga los momentos positivos y negativos no pueden ser menores que la cuarta parte del mayor momento existente en las caras.
+
 
 Pasar a una segunda ventana donde se haga el diseño de refuerzo:
 
