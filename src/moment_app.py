@@ -167,8 +167,10 @@ class MomentApp(QMainWindow):
         if sys_t == 'dual1':
             mn_k[1] = np.sign(mn_k[1]) * np.maximum(np.abs(mn_k[1]), 1.3 * np.abs(mp_k[1]))
             mp_k[1] = np.sign(mp_k[1]) * np.maximum(np.abs(mp_k[1]), 1.3 * np.abs(mn_k[1]))
-        mn_k[1] = np.maximum(mn_k[1], floor)
-        mp_k[1] = np.maximum(mp_k[1], floor)
+        # Use only the floor value corresponding to the middle support
+        floor_mid = floor[1]
+        mn_k[1] = np.maximum(mn_k[1], floor_mid)
+        mp_k[1] = np.maximum(mp_k[1], floor_mid)
         return mn_k / 100000, mp_k / 100000
 
     def on_calculate(self):
