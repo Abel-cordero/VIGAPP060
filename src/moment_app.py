@@ -161,17 +161,24 @@ class MomentApp(QMainWindow):
         ax.grid(True)
 
     def correct_moments(self, mn, mp, sys_t):
+        """Return moments corrected according to NTP E.060."""
         mn_k = mn * 100000
         mp_k = mp * 100000
-        floor = 0.7 * np.minimum(np.abs(mn_k), np.abs(mp_k))
-        if sys_t == 'dual1':
-            mn_k[1] = np.sign(mn_k[1]) * np.maximum(np.abs(mn_k[1]), 1.3 * np.abs(mp_k[1]))
-            mp_k[1] = np.sign(mp_k[1]) * np.maximum(np.abs(mp_k[1]), 1.3 * np.abs(mn_k[1]))
-        # Use only the floor value corresponding to the middle support
-        floor_mid = floor[1]
-        mn_k[1] = np.maximum(mn_k[1], floor_mid)
-        mp_k[1] = np.maximum(mp_k[1], floor_mid)
-        return mn_k / 100000, mp_k / 100000
+
+        abs_mn = np.abs(mn_k)
+        abs_mp = np.abs(mp_k)
+        floor = 0.7 * np.minimum(abs_mn, abs_mp)
+
+        mn_corr = np.sign(mn_k) * np.maximum(abs_mn, floor)
+        mp_corr = np.sign(mp_k) * np.maximum(abs_mp, floor)
+
+        if sys_t == "dual1":
+            mneg = abs(mn_corr[1])
+            mpos = abs(mp_corr[1])
+            mn_corr[1] = np.sign(mn_corr[1]) * max(mneg, 1.3 * mpos)
+            mp_corr[1] = np.sign(mp_corr[1]) * max(mpos, 1.3 * mneg)
+
+        return mn_corr / 100000, mp_corr / 100000
 
     def on_calculate(self):
         try:
