@@ -69,10 +69,11 @@ class View3DWindow(QMainWindow):
         self.setCentralWidget(central)
         layout = QVBoxLayout(central)
 
-        # Editable title shown inside the window
+        # Editable title. Moved below the canvas so it won't appear
+        # when capturing the view. The text is also printed as a bold
+        # heading above the section cuts.
         self.title_edit = QLineEdit(default_title)
-        self.title_edit.textChanged.connect(self.setWindowTitle)
-        layout.addWidget(self.title_edit)
+        self.title_edit.textChanged.connect(self._on_title_change)
 
 
 
@@ -80,6 +81,8 @@ class View3DWindow(QMainWindow):
         self.ax_sections = [self.fig.add_subplot(1, 3, i + 1) for i in range(3)]
         self.canvas = FigureCanvas(self.fig)
         layout.addWidget(self.canvas)
+        # Place the editable title at the bottom
+        layout.addWidget(self.title_edit)
         self.btn_capture = QPushButton("Capturar Vista")
         self.btn_capture.clicked.connect(self._capture_view)
         layout.addWidget(self.btn_capture)
@@ -91,6 +94,12 @@ class View3DWindow(QMainWindow):
 
         self.draw_views()
 
+    def _on_title_change(self, text):
+        """Update window title and figure heading."""
+        self.setWindowTitle(text)
+        self.fig.suptitle(text.upper(), fontweight="bold")
+        self.canvas.draw_idle()
+
     def draw_views(self):
         """Redraw the three section cuts."""
         try:
@@ -101,6 +110,9 @@ class View3DWindow(QMainWindow):
             return
 
         de = DIAM_CM.get(self.design.cb_estribo.currentText(), 0)
+
+        # Update the figure header using the current title
+        self.fig.suptitle(self.title_edit.text().upper(), fontweight="bold")
 
         neg_layers = [self._collect_bars(i) for i in range(3)]
         pos_layers = [self._collect_bars(i + 3) for i in range(3)]
