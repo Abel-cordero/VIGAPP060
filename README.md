@@ -228,9 +228,9 @@ Consulta el archivo [DESARROLLO.md](DESARROLLO.md) para pautas sobre configuraci
 ## Desarrollo de Refuerzo
 
 Se añadió un botón **Desarrollo de Refuerzo** en la ventana de diseño que abre
-una representación simple de la viga. Esta ventana muestra una sección 2D y una
-vista tridimensional generada con Matplotlib. La longitud de la viga se ingresa
-en esta tercera ventana mediante el campo **L (m)**. Es una funcionalidad
+una representación simple de la viga. Actualmente solo se muestran los cortes de
+sección en M1, M2 y M3. La longitud de la viga se ingresa en esta ventana
+mediante el campo **L (m)** (sin efecto por ahora). Es una funcionalidad
 experimental que sirve como paso previo a la integración más completa descrita
 en [DESARROLLO_3D.md](DESARROLLO_3D.md).
 
