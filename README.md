@@ -166,6 +166,12 @@ python main.py
 Se abrirá la interfaz gráfica donde se ingresan los momentos y se generan los
 diagramas correspondientes.
 
+## Activación
+
+Al ejecutarse por primera vez, la aplicación solicita una clave de licencia.
+Si la clave coincide con la esperada, se almacena una huella del equipo en
+`key.dat` y los siguientes inicios se validan de forma automática.
+
 
 ## Formulario de datos y flujos
 
