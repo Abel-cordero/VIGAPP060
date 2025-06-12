@@ -87,11 +87,7 @@ class MomentApp(QMainWindow):
         layout.addWidget(self.rb_dual1, 2, 1)
         layout.addWidget(self.rb_dual2, 2, 2)
 
-        layout.addWidget(QLabel("L (m):"), 2, 3)
-        self.length_edit = QLineEdit("1.0")
-        self.length_edit.setAlignment(Qt.AlignRight)
-        self.length_edit.setFixedWidth(60)
-        layout.addWidget(self.length_edit, 2, 4)
+        # longitud se solicitará en la siguiente etapa
 
         # ── Botones ────────────────────────────────────
         btn_calc    = QPushButton("Calcular Diagramas")
@@ -126,12 +122,8 @@ class MomentApp(QMainWindow):
             raise
 
     def get_length(self):
-        """Return beam length from the input field."""
-        try:
-            return float(self.length_edit.text())
-        except ValueError:
-            QMessageBox.warning(self, "Error", "Longitud L inválida")
-            return 1.0
+        """Return beam length (fixed to 1 m in esta etapa)."""
+        return 1.0
 
     def plot_original(self):
         """Plot the original moment diagrams on the first axes with shading."""
@@ -295,7 +287,7 @@ class MomentApp(QMainWindow):
                 "Primero calcule los momentos corregidos",
             )
             return
-        self.design_win = DesignWindow(self.mn_corr, self.mp_corr, self.get_length())
+        self.design_win = DesignWindow(self.mn_corr, self.mp_corr)
         self.design_win.show()
 
     def _capture_diagram(self):
@@ -309,7 +301,7 @@ class MomentApp(QMainWindow):
 class DesignWindow(QMainWindow):
     """Ventana para la etapa de diseño de acero (solo interfaz gráfica)."""
 
-    def __init__(self, mn_corr, mp_corr, length):
+    def __init__(self, mn_corr, mp_corr, length=1.0):
         """Create the design window using corrected moments."""
         super().__init__()
         self.mn_corr = mn_corr
@@ -426,12 +418,20 @@ class DesignWindow(QMainWindow):
         self.edits["d (cm)"].setText(f"{d:.2f}")
         return d
 
+    def _on_length_changed(self):
+        """Update stored length when the user edits the L field."""
+        try:
+            self.length = float(self.edits["L (m)"].text())
+        except ValueError:
+            self.length = 1.0
+
     def _build_ui(self):
         central = QWidget()
         self.setCentralWidget(central)
         layout = QGridLayout(central)
 
         labels = [
+            ("L (m)", str(self.length)),
             ("b (cm)", "30"),
             ("h (cm)", "50"),
             ("r (cm)", "4"),
@@ -451,6 +451,8 @@ class DesignWindow(QMainWindow):
                 ed.setReadOnly(True)
             layout.addWidget(ed, row, 1)
             self.edits[text] = ed
+            if text == "L (m)":
+                ed.editingFinished.connect(self._on_length_changed)
 
         # Combos para diámetro de estribo y de varilla
         estribo_opts = ["8mm", "3/8\"", "1/2\""]
@@ -483,9 +485,10 @@ class DesignWindow(QMainWindow):
             cell.addWidget(QLabel(label), alignment=Qt.AlignCenter)
 
             header = QGridLayout()
-            header.addWidget(QLabel("Cant. varill."), 0, 0)
-            header.addWidget(QLabel("\u00f8 varill."), 0, 1)
-            header.addWidget(QLabel("N\u00b0 capa"), 0, 2)
+            header.addWidget(QLabel("cant."), 0, 0, alignment=Qt.AlignCenter)
+            header.addWidget(QLabel("\u00f8''"), 0, 1, alignment=Qt.AlignCenter)
+            header.addWidget(QLabel("n\u00b0 capas"), 0, 2, alignment=Qt.AlignCenter)
+            header.addWidget(QLabel("capas"), 0, 3, alignment=Qt.AlignCenter)
             cell.addLayout(header)
 
             rows_layout = QVBoxLayout()
@@ -847,7 +850,7 @@ class View3DWindow(QMainWindow):
             b = float(self.design.edits["b (cm)"].text())
             h = float(self.design.edits["h (cm)"].text())
             r = float(self.design.edits["r (cm)"].text())
-            L = float(self.design.length) * 100
+            L = float(self.design.edits["L (m)"].text()) * 100
         except ValueError:
             return
         de = DIAM_CM.get(self.design.cb_estribo.currentText(), 0)
