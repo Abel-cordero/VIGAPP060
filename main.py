@@ -11,7 +11,8 @@ def main():
     logging.basicConfig(level=logging.ERROR)
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
-    MomentApp()
+    # Keep a reference to the main window so it isn't garbage collected
+    window = MomentApp()
     sys.exit(app.exec_())
 
 
