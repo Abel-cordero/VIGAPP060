@@ -236,6 +236,8 @@ transparencia. Además es posible reordenar las barras de cada sección haciendo
 clic en una barra y utilizando las flechas izquierda/derecha del teclado o
 arrastrándola a la posición deseada. Internamente la función `swap_bars` en
 `View3DWindow` permite intercambiar dos varillas de una sección.
+Las varillas ahora se dibujan por capas (hasta 4) usando colores primarios
+para distinguirlas, siguiendo el mismo criterio de la primera capa.
 Es una funcionalidad experimental que sirve como paso previo a la integración
 más completa descrita en [DESARROLLO_3D.md](DESARROLLO_3D.md).
 
