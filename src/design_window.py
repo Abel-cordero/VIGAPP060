@@ -496,10 +496,15 @@ class DesignWindow(QMainWindow):
         self.canvas_dist.draw()
 
     def _capture_design(self):
+        widgets = [self.btn_capture, self.btn_memoria, self.btn_view3d, self.btn_salir]
+        for w in widgets:
+            w.hide()
         self.repaint()
         QApplication.processEvents()
-        pix = self.grab()
+        pix = self.centralWidget().grab()
         QGuiApplication.clipboard().setPixmap(pix)
+        for w in widgets:
+            w.show()
         # Sin mensaje emergente
 
     def show_view3d(self):
