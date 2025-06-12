@@ -162,23 +162,25 @@ class MomentApp(QMainWindow):
 
     def correct_moments(self, mn, mp, sys_t):
         """Return moments corrected according to NTP E.060."""
-        mn_k = mn * 100000
-        mp_k = mp * 100000
+        mn_corr = mn.astype(float).copy()
+        mp_corr = mp.astype(float).copy()
 
-        abs_mn = np.abs(mn_k)
-        abs_mp = np.abs(mp_k)
-        floor = 0.7 * np.minimum(abs_mn, abs_mp)
+        ratio = 1 / 2 if sys_t == "dual2" else 1 / 3
 
-        mn_corr = np.sign(mn_k) * np.maximum(abs_mn, floor)
-        mp_corr = np.sign(mp_k) * np.maximum(abs_mp, floor)
+        for idx in (0, 2):
+            req = ratio * abs(mn_corr[idx])
+            mp_corr[idx] = max(mp_corr[idx], req)
 
-        if sys_t == "dual1":
-            mneg = abs(mn_corr[1])
-            mpos = abs(mp_corr[1])
-            mn_corr[1] = np.sign(mn_corr[1]) * max(mneg, 1.3 * mpos)
-            mp_corr[1] = np.sign(mp_corr[1]) * max(mpos, 1.3 * mneg)
+        max_face = max(abs(mn_corr[0]), abs(mn_corr[2]),
+                       abs(mp_corr[0]), abs(mp_corr[2]))
+        floor = 0.25 * max_face
 
-        return mn_corr / 100000, mp_corr / 100000
+        for arr in (mn_corr, mp_corr):
+            for i in range(len(arr)):
+                if abs(arr[i]) < floor:
+                    arr[i] = np.sign(arr[i]) * floor
+
+        return mn_corr, mp_corr
 
     def on_calculate(self):
         try:
