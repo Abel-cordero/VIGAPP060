@@ -32,6 +32,7 @@ class Section2DView(QWidget):
         layout = QVBoxLayout(self)
         self.plot = pg.PlotWidget()
         layout.addWidget(self.plot)
+        self.setFocusPolicy(Qt.StrongFocus)
         self.plot.setAspectLocked(True)
         self.plot.hideAxis('left')
         self.plot.hideAxis('bottom')
@@ -92,3 +93,33 @@ class Section2DView(QWidget):
         for i, r in enumerate(self._bars):
             r.bar_index = i
         self.barraMovida.emit(roi.bar_index, center_x)
+
+    def keyPressEvent(self, event):
+        """Allow reordering bars using left/right arrows."""
+        if self._selected is None:
+            return super().keyPressEvent(event)
+
+        if event.key() in (Qt.Key_Left, Qt.Key_Right):
+            idx = self._selected
+            if event.key() == Qt.Key_Left and idx > 0:
+                j = idx - 1
+            elif event.key() == Qt.Key_Right and idx < len(self._bars) - 1:
+                j = idx + 1
+            else:
+                return
+
+            roi_i = self._bars[idx]
+            roi_j = self._bars[j]
+            pos_i = roi_i.pos()
+            pos_j = roi_j.pos()
+            roi_i.setPos(pos_j)
+            roi_j.setPos(pos_i)
+            self._bars[idx], self._bars[j] = self._bars[j], self._bars[idx]
+            for k, r in enumerate(self._bars):
+                r.bar_index = k
+            self._selected = j
+            center_x = self._bars[j].pos()[0] + self._bars[j].size()[0] / 2
+            self.barraMovida.emit(j, center_x)
+            event.accept()
+        else:
+            super().keyPressEvent(event)
