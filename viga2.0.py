@@ -133,10 +133,12 @@ class MomentApp(QMainWindow):
         for ax in (self.ax1, self.ax2):
             ax.plot([0, L], [0, 0], 'k-', lw=6)
 
-        self.ax1.plot(xs, csn(xs), 'b-', label='Neg original')
-        self.ax1.fill_between(xs, csn(xs), 0, color='b', alpha=0.2)
-        self.ax1.plot(xs, csp(xs), 'r-', label='Pos original')
-        self.ax1.fill_between(xs, csp(xs), 0, color='r', alpha=0.2)
+        self.ax1.plot(xs, csn(xs), 'b-', lw=1.5, label='Neg original')
+        self.ax1.fill_between(xs, csn(xs), 0, color='b', alpha=0.25,
+                              hatch='//', edgecolor='b')
+        self.ax1.plot(xs, csp(xs), 'r-', lw=1.5, label='Pos original')
+        self.ax1.fill_between(xs, csp(xs), 0, color='r', alpha=0.25,
+                              hatch='\\\\', edgecolor='r')
         self._draw_verticals(self.ax1, csn, csp, x_ctrl)
         self._label_points(self.ax1, csn, csp, x_ctrl)
         self._enable_hover(self.ax1, csn, csp)
@@ -161,15 +163,23 @@ class MomentApp(QMainWindow):
         if mn_orig is not None and mp_orig is not None:
             csn_o = CubicSpline(x_ctrl, mn_orig)
             csp_o = CubicSpline(x_ctrl, -mp_orig)
-            self.ax2.plot(xs, csn_o(xs), 'b-', alpha=0.3, label='Neg original')
-            self.ax2.fill_between(xs, csn_o(xs), 0, color='b', alpha=0.1)
-            self.ax2.plot(xs, csp_o(xs), 'r-', alpha=0.3, label='Pos original')
-            self.ax2.fill_between(xs, csp_o(xs), 0, color='r', alpha=0.1)
+            self.ax2.plot(xs, csn_o(xs), 'b-', lw=1, alpha=0.3,
+                          label='Neg original')
+            self.ax2.fill_between(xs, csn_o(xs), 0, color='b', alpha=0.08,
+                                  hatch='//', edgecolor='b')
+            self.ax2.plot(xs, csp_o(xs), 'r-', lw=1, alpha=0.3,
+                          label='Pos original')
+            self.ax2.fill_between(xs, csp_o(xs), 0, color='r', alpha=0.08,
+                                  hatch='\\\\', edgecolor='r')
 
-        self.ax2.plot(xs, csn(xs), 'b--', lw=2, label='Neg corregido')
-        self.ax2.fill_between(xs, csn(xs), 0, color='b', alpha=0.4)
-        self.ax2.plot(xs, csp(xs), 'r--', lw=2, label='Pos corregido')
-        self.ax2.fill_between(xs, csp(xs), 0, color='r', alpha=0.4)
+        self.ax2.plot(xs, csn(xs), 'b--', lw=2.5, alpha=0.9,
+                       label='Neg corregido')
+        self.ax2.fill_between(xs, csn(xs), 0, color='b', alpha=0.4,
+                              hatch='//', edgecolor='b')
+        self.ax2.plot(xs, csp(xs), 'r--', lw=2.5, alpha=0.9,
+                       label='Pos corregido')
+        self.ax2.fill_between(xs, csp(xs), 0, color='r', alpha=0.4,
+                              hatch='\\\\', edgecolor='r')
         self._draw_verticals(self.ax2, csn, csp, x_ctrl, dashed=True)
         self._label_points(self.ax2, csn, csp, x_ctrl)
         self._enable_hover(self.ax2, csn, csp)
@@ -275,9 +285,11 @@ class MomentApp(QMainWindow):
         self.design_win.show()
 
     def _capture_diagram(self):
+        self.canvas.repaint()
+        QApplication.processEvents()
         pix = self.canvas.grab()
         QGuiApplication.clipboard().setPixmap(pix)
-        # Silenciar cualquier mensaje de confirmación
+        # Sin mensaje emergente
 
 
 class DesignWindow(QMainWindow):
@@ -456,8 +468,8 @@ class DesignWindow(QMainWindow):
             cell.addWidget(QLabel(label), alignment=Qt.AlignCenter)
 
             header = QGridLayout()
-            header.addWidget(QLabel("Cant."), 0, 0)
-            header.addWidget(QLabel("\u03c6"), 0, 1)
+            header.addWidget(QLabel("Cant. varill."), 0, 0)
+            header.addWidget(QLabel("\u03c6 varill."), 0, 1)
             header.addWidget(QLabel("Capa"), 0, 2)
             cell.addLayout(header)
 
@@ -703,6 +715,8 @@ class DesignWindow(QMainWindow):
         self.canvas_dist.draw()
 
     def _capture_design(self):
+        self.repaint()
+        QApplication.processEvents()
         pix = self.grab()
         QGuiApplication.clipboard().setPixmap(pix)
         # Sin mensaje emergente
