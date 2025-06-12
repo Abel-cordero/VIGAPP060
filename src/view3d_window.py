@@ -11,6 +11,8 @@ from PyQt5.QtWidgets import (
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 from matplotlib import colors as mcolors
+from matplotlib import patches
+import numpy as np
 
 
 DIAM_CM = {
@@ -32,6 +34,8 @@ COLOR_MAP = {
     )
 }
 
+# Pre-generated noise texture for concrete-like appearance
+
 
 class View3DWindow(QMainWindow):
     """Window that displays beam sections for M1, M2 and M3."""
@@ -41,6 +45,10 @@ class View3DWindow(QMainWindow):
         self.design = design
         self.setWindowTitle("Desarrollo de Refuerzo")
         self.resize(800, 400)
+
+        rng = np.random.default_rng(0)
+        self.texture = rng.normal(loc=0.7, scale=0.1, size=(64, 64))
+        self.texture = np.clip(self.texture, 0, 1)
 
         central = QWidget()
         self.setCentralWidget(central)
@@ -79,6 +87,19 @@ class View3DWindow(QMainWindow):
 
         for ax, neg, pos, tit in zip(self.ax_sections, neg_layers, pos_layers, titles):
             self._plot_section(ax, neg, pos, b, h, r, de, tit)
+
+        used_diams = set()
+        for layers in neg_layers + pos_layers:
+            for bars in layers.values():
+                used_diams.update(key for _, key in bars)
+        handles = [
+            plt.Line2D([], [], marker='o', color=COLOR_MAP.get(d), linestyle='',
+                       label=d)
+            for d in used_diams
+        ]
+        if handles:
+            self.fig.legend(handles=handles, title="Diámetros",
+                            loc='lower center', ncol=len(handles))
 
         self.canvas.draw()
 
@@ -144,6 +165,10 @@ class View3DWindow(QMainWindow):
     def _plot_section(self, ax, neg_layers, pos_layers, b, h, r, de, title):
         ax.clear()
         ax.set_aspect("equal")
+        if self.texture is not None:
+            ax.imshow(self.texture, extent=(0, b, 0, h), origin='lower', alpha=0.3)
+        rect_bg = patches.Rectangle((0, 0), b, h, facecolor='lightgray', alpha=0.2)
+        ax.add_patch(rect_bg)
         ax.plot([0, b, b, 0, 0], [0, 0, h, h, 0], "k-")
         ax.plot([r, b - r, b - r, r, r], [r, r, h - r, h - r, r], color="0.6", ls="--", lw=0.8)
         ax.plot(
