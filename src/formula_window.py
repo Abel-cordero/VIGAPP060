@@ -51,7 +51,7 @@ class FormulaWindow(QMainWindow):
         }
 
         self._build_ui()
-        self.setFixedSize(560, 720)
+        self.setFixedSize(700, 900)
 
     def _build_ui(self):
         central = QWidget()
