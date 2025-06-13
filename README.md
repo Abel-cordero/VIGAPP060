@@ -256,6 +256,11 @@ Para que el mismo icono aparezca en la barra de tareas y en el archivo `.exe`,
 primero convierte `vigapp060.png` a formato `.ico`. Luego usa
 `auto-py-to-exe` o `pyinstaller` indicando esa ruta en la opción `--icon`.
 
+### Cambios recientes
+
+- Los diagramas de momentos se ajustaron para mostrar los valores negativos
+  hacia arriba y los positivos hacia abajo, respetando su posición habitual.
+
 ## Desarrollo de Refuerzo
 
 Se añadió un botón **Desarrollo de Refuerzo** en la ventana de diseño que abre
