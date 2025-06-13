@@ -170,13 +170,20 @@ class MomentApp(QMainWindow):
         ax.grid(True)
 
     def correct_moments(self, mn, mp, sys_t):
-        """Return moments corrected by face and global rules."""
+        """Return moments corrected by face and global rules.
+
+        The positive moments at the beam ends (M1+ and M3+) must be at
+        least a fraction of the negative moment at that face. Dual 1
+        uses 1/3 while Dual 2 uses 1/2. Additionally, all moments must
+        not fall below one quarter of the largest face moment.
+        """
         mn = np.asarray(mn, dtype=float)
         mp = np.asarray(mp, dtype=float)
 
         f = 1 / 3 if sys_t.lower() == "dual1" else 1 / 2
 
-        min_face_pos = f * np.abs(mn)
+        min_face_pos = np.zeros(3)
+        min_face_pos[[0, 2]] = f * np.abs(mn[[0, 2]])
         m_max = max(np.max(np.abs(mn)), np.max(np.abs(mp)))
         min_global = m_max / 4.0
 
