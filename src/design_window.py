@@ -619,7 +619,12 @@ class DesignWindow(QMainWindow):
 
         html = (
             "<html><head>"
-            "<style>p{margin:6px 0;} .eq{margin-left:20px;}</style>"
+            "<style>"
+            "body{font-size:11pt;font-family:'Times New Roman';}"
+            "h2{font-size:12pt;margin:8px 0;}"
+            "h3{font-size:11pt;margin:6px 0;}"
+            "p{margin:6px 0;} .eq{margin-left:20px;}"
+            "</style>"
             "</head><body>"
             + "\n".join(lines) +
             "</body></html>"
