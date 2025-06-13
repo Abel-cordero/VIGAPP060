@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QWidget,
     QVBoxLayout,
-    QLabel,
     QPushButton,
     QApplication,
     QLineEdit,
@@ -12,7 +11,6 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QGuiApplication
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
-from matplotlib import colors as mcolors
 from matplotlib import patches
 import numpy as np
 
@@ -288,8 +286,8 @@ class View3DWindow(QMainWindow):
         orders_pos = self.pos_orders[idx] if idx < len(self.pos_orders) else []
         orders_neg = self.neg_orders[idx] if idx < len(self.neg_orders) else []
 
-        pos_counts = [len(pos_layers.get(l, [])) for l in sorted(pos_layers)]
-        neg_counts = [len(neg_layers.get(l, [])) for l in sorted(neg_layers)]
+        pos_counts = [len(pos_layers.get(layer, [])) for layer in sorted(pos_layers)]
+        neg_counts = [len(neg_layers.get(layer, [])) for layer in sorted(neg_layers)]
 
         pos_y = self._layer_positions_bottom(pos_layers, r, de)
         neg_y = self._layer_positions_top(neg_layers, r, de, h)

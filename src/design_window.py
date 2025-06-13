@@ -69,13 +69,9 @@ class DesignWindow(QMainWindow):
     def _required_areas(self):
         try:
             b = float(self.edits["b (cm)"].text())
-            h = float(self.edits["h (cm)"].text())
-            r = float(self.edits["r (cm)"].text())
             fc = float(self.edits["f'c (kg/cm²)"].text())
             fy = float(self.edits["fy (kg/cm²)"].text())
             phi = float(self.edits["φ"].text())
-            de = DIAM_CM.get(self.cb_estribo.currentText(), 0)
-            db = DIAM_CM.get(self.cb_varilla.currentText(), 0)
         except ValueError:
             return np.zeros(3), np.zeros(3)
 
@@ -126,9 +122,9 @@ class DesignWindow(QMainWindow):
                     layer_diams[layer] = DIAM_CM.get(dia_key, 0)
 
         max_layer = 1
-        for l in range(1, 5):
-            if layer_areas[l] > 0:
-                max_layer = max(max_layer, l)
+        for layer_num in range(1, 5):
+            if layer_areas[layer_num] > 0:
+                max_layer = max(max_layer, layer_num)
         self.layer_combo.setCurrentText(str(max_layer))
 
         db1 = layer_diams[1]
@@ -192,18 +188,21 @@ class DesignWindow(QMainWindow):
         # Combos para diámetro de estribo y de varilla
         estribo_opts = ["8mm", "3/8\"", "1/2\""]
         layout.addWidget(QLabel("ϕ estribo"), len(labels), 0)
-        self.cb_estribo = QComboBox(); self.cb_estribo.addItems(estribo_opts)
+        self.cb_estribo = QComboBox()
+        self.cb_estribo.addItems(estribo_opts)
         self.cb_estribo.setCurrentText('3/8"')
         layout.addWidget(self.cb_estribo, len(labels), 1)
 
         varilla_opts = ["1/2\"", "5/8\"", "3/4\"", "1\""]
         layout.addWidget(QLabel("ϕ varilla"), len(labels)+1, 0)
-        self.cb_varilla = QComboBox(); self.cb_varilla.addItems(varilla_opts)
+        self.cb_varilla = QComboBox()
+        self.cb_varilla.addItems(varilla_opts)
         self.cb_varilla.setCurrentText('5/8"')
         layout.addWidget(self.cb_varilla, len(labels)+1, 1)
 
         layout.addWidget(QLabel("N\u00b0 capas"), len(labels)+2, 0)
-        self.layer_combo = QComboBox(); self.layer_combo.addItems(["1", "2", "3", "4"])
+        self.layer_combo = QComboBox()
+        self.layer_combo.addItems(["1", "2", "3", "4"])
         layout.addWidget(self.layer_combo, len(labels)+2, 1)
 
         pos_labels = ["M1-", "M2-", "M3-", "M1+", "M2+", "M3+"]
@@ -313,11 +312,19 @@ class DesignWindow(QMainWindow):
         qty_opts = [""] + [str(i) for i in range(1, 11)]
         dia_opts = ["", "1/2\"", "5/8\"", "3/4\"", "1\""]
         row_layout = QHBoxLayout()
-        q = QComboBox(); q.addItems(qty_opts); q.setCurrentText("2")
-        d = QComboBox(); d.addItems(dia_opts); d.setCurrentText('1/2"')
-        c = QComboBox(); c.addItems(["1", "2", "3", "4"]); c.setCurrentText("1")
-        btn_add = QPushButton("+"); btn_add.setFixedWidth(20)
-        btn_rem = QPushButton("-"); btn_rem.setFixedWidth(20)
+        q = QComboBox()
+        q.addItems(qty_opts)
+        q.setCurrentText("2")
+        d = QComboBox()
+        d.addItems(dia_opts)
+        d.setCurrentText('1/2"')
+        c = QComboBox()
+        c.addItems(["1", "2", "3", "4"])
+        c.setCurrentText("1")
+        btn_add = QPushButton("+")
+        btn_add.setFixedWidth(20)
+        btn_rem = QPushButton("-")
+        btn_rem.setFixedWidth(20)
         row_layout.addWidget(q)
         row_layout.addWidget(d)
         row_layout.addWidget(c)
@@ -345,8 +352,6 @@ class DesignWindow(QMainWindow):
             b = float(self.edits["b (cm)"].text())
             h = float(self.edits["h (cm)"].text())
             r = float(self.edits["r (cm)"].text())
-            de = DIAM_CM.get(self.cb_estribo.currentText(), 0)
-            db = DIAM_CM.get(self.cb_varilla.currentText(), 0)
         except ValueError:
             return
 

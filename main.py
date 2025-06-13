@@ -4,11 +4,11 @@ import logging
 import os
 import sys
 import ctypes
-from PyQt5.QtWidgets import QApplication, QMessageBox, QDialog
+from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
 from src.moment_app import MomentApp
-from src.activation import check_activation, activate, machine_code
+from src.activation import check_activation
 from src.activation_dialog import ActivationDialog
 
 
@@ -31,7 +31,7 @@ def main():
 
     app.setStyle("Fusion")
     # Keep a reference to the main window so it isn't garbage collected
-    window = MomentApp()
+    _window = MomentApp()
     sys.exit(app.exec_())
 
 

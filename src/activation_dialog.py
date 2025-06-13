@@ -7,7 +7,6 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QMessageBox,
 )
-from PyQt5.QtCore import Qt
 
 from .activation import machine_code, activate
 
