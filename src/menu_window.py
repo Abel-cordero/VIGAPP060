@@ -27,7 +27,7 @@ class MenuWindow(QMainWindow):
         self.stacked = QStackedWidget()
         self.setCentralWidget(self.stacked)
 
-        self.setFixedSize(560, 720)
+        self.setFixedSize(700, 900)
 
         self.mn_corr = None
         self.mp_corr = None
@@ -49,20 +49,23 @@ class MenuWindow(QMainWindow):
         layout.addWidget(label_title)
 
         btn_flex = QPushButton("Diseño por Flexión")
+        btn_flex_extra = QPushButton("Otro Diseño")
         btn_cort = QPushButton("Diseño por Cortante")
         btn_mem = QPushButton("Memoria de Cálculo")
         btn_exit = QPushButton("Salir")
 
-        for b in (btn_flex, btn_cort, btn_mem, btn_exit):
+        for b in (btn_flex, btn_flex_extra, btn_cort, btn_mem, btn_exit):
             b.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             b.setStyleSheet("font-size:16pt;padding:20px;")
 
         layout.addWidget(btn_flex)
+        layout.addWidget(btn_flex_extra)
         layout.addWidget(btn_cort)
         layout.addWidget(btn_mem)
         layout.addWidget(btn_exit)
 
         btn_flex.clicked.connect(self.open_diagrama)
+        btn_flex_extra.clicked.connect(self.show_cortante_msg)
         btn_cort.clicked.connect(self.show_cortante_msg)
         btn_mem.clicked.connect(self.open_memoria)
         btn_exit.clicked.connect(self.close)
@@ -126,18 +129,20 @@ class MenuWindow(QMainWindow):
         if not self.design_ready:
             QMessageBox.warning(self, "Advertencia", "Debe completar el diseño")
             return
+        title, html = self.design_page._build_memoria()
+        if title is None:
+            return
         if not hasattr(self, "mem_page"):
-            try:
-                title = self.design_page.windowTitle()
-            except Exception:
-                title = "Memoria"
             self.mem_page = MemoriaWindow(
                 title,
-                "",
+                html,
                 show_window=False,
                 menu_callback=self.show_menu,
             )
             self.stacked.addWidget(self.mem_page)
+        else:
+            self.mem_page.setWindowTitle(title)
+            self.mem_page.text.setHtml(html)
         self.stacked.setCurrentWidget(self.mem_page)
 
     def show_cortante_msg(self):

@@ -59,7 +59,7 @@ class DesignWindow(QMainWindow):
         self.menu_callback = menu_callback
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
-        self.setFixedSize(560, 720)
+        self.setFixedSize(700, 900)
         if show_window:
             self.show()
 
@@ -526,6 +526,12 @@ class DesignWindow(QMainWindow):
 
     def show_memoria(self):
         """Show a detailed calculation window."""
+        title, text = self._build_memoria()
+        self.mem_win = MemoriaWindow(title, text)
+        self.mem_win.show()
+
+    def _build_memoria(self):
+        """Return title and HTML for the calculation memory."""
         try:
             b = float(self.edits["b (cm)"].text())
             h = float(self.edits["h (cm)"].text())
@@ -537,7 +543,7 @@ class DesignWindow(QMainWindow):
             db = DIAM_CM.get(self.cb_varilla.currentText(), 0)
         except ValueError:
             QMessageBox.warning(self, "Error", "Datos num\u00e9ricos inv\u00e1lidos")
-            return
+            return None, None
 
         d = h - r - de - 0.5 * db
         beta1 = 0.85 if fc <= 280 else 0.85 - ((fc - 280) / 70) * 0.05
@@ -556,6 +562,9 @@ class DesignWindow(QMainWindow):
         num_as_max = "0.85 f'c \\beta_1"
 
         lines = [
+            "<h1>DISE\u00d1O DE VIGAS</h1>",
+            "<h2>Datos de la viga del dise\u00f1o a flexi\u00f3n &gt; Dise\u00f1o de Acero</h2>",
+            "<h2>DISE\u00d1O A FLEXI\u00d3N</h2>",
             "<h2>DATOS INGRESADOS</h2>",
             f"<p>b = {b} cm</p>",
             f"<p>h = {h} cm</p>",
@@ -636,9 +645,7 @@ class DesignWindow(QMainWindow):
             "</body></html>"
         )
         title = f"DISE\u00d1O DE VIGA {int(b)}X{int(h)}"
-        text = html
-        self.mem_win = MemoriaWindow(title, text)
-        self.mem_win.show()
+        return title, html
 
     def on_next(self):
         if self.next_callback:

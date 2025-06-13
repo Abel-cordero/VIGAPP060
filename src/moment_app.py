@@ -35,7 +35,7 @@ class MomentApp(QMainWindow):
         self.mn_corr = None
         self.mp_corr = None
         self._build_ui()
-        self.setFixedSize(560, 720)
+        self.setFixedSize(700, 900)
         if show_window:
             self.show()
 
