@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (
     QLineEdit,
     QPushButton,
     QFileDialog,
+    QComboBox,
 )
 from PyQt5.QtGui import QGuiApplication
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -25,13 +26,30 @@ class FormulaWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Parte 4 – Fórmulas")
+
+        self._formulas = {
+            "Peralte efectivo d": "d = h - r - phi_estribo - 0.5*phi_barra",
+            "Coeficiente beta1": "beta1 = 0.85 - 0.05*(fc-280)/70",
+            "As_min": "As_min = 0.7*sqrt(fc)/fy*b*d",
+            "As_max": "As_max = 0.75*(0.85*fc*beta1/fy)*(6000/(6000+fy))*b*d",
+            "As por momento": (
+                "As = (1.7*fc*b*d)/(2*fy) - 0.5*sqrt((2.89*(fc*b*d)**2)/fy**2 - "
+                "(6.8*fc*b*Mu)/(phi*fy**2))"
+            ),
+        }
+
         self._build_ui()
-        self.resize(600, 400)
+        self.resize(600, 350)
 
     def _build_ui(self):
         central = QWidget()
         self.setCentralWidget(central)
         layout = QVBoxLayout(central)
+
+        self.box = QComboBox()
+        self.box.addItems(self._formulas.keys())
+        self.box.currentIndexChanged.connect(self._formula_selected)
+        layout.addWidget(self.box)
 
         input_layout = QHBoxLayout()
         self.edit = QLineEdit("As = Mu / (0.9 * fy * (d - a/2))")
@@ -41,7 +59,7 @@ class FormulaWindow(QMainWindow):
         input_layout.addWidget(btn_show)
         layout.addLayout(input_layout)
 
-        self.fig, self.ax = plt.subplots(figsize=(5, 2))
+        self.fig, self.ax = plt.subplots(figsize=(4, 1.5))
         self.ax.axis("off")
         self.canvas = FigureCanvas(self.fig)
         layout.addWidget(self.canvas)
@@ -54,6 +72,13 @@ class FormulaWindow(QMainWindow):
         btns.addWidget(self.btn_capture)
         btns.addWidget(self.btn_export)
         layout.addLayout(btns)
+
+    def _formula_selected(self, index: int):
+        text = self.box.itemText(index)
+        formula = self._formulas.get(text, "")
+        if formula:
+            self.edit.setText(formula)
+            self.show_formula()
 
     # ------------------------------------------------------------------
     def _parse_formula(self, text: str) -> Optional[sp.Eq]:
@@ -75,7 +100,7 @@ class FormulaWindow(QMainWindow):
         latex = sp.latex(eq)
         self.ax.clear()
         self.ax.axis("off")
-        self.ax.text(0.5, 0.5, f"${latex}$", ha="center", va="center", fontsize=12)
+        self.ax.text(0.5, 0.5, f"${latex}$", ha="center", va="center", fontsize=10)
         self.canvas.draw()
 
     # ------------------------------------------------------------------
