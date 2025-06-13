@@ -92,7 +92,7 @@ class MomentApp(QMainWindow):
         L = self.get_length()
         x_ctrl = np.array([0, 0.5, 1.0])
         xs = np.linspace(0, L, 200)
-        csn = CubicSpline(x_ctrl, mn)
+        csn = CubicSpline(x_ctrl, -mn)
         csp = CubicSpline(x_ctrl, -mp)
 
         self.ax1.clear()
@@ -114,7 +114,7 @@ class MomentApp(QMainWindow):
         L = self.get_length()
         x_ctrl = np.array([0, 0.5, 1.0])
         xs = np.linspace(0, L, 200)
-        csn = CubicSpline(x_ctrl, mn_corr)
+        csn = CubicSpline(x_ctrl, -mn_corr)
         csp = CubicSpline(x_ctrl, -mp_corr)
 
         self.ax2.clear()
@@ -124,7 +124,7 @@ class MomentApp(QMainWindow):
         self.ax2.fill_between(xs, csp(xs), 0, color='r', alpha=0.25, hatch='\\', edgecolor='r')
 
         if mn_orig is not None and mp_orig is not None:
-            csn_o = CubicSpline(x_ctrl, mn_orig)
+            csn_o = CubicSpline(x_ctrl, -mn_orig)
             csp_o = CubicSpline(x_ctrl, -mp_orig)
             self.ax2.plot(xs, csn_o(xs), 'b--', alpha=0.5)
             self.ax2.plot(xs, csp_o(xs), 'r--', alpha=0.5)
@@ -144,15 +144,17 @@ class MomentApp(QMainWindow):
 
     def _label_points(self, ax, csn, csp, x_ctrl):
         for x in x_ctrl:
-            ax.annotate(f"{csn(x):.2f}", (x, csn(x)), xytext=(5, 5), textcoords='offset points')
+            ax.annotate(f"{-csn(x):.2f}", (x, csn(x)), xytext=(5, 5), textcoords='offset points')
             ax.annotate(f"{abs(csp(x)):.2f}", (x, csp(x)), xytext=(5, -15), textcoords='offset points')
 
     def _enable_hover(self, ax, csn, csp):
-        cursor = mplcursors.cursor(ax.lines, hover=True)
+        cursor = mplcursors.cursor(ax.lines[:2], hover=True)
 
         @cursor.connect("add")
         def _(sel):
-            sel.annotation.set(text=f"{sel.target[1]:.2f}")
+            y = sel.target[1]
+            val = y if y < 0 else -y
+            sel.annotation.set(text=f"{val:.2f}")
 
     def _format(self, ax):
         ax.set_xlabel('Longitud (m)')
