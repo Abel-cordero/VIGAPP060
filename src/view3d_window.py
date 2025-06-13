@@ -41,9 +41,10 @@ CLEARANCE = 0.2
 class View3DWindow(QMainWindow):
     """Window that displays beam sections for M1, M2 and M3."""
 
-    def __init__(self, design):
-        super().__init__()
+    def __init__(self, design, parent=None, *, show_window=True, menu_callback=None):
+        super().__init__(parent)
         self.design = design
+        self.menu_callback = menu_callback
         self.neg_orders = []
         self.pos_orders = []
         self.selected = None
@@ -83,7 +84,10 @@ class View3DWindow(QMainWindow):
         layout.addWidget(self.title_edit)
         self.btn_capture = QPushButton("Capturar Vista")
         self.btn_capture.clicked.connect(self._capture_view)
+        self.btn_menu = QPushButton("Menú")
+        self.btn_menu.clicked.connect(self.on_menu)
         layout.addWidget(self.btn_capture)
+        layout.addWidget(self.btn_menu)
 
         self.canvas.mpl_connect("pick_event", self._on_pick)
         self.canvas.mpl_connect("key_press_event", self._on_key)
@@ -91,6 +95,9 @@ class View3DWindow(QMainWindow):
         self.canvas.mpl_connect("button_release_event", self._on_release)
 
         self.draw_views()
+
+        if show_window:
+            self.show()
 
     def _on_title_change(self, text):
         """Update window title and figure heading."""
@@ -418,4 +425,8 @@ class View3DWindow(QMainWindow):
         QApplication.processEvents()
         pix = self.canvas.grab()
         QGuiApplication.clipboard().setPixmap(pix)
+
+    def on_menu(self):
+        if self.menu_callback:
+            self.menu_callback()
 

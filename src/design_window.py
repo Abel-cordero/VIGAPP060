@@ -48,14 +48,20 @@ DIAM_CM = {
 class DesignWindow(QMainWindow):
     """Ventana para la etapa de diseño de acero (solo interfaz gráfica)."""
 
-    def __init__(self, mn_corr, mp_corr):
+    def __init__(self, mn_corr, mp_corr, parent=None, *, show_window=True,
+                 next_callback=None, save_callback=None, menu_callback=None):
         """Create the design window using corrected moments."""
-        super().__init__()
+        super().__init__(parent)
         self.mn_corr = mn_corr
         self.mp_corr = mp_corr
+        self.next_callback = next_callback
+        self.save_callback = save_callback
+        self.menu_callback = menu_callback
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
         self.resize(700, 900)
+        if show_window:
+            self.show()
 
     def _calc_as_req(self, Mu, fc, b, d, fy, phi):
         """Calculate required steel area for a single moment."""
@@ -276,18 +282,21 @@ class DesignWindow(QMainWindow):
 
         self.btn_capture = QPushButton("Capturar Diseño")
         self.btn_memoria = QPushButton("Memoria de Cálculo")
-        self.btn_view3d = QPushButton("Desarrollo de Refuerzo")
-        self.btn_salir = QPushButton("Salir")
+        self.btn_view3d = QPushButton("Continuar con Desarrollo")
+        self.btn_save = QPushButton("Guardar Diseño")
+        self.btn_menu = QPushButton("Menú")
 
         self.btn_capture.clicked.connect(self._capture_design)
         self.btn_memoria.clicked.connect(self.show_memoria)
-        self.btn_view3d.clicked.connect(self.show_view3d)
-        self.btn_salir.clicked.connect(QApplication.instance().quit)
+        self.btn_view3d.clicked.connect(self.on_next)
+        self.btn_save.clicked.connect(self.on_save)
+        self.btn_menu.clicked.connect(self.on_menu)
 
-        layout.addWidget(self.btn_capture, row_start + 4, 0, 1, 2)
-        layout.addWidget(self.btn_memoria, row_start + 4, 2, 1, 2)
-        layout.addWidget(self.btn_view3d, row_start + 4, 4, 1, 2)
-        layout.addWidget(self.btn_salir,   row_start + 4, 6, 1, 2)
+        layout.addWidget(self.btn_save,    row_start + 4, 0, 1, 2)
+        layout.addWidget(self.btn_capture, row_start + 4, 2, 1, 2)
+        layout.addWidget(self.btn_memoria, row_start + 4, 4, 1, 2)
+        layout.addWidget(self.btn_view3d,  row_start + 4, 6, 1, 2)
+        layout.addWidget(self.btn_menu,    row_start + 4, 8, 1, 2)
 
         for ed in self.edits.values():
             ed.editingFinished.connect(self._redraw)
@@ -502,7 +511,7 @@ class DesignWindow(QMainWindow):
         self.canvas_dist.draw()
 
     def _capture_design(self):
-        widgets = [self.btn_capture, self.btn_memoria, self.btn_view3d, self.btn_salir]
+        widgets = [self.btn_capture, self.btn_memoria, self.btn_view3d, self.btn_save, self.btn_menu]
         for w in widgets:
             w.hide()
         self.repaint()
@@ -633,4 +642,18 @@ class DesignWindow(QMainWindow):
         text = html
         self.mem_win = MemoriaWindow(title, text)
         self.mem_win.show()
+
+    def on_next(self):
+        if self.next_callback:
+            self.next_callback()
+        else:
+            self.show_view3d()
+
+    def on_save(self):
+        if self.save_callback:
+            self.save_callback()
+
+    def on_menu(self):
+        if self.menu_callback:
+            self.menu_callback()
 
