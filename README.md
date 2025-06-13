@@ -330,6 +330,8 @@ primero convierte `vigapp060.png` a formato `.ico`. Luego usa
   hacia arriba y los positivos hacia abajo, respetando su posición habitual.
 - La función `correct_moments` aplica ahora los mínimos por cara y global
   siguiendo los criterios de Dual 1 y Dual 2.
+- Se incorporó una pantalla de carga y un menú principal desde donde se accede
+  a las distintas etapas del programa.
 
 ## Desarrollo de Refuerzo
 

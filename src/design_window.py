@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
 )
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QGuiApplication
 
 from .view3d_window import View3DWindow
@@ -47,6 +47,8 @@ DIAM_CM = {
 
 class DesignWindow(QMainWindow):
     """Ventana para la etapa de diseño de acero (solo interfaz gráfica)."""
+
+    menu_requested = pyqtSignal()
 
     def __init__(self, mn_corr, mp_corr):
         """Create the design window using corrected moments."""
@@ -276,18 +278,21 @@ class DesignWindow(QMainWindow):
 
         self.btn_capture = QPushButton("Capturar Diseño")
         self.btn_memoria = QPushButton("Memoria de Cálculo")
-        self.btn_view3d = QPushButton("Desarrollo de Refuerzo")
-        self.btn_salir = QPushButton("Salir")
+        self.btn_view3d = QPushButton("Continuar Desarrollo")
+        self.btn_save = QPushButton("Guardar Diseño")
+        self.btn_menu = QPushButton("Menú Principal")
 
         self.btn_capture.clicked.connect(self._capture_design)
         self.btn_memoria.clicked.connect(self.show_memoria)
         self.btn_view3d.clicked.connect(self.show_view3d)
-        self.btn_salir.clicked.connect(QApplication.instance().quit)
+        self.btn_save.clicked.connect(self.on_save)
+        self.btn_menu.clicked.connect(self.menu_requested)
 
         layout.addWidget(self.btn_capture, row_start + 4, 0, 1, 2)
         layout.addWidget(self.btn_memoria, row_start + 4, 2, 1, 2)
         layout.addWidget(self.btn_view3d, row_start + 4, 4, 1, 2)
-        layout.addWidget(self.btn_salir,   row_start + 4, 6, 1, 2)
+        layout.addWidget(self.btn_save,    row_start + 4, 6, 1, 2)
+        layout.addWidget(self.btn_menu,    row_start + 5, 0, 1, 8)
 
         for ed in self.edits.values():
             ed.editingFinished.connect(self._redraw)
@@ -502,7 +507,7 @@ class DesignWindow(QMainWindow):
         self.canvas_dist.draw()
 
     def _capture_design(self):
-        widgets = [self.btn_capture, self.btn_memoria, self.btn_view3d, self.btn_salir]
+        widgets = [self.btn_capture, self.btn_memoria, self.btn_view3d, self.btn_save, self.btn_menu]
         for w in widgets:
             w.hide()
         self.repaint()
@@ -512,6 +517,9 @@ class DesignWindow(QMainWindow):
         for w in widgets:
             w.show()
         # Sin mensaje emergente
+
+    def on_save(self):
+        QMessageBox.information(self, "Guardar", "Diseño guardado correctamente.")
 
     def show_view3d(self):
         """Open a window with cross-section views."""

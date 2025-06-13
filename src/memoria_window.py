@@ -10,12 +10,15 @@ from PyQt5.QtWidgets import (
     QTextEdit,
     QFileDialog,
 )
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtPrintSupport import QPrinter
 
 
 class MemoriaWindow(QMainWindow):
     """Window showing detailed calculation memory."""
+
+    menu_requested = pyqtSignal()
 
     def __init__(self, title: str, text: str):
         super().__init__()
@@ -40,6 +43,9 @@ class MemoriaWindow(QMainWindow):
         self.btn_export.clicked.connect(self.export)
         layout.addWidget(self.btn_capture)
         layout.addWidget(self.btn_export)
+        self.btn_menu = QPushButton("Menú Principal")
+        self.btn_menu.clicked.connect(self.menu_requested)
+        layout.addWidget(self.btn_menu)
 
     def _capture(self):
         pix = self.centralWidget().grab()

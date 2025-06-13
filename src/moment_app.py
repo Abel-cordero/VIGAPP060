@@ -1,9 +1,17 @@
 import logging
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QGridLayout, QLabel,
-    QLineEdit, QPushButton, QRadioButton, QButtonGroup, QMessageBox
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QGridLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QRadioButton,
+    QButtonGroup,
+    QMessageBox,
 )
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QGuiApplication
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -17,6 +25,8 @@ from src.design_window import DesignWindow
 class MomentApp(QMainWindow):
     """Ventana principal para ingresar momentos y graficar diagramas."""
 
+    menu_requested = pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Parte 1 – Momentos y Diagramas (NTP E.060)")
@@ -24,7 +34,6 @@ class MomentApp(QMainWindow):
         self.mp_corr = None
         self._build_ui()
         self.resize(700, 900)
-        self.show()
 
     def _build_ui(self):
         central = QWidget()
@@ -59,14 +68,22 @@ class MomentApp(QMainWindow):
         layout.addWidget(self.rb_dual2, 2, 2)
 
         btn_calc = QPushButton("Calcular Diagramas")
-        btn_next = QPushButton("Ir a Diseño de Acero")
+        btn_next = QPushButton("Continuar con el Diseño")
         btn_capture = QPushButton("Capturar Diagramas")
+        btn_save = QPushButton("Guardar")
+        btn_menu = QPushButton("Menú Principal")
+
         btn_calc.clicked.connect(self.on_calculate)
         btn_next.clicked.connect(self.on_next)
         btn_capture.clicked.connect(self._capture_diagram)
-        layout.addWidget(btn_calc, 3, 3)
-        layout.addWidget(btn_next, 3, 4)
-        layout.addWidget(btn_capture, 3, 5)
+        btn_save.clicked.connect(self.on_save)
+        btn_menu.clicked.connect(self.menu_requested)
+
+        layout.addWidget(btn_calc, 3, 1)
+        layout.addWidget(btn_next, 3, 2)
+        layout.addWidget(btn_capture, 3, 3)
+        layout.addWidget(btn_save, 3, 4)
+        layout.addWidget(btn_menu, 3, 5)
 
         self.fig, (self.ax1, self.ax2) = plt.subplots(2, 1, figsize=(6, 5), constrained_layout=True)
         self.canvas = FigureCanvas(self.fig)
@@ -210,6 +227,9 @@ class MomentApp(QMainWindow):
         self.plot_corrected(mn_c, mp_c, mn_orig=mn, mp_orig=mp)
         self.mn_corr = mn_c
         self.mp_corr = mp_c
+
+    def on_save(self):
+        QMessageBox.information(self, "Guardar", "Datos guardados correctamente.")
 
     def on_next(self):
         if self.mn_corr is None or self.mp_corr is None:

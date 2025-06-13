@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import (
     QApplication,
     QLineEdit,
 )
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QGuiApplication
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -40,6 +41,8 @@ CLEARANCE = 0.2
 
 class View3DWindow(QMainWindow):
     """Window that displays beam sections for M1, M2 and M3."""
+
+    menu_requested = pyqtSignal()
 
     def __init__(self, design):
         super().__init__()
@@ -84,6 +87,9 @@ class View3DWindow(QMainWindow):
         self.btn_capture = QPushButton("Capturar Vista")
         self.btn_capture.clicked.connect(self._capture_view)
         layout.addWidget(self.btn_capture)
+        self.btn_menu = QPushButton("Menú Principal")
+        layout.addWidget(self.btn_menu)
+        self.btn_menu.clicked.connect(self.menu_requested)
 
         self.canvas.mpl_connect("pick_event", self._on_pick)
         self.canvas.mpl_connect("key_press_event", self._on_key)
