@@ -10,7 +10,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
 
 from src.moment_app import MomentApp
-from local_activation.main import run_activation
+from src.activation_dialog import run_activation
 
 
 

@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QGuiApplication
 
-from .activation import machine_code, activate, license_counter
+from .activation import machine_code, activate, check_activation, license_counter
 
 
 class ActivationDialog(QDialog):
@@ -75,4 +75,12 @@ class ActivationDialog(QDialog):
     def _copy_id(self):
         QGuiApplication.clipboard().setText(self._code)
         QMessageBox.information(self, "Copiar ID", "ID copiado al portapapeles")
+
+
+def run_activation(parent=None) -> bool:
+    """Return ``True`` if the application is activated."""
+    if check_activation():
+        return True
+    dialog = ActivationDialog(parent)
+    return dialog.exec_() == QDialog.Accepted
 
