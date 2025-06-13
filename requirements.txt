@@ -7,3 +7,4 @@ pyqtgraph
 sympy
 python-docx
 pylatex
+Pillow
