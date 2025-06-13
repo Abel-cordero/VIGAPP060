@@ -7,7 +7,10 @@ import uuid
 def _app_dir() -> str:
     """Return the application data folder."""
     if os.name == "nt":
-        base = os.getenv("APPDATA", os.path.expanduser("~"))
+        base = os.getenv(
+            "LOCALAPPDATA",
+            os.path.join(os.path.expanduser("~"), "AppData", "Local"),
+        )
     else:
         base = os.getenv("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
     path = os.path.join(base, "vigapp060")
