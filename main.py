@@ -12,6 +12,10 @@ from PyQt5.QtCore import Qt, QTimer
 from src.menu_window import MenuWindow
 from local_activation.activacion import run_activation
 
+# Toggle for enabling or disabling the license check. Set to ``True`` to
+# require activation again.
+ACTIVATION_ENABLED = False
+
 
 
 
@@ -33,7 +37,7 @@ def main():
 
     app.setStyle("Fusion")
 
-    if not run_activation():
+    if ACTIVATION_ENABLED and not run_activation():
         return
 
     splash = QSplashScreen(QPixmap(icon_path).scaled(256, 256, Qt.KeepAspectRatio, Qt.SmoothTransformation))
