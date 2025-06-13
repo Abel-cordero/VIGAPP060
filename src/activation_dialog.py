@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QMessageBox,
 )
+from PyQt5.QtGui import QGuiApplication
 
 from .activation import machine_code, activate
 
@@ -18,9 +19,9 @@ class ActivationDialog(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Activar VIGAPP 060")
         self.setModal(True)
-        code = machine_code()
+        self._code = machine_code()
         msg = (
-            f"ID de equipo: {code}\n\n"
+            f"ID de equipo: {self._code}\n\n"
             "Comparta este codigo al contacto para solicitar su clave de "
             "activacion. Si ya la tiene, ingrese la clave y presione Activar."
         )
@@ -31,15 +32,18 @@ class ActivationDialog(QDialog):
         self.input.setPlaceholderText("Clave de activacion")
 
         contact_btn = QPushButton("Contacto")
+        copy_btn = QPushButton("Copiar ID")
         activate_btn = QPushButton("Activar")
         exit_btn = QPushButton("Salir")
 
         contact_btn.clicked.connect(self._show_contact)
+        copy_btn.clicked.connect(self._copy_id)
         activate_btn.clicked.connect(self._on_activate)
         exit_btn.clicked.connect(self.reject)
 
         btn_row = QHBoxLayout()
         btn_row.addWidget(contact_btn)
+        btn_row.addWidget(copy_btn)
         btn_row.addWidget(activate_btn)
         btn_row.addWidget(exit_btn)
 
@@ -65,3 +69,8 @@ class ActivationDialog(QDialog):
             self.accept()
         else:
             QMessageBox.warning(self, "Licencia", "Clave invalida. Verifique e intente nuevamente.")
+
+    def _copy_id(self):
+        QGuiApplication.clipboard().setText(self._code)
+        QMessageBox.information(self, "Copiar ID", "ID copiado al portapapeles")
+
