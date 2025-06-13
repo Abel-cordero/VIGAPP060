@@ -1,7 +1,14 @@
 import os
 from PyQt5.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QStackedWidget,
-    QMessageBox, QSizePolicy
+    QMainWindow,
+    QWidget,
+    QVBoxLayout,
+    QPushButton,
+    QLabel,
+    QStackedWidget,
+    QMessageBox,
+    QSizePolicy,
+    QFrame,
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QIcon
@@ -17,34 +24,42 @@ class MenuWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        icon_path = os.path.join(os.path.dirname(__file__), "..", "icon", "vigapp060.png")
+        base_dir = os.path.dirname(__file__)
+        icon_path = os.path.join(base_dir, "..", "icon", "vigapp060.png")
         pix = QPixmap(icon_path)
         if not pix.isNull():
             self.setWindowIcon(QIcon(pix))
+        self._logo_path = os.path.join(base_dir, "..", "icon", "mi_logo.png")
+        if not os.path.exists(self._logo_path):
+            self._logo_path = icon_path
 
         self.setWindowTitle("VIGAPP060")
 
         self.stacked = QStackedWidget()
         self.setCentralWidget(self.stacked)
 
-        self.setFixedSize(700, 900)
+        self.setMinimumSize(700, 600)
+        self.resize(700, 800)
 
         self.mn_corr = None
         self.mp_corr = None
         self.design_ready = False
 
-        self._build_menu(icon_path)
+        self._build_menu()
 
     # ------------------------------------------------------------------
-    def _build_menu(self, icon_path):
+    def _build_menu(self):
         page = QWidget()
         layout = QVBoxLayout(page)
-        layout.setAlignment(Qt.AlignCenter)
+        layout.setAlignment(Qt.AlignTop)
+
         label_icon = QLabel()
-        label_icon.setPixmap(QPixmap(icon_path).scaled(128, 128, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        label_icon.setPixmap(QPixmap(self._logo_path).scaled(180, 180, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        label_icon.setAlignment(Qt.AlignCenter)
         label_title = QLabel("VIGAPP060")
         label_title.setAlignment(Qt.AlignCenter)
-        label_title.setStyleSheet("font-size:20pt;font-weight:bold;")
+        label_title.setStyleSheet("font-size:24pt;font-weight:bold;padding:10px;")
+
         layout.addWidget(label_icon, alignment=Qt.AlignCenter)
         layout.addWidget(label_title)
 
@@ -54,15 +69,32 @@ class MenuWindow(QMainWindow):
         btn_mem = QPushButton("Memoria de Cálculo")
         btn_exit = QPushButton("Salir")
 
-        for b in (btn_flex, btn_flex_extra, btn_cort, btn_mem, btn_exit):
-            b.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            b.setStyleSheet("font-size:16pt;padding:20px;")
+        button_box = QFrame()
+        btn_layout = QVBoxLayout(button_box)
+        btn_layout.setSpacing(15)
+        btn_layout.setContentsMargins(40, 20, 40, 20)
 
-        layout.addWidget(btn_flex)
-        layout.addWidget(btn_flex_extra)
-        layout.addWidget(btn_cort)
-        layout.addWidget(btn_mem)
-        layout.addWidget(btn_exit)
+        default_style = (
+            "QPushButton {background-color:#3498db;color:white;font-size:16pt;"
+            "padding:15px;border-radius:10px;}"
+            "QPushButton:hover {background-color:#2980b9;}"
+        )
+
+        for b in (btn_flex, btn_flex_extra, btn_cort, btn_mem):
+            b.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            b.setStyleSheet(default_style)
+            btn_layout.addWidget(b)
+
+        exit_style = (
+            "QPushButton {background-color:#e74c3c;color:white;font-size:16pt;"
+            "padding:15px;border-radius:10px;}"
+            "QPushButton:hover {background-color:#c0392b;}"
+        )
+        btn_exit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        btn_exit.setStyleSheet(exit_style)
+        btn_layout.addWidget(btn_exit)
+
+        layout.addWidget(button_box)
 
         btn_flex.clicked.connect(self.open_diagrama)
         btn_flex_extra.clicked.connect(self.show_cortante_msg)
