@@ -273,59 +273,36 @@ Para que el mismo icono aparezca en la barra de tareas y en el archivo `.exe`,
 primero convierte `vigapp060.png` a formato `.ico`. Luego usa
 `auto-py-to-exe` o `pyinstaller` indicando esa ruta en la opción `--icon`.
 
-### Activación por hardware
 
-Al iniciar la aplicación se muestra un **código de equipo** derivado del
-hardware. Envíe ese código a la persona encargada y utilice el script
-`scripts/generate_license.py` para generar la clave correspondiente:
-
-```bash
-python scripts/generate_license.py <codigo> --counter 1
-```
-
-Ingrese la clave resultante en la ventana de activación. Cada clave es válida
-solo para el equipo que generó el código y para un único contador. El contador
-se incrementa automáticamente después de una activación exitosa y ahora se
-muestra en la misma ventana para facilitar la generación de futuras licencias.
 
 ### Sistema de Activación y Validación de Licencias – VIGA_FINAL (Versión Beta)
 
-Este sistema de activación permite proteger la aplicación contra uso no
-autorizado, ligando la licencia a una única computadora mediante el número de
-serie del disco duro (S/N). La activación es local, no requiere conexión a
-internet, y es ideal para distribución controlada de versiones beta.
+Este sistema de activación permite proteger la aplicación contra uso no autorizado, ligando la licencia a una única computadora mediante el número de serie del disco duro (S/N). La activación es completamente local, sin requerir conexión a internet, y es ideal para distribución controlada de versiones beta.
 
-Al iniciar la aplicación (`main.py`) por primera vez, se obtiene
-automáticamente el número de serie del disco duro mediante el comando `wmic`.
-Ese valor se muestra como un **ID de solicitud** que el usuario debe copiar y
-enviar al desarrollador. Con el script `generador_licencia.py` incluido en el
-repositorio, el desarrollador genera una clave de activación basada en ese
-número de serie.
+La validación se gestiona a través de un módulo externo ubicado en la carpeta activacion/, lo que mantiene el código principal (main.py) limpio y desacoplado del proceso de seguridad. El archivo main.py no contiene lógica de activación directamente, sino que llama al módulo de activación para validar el entorno antes de ejecutar el programa.
 
-La clave se crea concatenando el serial con una clave secreta interna y
-aplicando SHA256. El resultado se transforma a base 36 y se toman los primeros
-seis caracteres. Así se obtiene una clave corta y única, por ejemplo `A9F7D2`.
+Al ejecutar la aplicación, se importa y ejecuta activacion/ventana_activacion.py. Este script abre una ventana gráfica de activación, que obtiene automáticamente el número de serie del disco duro mediante el comando wmic. Ese número se muestra como un ID de solicitud (Request ID) que el usuario debe copiar y enviar al desarrollador.
 
-El usuario ingresa la clave en la ventana de activación. La aplicación realiza
-el mismo proceso internamente y compara ambos valores. Si coinciden, la licencia
-se activa; de lo contrario, se rechaza automáticamente en otra computadora.
+El desarrollador utiliza el script activacion/generador_licencia.py, también incluido en el repositorio, para generar la clave de activación. Esta clave se construye combinando el serial con una clave secreta interna, aplicando el algoritmo SHA256, transformando el resultado a base 36, y tomando los primeros seis caracteres (por ejemplo, A9F7D2).
 
-El generador de licencias cuenta opcionalmente con una interfaz gráfica con los
-campos "Request" y "Activation", botones para generar la clave, copiarla al
-portapapeles y salir. Todo se muestra en una ventana compacta de 500x200
-pixeles, con estilo tipo *keygen* clásico.
+El usuario ingresa esta clave en el campo correspondiente de la ventana de activación. El sistema repite el proceso internamente con el serial local y verifica si la clave ingresada es válida. Si coincide, el módulo de activación lo notifica a main.py, permitiéndole continuar con la ejecución normal. Si la clave no es válida o no se ingresa, el programa no continúa.
+
+El generador de licencias (generador_licencia.py) cuenta opcionalmente con una interfaz gráfica con los campos “Request” y “Activation”, botones para generar la clave, copiarla al portapapeles y cerrar. Todo esto se presenta en una ventana compacta de 500x200 píxeles, con estilo tipo keygen clásico.
 
 En resumen:
+La activación se gestiona desde la carpeta activacion/, no desde main.py.
 
-- El sistema utiliza el número de serie del disco duro como base.
-- Las claves son únicas por máquina y constan de 6 caracteres alfanuméricos (ej.
-  `8ZK7X1`).
-- La validación es completamente local y no se crean archivos adicionales.
-- Si la aplicación se copia a otro equipo, la clave deja de ser válida.
-- El desarrollador genera las claves con el script incluido y una clave secreta
-  privada.
-- Es una protección ligera y efectiva para versiones beta de aplicaciones
-  técnicas.
+El sistema utiliza el número de serie del disco duro como identificador único.
+
+Las claves son de 6 caracteres alfanuméricos, únicas por máquina.
+
+La validación es completamente local, sin necesidad de conexión a internet.
+
+Si el programa se copia a otra computadora, la clave ya no será válida.
+
+El script generador_licencia.py se usa solo por el desarrollador y requiere una clave secreta interna.
+
+Es una solución ligera, robusta y eficaz para proteger versiones beta de software técnico.
 
 ### Cambios recientes
 
