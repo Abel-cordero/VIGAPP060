@@ -11,7 +11,7 @@ def color_for_diameter(diam):
     return "#000000"
 
 
-def latex_image(latex: str, fontsize: int = 12) -> str:
+def latex_image(latex: str, fontsize: int = 11) -> str:
     """Return an HTML ``<img>`` tag with a LaTeX expression rendered to PNG."""
     fig = Figure(figsize=(0.01, 0.01))
     ax = fig.add_subplot(111)

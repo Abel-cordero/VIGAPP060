@@ -75,7 +75,7 @@ class FormulaWindow(QMainWindow):
         latex = sp.latex(eq)
         self.ax.clear()
         self.ax.axis("off")
-        self.ax.text(0.5, 0.5, f"${latex}$", ha="center", va="center", fontsize=20)
+        self.ax.text(0.5, 0.5, f"${latex}$", ha="center", va="center", fontsize=12)
         self.canvas.draw()
 
     # ------------------------------------------------------------------
