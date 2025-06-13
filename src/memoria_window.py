@@ -17,8 +17,10 @@ from PyQt5.QtPrintSupport import QPrinter
 class MemoriaWindow(QMainWindow):
     """Window showing detailed calculation memory."""
 
-    def __init__(self, title: str, text: str):
-        super().__init__()
+    def __init__(self, title: str, text: str, parent=None, *, show_window=True,
+                 menu_callback=None):
+        super().__init__(parent)
+        self.menu_callback = menu_callback
         self.setWindowTitle(title)
         self.resize(700, 900)
 
@@ -38,8 +40,14 @@ class MemoriaWindow(QMainWindow):
         self.btn_export = QPushButton("Exportar…")
         self.btn_capture.clicked.connect(self._capture)
         self.btn_export.clicked.connect(self.export)
+        self.btn_menu = QPushButton("Menú")
+        self.btn_menu.clicked.connect(self.on_menu)
         layout.addWidget(self.btn_capture)
         layout.addWidget(self.btn_export)
+        layout.addWidget(self.btn_menu)
+
+        if show_window:
+            self.show()
 
     def _capture(self):
         pix = self.centralWidget().grab()
@@ -75,4 +83,8 @@ class MemoriaWindow(QMainWindow):
             self.text.document().print_(printer)
         else:
             pix.save(path)
+        
+    def on_menu(self):
+        if self.menu_callback:
+            self.menu_callback()
 

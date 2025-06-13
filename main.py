@@ -5,11 +5,11 @@ import os
 import sys
 import ctypes
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QSplashScreen
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 
-from src.moment_app import MomentApp
+from src.menu_window import MenuWindow
 from local_activation.activacion import run_activation
 
 
@@ -36,8 +36,16 @@ def main():
     if not run_activation():
         return
 
-    # Keep a reference to the main window so it isn't garbage collected
-    _window = MomentApp()
+    splash = QSplashScreen(QPixmap(icon_path).scaled(256, 256, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+    splash.show()
+
+    def show_main():
+        splash.close()
+        main_win = MenuWindow()
+        main_win.show()
+        app._window = main_win
+
+    QTimer.singleShot(2000, show_main)
     sys.exit(app.exec_())
 
 
