@@ -76,10 +76,17 @@ class MomentApp(QMainWindow):
         self.plot_original()
 
     def get_moments(self):
+        """Return entered moments enforcing expected sign convention."""
         try:
-            mn = np.array([float(ed.text()) for ed in self.m_neg_edits])
-            mp = np.array([float(ed.text()) for ed in self.m_pos_edits])
-            return mn, mp
+            mn = []
+            mp = []
+            for ed in self.m_neg_edits:
+                val = float(ed.text())
+                mn.append(-abs(val))
+            for ed in self.m_pos_edits:
+                val = float(ed.text())
+                mp.append(abs(val))
+            return np.array(mn), np.array(mp)
         except ValueError:
             QMessageBox.warning(self, "Error", "Ingrese valores numéricos válidos.")
             raise
