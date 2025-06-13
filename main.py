@@ -8,8 +8,6 @@ from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
 from src.moment_app import MomentApp
-from src.activation import check_activation
-from src.activation_dialog import ActivationDialog
 
 
 def main():
@@ -24,10 +22,7 @@ def main():
         pix = QPixmap(icon_path).scaled(
             256, 256, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         app.setWindowIcon(QIcon(pix))
-    if not check_activation():
-        dlg = ActivationDialog()
-        if dlg.exec_() != QDialog.Accepted:
-            return
+
 
     app.setStyle("Fusion")
     # Keep a reference to the main window so it isn't garbage collected
