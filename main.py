@@ -5,11 +5,13 @@ import os
 import sys
 import ctypes
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
 
 from src.moment_app import MomentApp
+from src.activation import check_activation
+from src.activation_dialog import ActivationDialog
 
 
 
@@ -30,6 +32,10 @@ def main():
 
     app.setStyle("Fusion")
 
+    if not check_activation():
+        dlg = ActivationDialog()
+        if dlg.exec_() != QDialog.Accepted:
+            return
 
     # Keep a reference to the main window so it isn't garbage collected
     _window = MomentApp()
