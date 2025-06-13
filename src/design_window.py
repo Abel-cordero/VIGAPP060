@@ -559,7 +559,13 @@ class DesignWindow(QMainWindow):
                 f"<p class='eq'>d = h - r - ϕ_estribo - {frac('1', '2')} ϕ_barra = {h} - {r} - {de} - {frac('1', '2')}×{db} = <b>{d:.2f} cm</b></p>"
             ),
             "<h3>Cálculo de β<sub>1</sub></h3>",
-            f"<p class='eq'>β<sub>1</sub> = {beta1:.3f}</p>",
+            (
+                "<p class='eq'>β<sub>1</sub> = <b>0.85</b></p>"
+                if fc <= 280
+                else (
+                    f"<p class='eq'>β<sub>1</sub> = 0.85 - 0.05 × {frac(f'{fc}-280', '70')} = <b>{beta1:.3f}</b></p>"
+                )
+            ),
             "<h3>Cálculo de As_min</h3>",
             (
                 f"<p class='eq'>A<sub>s,min</sub> = 0.7 × {frac('√f\'c', 'fy')} × b × d = 0.7 × {frac(f'√{fc}', str(fy))} × {b} × {d:.2f} = <b>{as_min:.2f} cm²</b></p>"
