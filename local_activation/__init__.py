@@ -1,0 +1,1 @@
+"""Activacion local por serial."""
