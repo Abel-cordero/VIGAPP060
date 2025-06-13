@@ -6,3 +6,4 @@ mplcursors
 pyqtgraph
 sympy
 python-docx
+pylatex

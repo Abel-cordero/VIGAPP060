@@ -145,6 +145,9 @@ Ventana 1: Ingreso de momentos → Diagramas superior/inferior → Corrección �
 
 Ventana 2: Visualización de viga con aceros → Selección de varillas → Resultados y verificación → Botón captura/exportar
 
+ETAPA 4 – MEMORIA DE CÁLCULO
+Muestra un resumen detallado de cada operación realizada en el diseño. Las fórmulas se presentan con notación LaTeX para una lectura clara e incluye botones para **Capturar**, **Exportar a PDF** o **Exportar a Word**.
+
 ## Requisitos de plataforma
 
 - Python 3.8 o superior instalado en el sistema.
@@ -162,6 +165,7 @@ Ventana 2: Visualización de viga con aceros → Selección de varillas → Resu
 
    Para funciones opcionales de captura o exportación a Word se pueden agregar
    `pyautogui` y `python-docx`.
+3. Para la visualización de fórmulas se recomienda contar con una distribución **LaTeX** instalada (TeX Live o similar).
 
 ## Ejecución
 
