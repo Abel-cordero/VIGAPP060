@@ -101,6 +101,14 @@ Botones adicionales:
 
 “Captura para Word” → toma automáticamente una captura de esta ventana y la guarda como imagen o la envía a Word (usar pyautogui y opcionalmente python-docx)
 
+
+ETAPA 3 – VISUALIZACIÓN DE FÓRMULAS
+Permite convertir expresiones lineales como `As = Mu / (0.9 * fy * (d - a/2))` en un formato fraccionario similar al de un libro de cálculo.
+Elementos principales:
+* Campo de texto para la fórmula
+* Botón **Mostrar** que renderiza la ecuación
+* Botones **Capturar** y **Exportar** para copiar la imagen o guardarla en PNG, PDF o Word
+
 “Volver a Momentos” → para regresar a la etapa anterior y modificar datos si es necesario
 
 CONSIDERACIONES TÉCNICAS:
@@ -238,6 +246,9 @@ Las clases principales son:
 
 - **`MemoriaWindow`** (en `src/memoria_window.py`)
   - `_capture()` — guarda una captura de la memoria de cálculo.
+- **`FormulaWindow`** (en `src/formula_window.py`)
+  - Permite escribir una fórmula en texto y visualizarla en formato LaTeX.
+  - Botones para capturar la vista o exportarla a PNG/PDF/DOCX.
 
 Esta organización modular facilita la comunicación y coordinación dentro del equipo, ya que cada función se asocia a una tarea específica del flujo de trabajo.
 
