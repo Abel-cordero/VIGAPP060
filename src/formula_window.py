@@ -28,10 +28,22 @@ class FormulaWindow(QMainWindow):
         self.setWindowTitle("Parte 4 – Fórmulas")
 
         self._formulas = {
+            # Reglas de corrección de momentos
+            "Corrección Mp": "Mp_corr = Max(abs(Mp), f*abs(Mn), Mmax/4)",
+            "Corrección Mn": "Mn_corr = -Max(abs(Mn), Mmax/4)",
+
+            # Datos básicos
             "Peralte efectivo d": "d = h - r - phi_estribo - 0.5*phi_barra",
             "Coeficiente beta1": "beta1 = 0.85 - 0.05*(fc-280)/70",
+            "p_balanceada": "p_bal = (0.85*fc*beta1/fy)*(6000/(6000+fy))",
+            "p_maxima": "p_max = 0.75*p_bal",
+
+            # Límites y verificaciones
             "As_min": "As_min = 0.7*sqrt(fc)/fy*b*d",
-            "As_max": "As_max = 0.75*(0.85*fc*beta1/fy)*(6000/(6000+fy))*b*d",
+            "As_max": "As_max = p_max*b*d",
+            "Base requerida": "b_req = 2*r + 2*phi_estribo + (n-1)*2.5 + sum_d",
+
+            # Acero por momento último
             "As por momento": (
                 "As = (1.7*fc*b*d)/(2*fy) - 0.5*sqrt((2.89*(fc*b*d)**2)/fy**2 - "
                 "(6.8*fc*b*Mu)/(phi*fy**2))"
