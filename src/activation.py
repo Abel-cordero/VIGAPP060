@@ -94,7 +94,7 @@ def _write_counter(val: int) -> None:
 def current_license() -> str:
     """Return the expected license for activation."""
     counter = _read_counter()
-    return f"{LICENSE_PREFIX}{counter:03d}{LICENSE_SUFFIX}"
+    return license_for(machine_code(), counter)
 
 def hardware_id() -> str:
     """Return a stable identifier for the current machine."""
