@@ -556,7 +556,7 @@ class DesignWindow(QMainWindow):
             "<h2>CÁLCULOS</h2>",
             "<h3>Cálculo del peralte efectivo d</h3>",
             (
-                f"<p class='eq'>d = h - r - ϕ_estribo - 0.5 ϕ_barra = {h} - {r} - {de} - 0.5×{db} = <b>{d:.2f} cm</b></p>"
+                f"<p class='eq'>d = h - r - ϕ_estribo - {frac('1', '2')} ϕ_barra = {h} - {r} - {de} - {frac('1', '2')}×{db} = <b>{d:.2f} cm</b></p>"
             ),
             "<h3>Cálculo de β<sub>1</sub></h3>",
             f"<p class='eq'>β<sub>1</sub> = {beta1:.3f}</p>",
@@ -570,7 +570,7 @@ class DesignWindow(QMainWindow):
             ),
             "<h3>Fórmula general para As</h3>",
             (
-                f"<p class='eq'>A<sub>s</sub> = {frac('1.7 f\'c b d', '2 fy')} - 0.5 √({frac('2.89 (f\'c b d)^2', 'fy^2')} - {frac('6.8 f\'c b M_u', 'φ fy^2')})</p>"
+                f"<p class='eq'>A<sub>s</sub> = {frac('1.7 f\'c b d', '2 fy')} - {frac('1', '2')} √({frac('2.89 (f\'c b d)^2', 'fy^2')} - {frac('6.8 f\'c b M_u', 'φ fy^2')})</p>"
             ),
             "<h3>Detalle del cálculo de As por momento</h3>",
         ]
@@ -600,7 +600,7 @@ class DesignWindow(QMainWindow):
                     f"<p><b>{lab}</b>: M<sub>u</sub> = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm</p>",
                     (
                         "<p class='eq'>A<sub>s,calc</sub> = "
-                        f"{term_html} - 0.5 √({root_html}) = {term:.2f} - 0.5√({root:.2f}) = <b>{calc:.2f} cm²</b></p>"
+                        f"{term_html} - {frac('1', '2')} √({root_html}) = {term:.2f} - {frac('1', '2')}√({root:.2f}) = <b>{calc:.2f} cm²</b></p>"
                     ),
                     f"<p>A<sub>s,req</sub> = <b>{a:.2f} cm²</b></p>",
                 ]
