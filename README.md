@@ -188,6 +188,12 @@ de la MAC, el nombre de host y el número de serie del primer disco disponible.
 En ejecuciones posteriores se descifra dicho archivo y se compara la huella con
 la de la máquina actual para verificar la validez de la licencia.
 
+La ventana de activación muestra este código de equipo y permite copiarlo con el
+botón **Copiar ID**. La clave ingresada se valida sin distinguir mayúsculas ni
+espacios y se genera mediante `scripts/generate_license.py` combinando el ID con
+un contador interno. Dicho contador se guarda cifrado y se incrementa después de
+cada activación, evitando reutilizar la misma licencia.
+
 
 ## Formulario de datos y flujos
 
@@ -276,7 +282,8 @@ primero convierte `vigapp060.png` a formato `.ico`. Luego usa
 ### Activación por hardware
 
 Al iniciar la aplicación se muestra un **código de equipo** derivado del
-hardware. Envíe ese código a la persona encargada y utilice el script
+hardware. Puede copiarlo con el botón **Copiar ID** y enviarlo a la persona
+encargada. Con ese código ejecute el script
 `scripts/generate_license.py` para generar la clave correspondiente:
 
 ```bash
@@ -284,7 +291,8 @@ python scripts/generate_license.py <codigo> --counter 1
 ```
 
 Ingrese la clave resultante en la ventana de activación. Cada clave es válida
-solo para el equipo que generó el código y para un único contador.
+solo para el equipo que generó el código y para un único contador. Durante la
+verificación de la clave no se consideran mayúsculas, minúsculas ni espacios.
 
 ### Cambios recientes
 
