@@ -44,6 +44,7 @@ class VentanaActivacion(tk.Tk):
         super().__init__()
         self.title("Activacion")
         self.geometry("400x200")
+        self.activated = False
 
         self.serial = obtener_serial()
 
@@ -70,16 +71,18 @@ class VentanaActivacion(tk.Tk):
         expected = clave_para(self.serial)
         if clave == expected:
             messagebox.showinfo("Licencia", "Clave correcta! Programa activado.")
+            self.activated = True
             self.destroy()
-            # Aqui continuaria el programa principal
-            print("Programa principal...")
         else:
             messagebox.showerror("Licencia", "Clave incorrecta")
 
 
-def main():
-    VentanaActivacion().mainloop()
+def run_activation() -> bool:
+    """Show the activation dialog and return ``True`` if validated."""
+    win = VentanaActivacion()
+    win.mainloop()
+    return win.activated
 
 
 if __name__ == "__main__":
-    main()
+    run_activation()
