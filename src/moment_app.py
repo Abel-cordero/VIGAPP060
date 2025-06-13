@@ -17,14 +17,15 @@ from src.design_window import DesignWindow
 class MomentApp(QMainWindow):
     """Ventana principal para ingresar momentos y graficar diagramas."""
 
-    def __init__(self):
+    def __init__(self, main=None):
         super().__init__()
+        self.main = main
         self.setWindowTitle("Parte 1 – Momentos y Diagramas (NTP E.060)")
         self.mn_corr = None
         self.mp_corr = None
+        self.saved = False
         self._build_ui()
         self.resize(700, 900)
-        self.show()
 
     def _build_ui(self):
         central = QWidget()
@@ -34,6 +35,7 @@ class MomentApp(QMainWindow):
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setHorizontalSpacing(10)
         layout.setColumnStretch(6, 1)
+        layout.setColumnStretch(7, 1)
 
         self.m_neg_edits, self.m_pos_edits = [], []
         for row, labels in enumerate([("M1–", "M2–", "M3–"), ("M1+", "M2+", "M3+")]):
@@ -59,14 +61,20 @@ class MomentApp(QMainWindow):
         layout.addWidget(self.rb_dual2, 2, 2)
 
         btn_calc = QPushButton("Calcular Diagramas")
-        btn_next = QPushButton("Ir a Diseño de Acero")
+        btn_save = QPushButton("Guardar")
+        btn_next = QPushButton("Continuar con el Diseño")
+        btn_menu = QPushButton("Ir al Menú")
         btn_capture = QPushButton("Capturar Diagramas")
         btn_calc.clicked.connect(self.on_calculate)
+        btn_save.clicked.connect(self.on_save)
         btn_next.clicked.connect(self.on_next)
+        btn_menu.clicked.connect(self._to_menu)
         btn_capture.clicked.connect(self._capture_diagram)
-        layout.addWidget(btn_calc, 3, 3)
+        layout.addWidget(btn_calc, 3, 2)
+        layout.addWidget(btn_save, 3, 3)
         layout.addWidget(btn_next, 3, 4)
-        layout.addWidget(btn_capture, 3, 5)
+        layout.addWidget(btn_menu, 3, 5)
+        layout.addWidget(btn_capture, 3, 6)
 
         self.fig, (self.ax1, self.ax2) = plt.subplots(2, 1, figsize=(6, 5), constrained_layout=True)
         self.canvas = FigureCanvas(self.fig)
@@ -212,11 +220,11 @@ class MomentApp(QMainWindow):
         self.mp_corr = mp_c
 
     def on_next(self):
-        if self.mn_corr is None or self.mp_corr is None:
-            QMessageBox.warning(self, 'Advertencia', 'Primero calcule los momentos corregidos')
+        if not self.saved:
+            QMessageBox.warning(self, 'Advertencia', 'Primero guarde los diagramas')
             return
-        self.design_win = DesignWindow(self.mn_corr, self.mp_corr)
-        self.design_win.show()
+        if self.main:
+            self.main.open_design(self.mn_corr, self.mp_corr)
 
     def _capture_diagram(self):
         self.canvas.repaint()
@@ -224,4 +232,25 @@ class MomentApp(QMainWindow):
         pix = self.canvas.grab()
         QGuiApplication.clipboard().setPixmap(pix)
         # Sin mensaje emergente
+
+    def reset_fields(self):
+        """Reset input fields and state."""
+        for ed in self.m_neg_edits + self.m_pos_edits:
+            ed.setText("0.0")
+        self.mn_corr = None
+        self.mp_corr = None
+        self.saved = False
+        self.plot_original()
+
+    def on_save(self):
+        if self.mn_corr is None or self.mp_corr is None:
+            QMessageBox.warning(self, 'Advertencia', 'Calcule los momentos antes de guardar')
+            return
+        self.saved = True
+        if self.main:
+            self.main.diagram_saved(self.mn_corr, self.mp_corr)
+
+    def _to_menu(self):
+        if self.main:
+            self.main.show_menu()
 

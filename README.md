@@ -324,6 +324,7 @@ El sistema es liviano, local y adecuado para versiones beta.
   hacia arriba y los positivos hacia abajo, respetando su posición habitual.
 - La función `correct_moments` aplica ahora los mínimos por cara y global
   siguiendo los criterios de Dual 1 y Dual 2.
+- Se añadió una pantalla de carga inicial y un menú principal unificado.
 
 ## Desarrollo de Refuerzo
 

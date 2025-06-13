@@ -48,14 +48,22 @@ DIAM_CM = {
 class DesignWindow(QMainWindow):
     """Ventana para la etapa de diseño de acero (solo interfaz gráfica)."""
 
-    def __init__(self, mn_corr, mp_corr):
+    def __init__(self, mn_corr, mp_corr, main=None):
         """Create the design window using corrected moments."""
         super().__init__()
+        self.main = main
         self.mn_corr = mn_corr
         self.mp_corr = mp_corr
+        self.saved = False
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
         self.resize(700, 900)
+
+    def set_moments(self, mn_corr, mp_corr):
+        """Update corrected moments and redraw."""
+        self.mn_corr = mn_corr
+        self.mp_corr = mp_corr
+        self._redraw()
 
     def _calc_as_req(self, Mu, fc, b, d, fy, phi):
         """Calculate required steel area for a single moment."""
@@ -275,19 +283,22 @@ class DesignWindow(QMainWindow):
         layout.addLayout(self.combo_grid, row_start + 3, 0, 1, 8)
 
         self.btn_capture = QPushButton("Capturar Diseño")
+        self.btn_save = QPushButton("Guardar Diseño")
+        self.btn_next = QPushButton("Continuar con Desarrollo")
         self.btn_memoria = QPushButton("Memoria de Cálculo")
-        self.btn_view3d = QPushButton("Desarrollo de Refuerzo")
-        self.btn_salir = QPushButton("Salir")
+        self.btn_menu = QPushButton("Ir al Menú")
 
         self.btn_capture.clicked.connect(self._capture_design)
+        self.btn_save.clicked.connect(self.on_save)
+        self.btn_next.clicked.connect(self.show_view3d)
         self.btn_memoria.clicked.connect(self.show_memoria)
-        self.btn_view3d.clicked.connect(self.show_view3d)
-        self.btn_salir.clicked.connect(QApplication.instance().quit)
+        self.btn_menu.clicked.connect(self._to_menu)
 
-        layout.addWidget(self.btn_capture, row_start + 4, 0, 1, 2)
-        layout.addWidget(self.btn_memoria, row_start + 4, 2, 1, 2)
-        layout.addWidget(self.btn_view3d, row_start + 4, 4, 1, 2)
-        layout.addWidget(self.btn_salir,   row_start + 4, 6, 1, 2)
+        layout.addWidget(self.btn_capture, row_start + 4, 0, 1, 1)
+        layout.addWidget(self.btn_save, row_start + 4, 1, 1, 2)
+        layout.addWidget(self.btn_next, row_start + 4, 3, 1, 2)
+        layout.addWidget(self.btn_memoria, row_start + 4, 5, 1, 2)
+        layout.addWidget(self.btn_menu, row_start + 4, 7, 1, 1)
 
         for ed in self.edits.values():
             ed.editingFinished.connect(self._redraw)
@@ -502,7 +513,7 @@ class DesignWindow(QMainWindow):
         self.canvas_dist.draw()
 
     def _capture_design(self):
-        widgets = [self.btn_capture, self.btn_memoria, self.btn_view3d, self.btn_salir]
+        widgets = [self.btn_capture, self.btn_save, self.btn_next, self.btn_memoria, self.btn_menu]
         for w in widgets:
             w.hide()
         self.repaint()
@@ -513,10 +524,23 @@ class DesignWindow(QMainWindow):
             w.show()
         # Sin mensaje emergente
 
+    def on_save(self):
+        """Mark the design data as saved."""
+        self.saved = True
+        if self.main:
+            self.main.design_saved()
+
+    def _to_menu(self):
+        if self.main:
+            self.main.show_menu()
+
     def show_view3d(self):
         """Open a window with cross-section views."""
-        self.view3d = View3DWindow(self)
-        self.view3d.show()
+        if not self.saved:
+            QMessageBox.warning(self, "Advertencia", "Guarde el diseño primero")
+            return
+        if self.main:
+            self.main.open_refuerzo(self)
 
     def show_memoria(self):
         """Show a detailed calculation window."""
@@ -631,6 +655,6 @@ class DesignWindow(QMainWindow):
         )
         title = f"DISE\u00d1O DE VIGA {int(b)}X{int(h)}"
         text = html
-        self.mem_win = MemoriaWindow(title, text)
-        self.mem_win.show()
+        if self.main:
+            self.main.open_memoria(title, text)
 

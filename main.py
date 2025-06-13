@@ -5,11 +5,11 @@ import os
 import sys
 import ctypes
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QSplashScreen
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 
-from src.moment_app import MomentApp
+from src.menu_window import MenuWindow
 from local_activation.main import run_activation
 
 
@@ -35,8 +35,19 @@ def main():
 
     app.setStyle("Fusion")
 
-    # Keep a reference to the main window so it isn't garbage collected
-    _window = MomentApp()
+    splash = None
+    if os.path.exists(icon_path):
+        splash_pix = QPixmap(icon_path).scaled(256, 256, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        splash = QSplashScreen(splash_pix)
+        splash.show()
+
+    def start_main():
+        if splash:
+            splash.close()
+        main_win = MenuWindow()
+        main_win.show()
+
+    QTimer.singleShot(2000, start_main)
     sys.exit(app.exec_())
 
 

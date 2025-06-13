@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QApplication,
     QLineEdit,
+    QMessageBox,
 )
 from PyQt5.QtGui import QGuiApplication
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -41,9 +42,11 @@ CLEARANCE = 0.2
 class View3DWindow(QMainWindow):
     """Window that displays beam sections for M1, M2 and M3."""
 
-    def __init__(self, design):
+    def __init__(self, design, main=None):
         super().__init__()
+        self.main = main
         self.design = design
+        self.saved = False
         self.neg_orders = []
         self.pos_orders = []
         self.selected = None
@@ -82,8 +85,17 @@ class View3DWindow(QMainWindow):
         # Place the editable title at the bottom
         layout.addWidget(self.title_edit)
         self.btn_capture = QPushButton("Capturar Vista")
+        self.btn_save = QPushButton("Guardar")
+        self.btn_next = QPushButton("Continuar a Memoria")
+        self.btn_menu = QPushButton("Ir al Menú")
         self.btn_capture.clicked.connect(self._capture_view)
+        self.btn_save.clicked.connect(self.on_save)
+        self.btn_next.clicked.connect(self._continue)
+        self.btn_menu.clicked.connect(self._to_menu)
         layout.addWidget(self.btn_capture)
+        layout.addWidget(self.btn_save)
+        layout.addWidget(self.btn_next)
+        layout.addWidget(self.btn_menu)
 
         self.canvas.mpl_connect("pick_event", self._on_pick)
         self.canvas.mpl_connect("key_press_event", self._on_key)
@@ -418,4 +430,21 @@ class View3DWindow(QMainWindow):
         QApplication.processEvents()
         pix = self.canvas.grab()
         QGuiApplication.clipboard().setPixmap(pix)
+
+    def on_save(self):
+        """Mark reinforcement view as saved."""
+        self.saved = True
+        if self.main:
+            self.main.refuerzo_saved()
+
+    def _continue(self):
+        if not self.saved:
+            QMessageBox.warning(self, "Advertencia", "Guarde primero")
+            return
+        if self.main:
+            self.main.open_memoria_from_refuerzo()
+
+    def _to_menu(self):
+        if self.main:
+            self.main.show_menu()
 
