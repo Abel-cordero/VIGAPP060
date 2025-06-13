@@ -169,10 +169,12 @@ diagramas correspondientes.
 ## Activación
 
 Al ejecutarse por primera vez, la aplicación solicita una clave de licencia.
-Si la clave coincide con la esperada, se almacena una huella del equipo en
-`key.dat` dentro de la carpeta de datos de la aplicación (por ejemplo
-`%LOCALAPPDATA%\vigapp060` en Windows) y los siguientes inicios se validan de
-forma automática.
+Si la clave coincide con la esperada, se almacena una huella del equipo en un
+archivo cifrado `key.dat` dentro de la carpeta de datos de la aplicación (por
+ejemplo `%LOCALAPPDATA%\vigapp060` en Windows). Esta huella se genera a partir
+de la MAC, el nombre de host y el número de serie del primer disco disponible.
+En ejecuciones posteriores se descifra dicho archivo y se compara la huella con
+la de la máquina actual para verificar la validez de la licencia.
 
 
 ## Formulario de datos y flujos
@@ -255,6 +257,19 @@ aplicación la escalará internamente a `256x256` cuando se inicie.
 Para que el mismo icono aparezca en la barra de tareas y en el archivo `.exe`,
 primero convierte `vigapp060.png` a formato `.ico`. Luego usa
 `auto-py-to-exe` o `pyinstaller` indicando esa ruta en la opción `--icon`.
+
+### Activación por hardware
+
+Al iniciar la aplicación se muestra un **código de equipo** derivado del
+hardware. Envíe ese código a la persona encargada y utilice el script
+`scripts/generate_license.py` para generar la clave correspondiente:
+
+```bash
+python scripts/generate_license.py <codigo> --counter 1
+```
+
+Ingrese la clave resultante en la ventana de activación. Cada clave es válida
+solo para el equipo que generó el código y para un único contador.
 
 ### Cambios recientes
 
