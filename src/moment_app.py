@@ -163,24 +163,23 @@ class MomentApp(QMainWindow):
         ax.grid(True)
 
     def correct_moments(self, mn, mp, sys_t):
-        """Return moments corrected according to NTP E.060."""
-        mn_corr = mn.astype(float).copy()
-        mp_corr = mp.astype(float).copy()
+        """Return moments corrected by face and global rules."""
+        mn = np.asarray(mn, dtype=float)
+        mp = np.asarray(mp, dtype=float)
 
-        ratio = 1 / 2 if sys_t == "dual2" else 1 / 3
+        f = 1 / 3 if sys_t.lower() == "dual1" else 1 / 2
 
-        for idx in (0, 2):
-            req = ratio * abs(mn_corr[idx])
-            mp_corr[idx] = max(mp_corr[idx], req)
+        min_face_pos = f * np.abs(mn)
+        m_max = max(np.max(np.abs(mn)), np.max(np.abs(mp)))
+        min_global = m_max / 4.0
 
-        max_face = max(abs(mn_corr[0]), abs(mn_corr[2]),
-                       abs(mp_corr[0]), abs(mp_corr[2]))
-        floor = 0.25 * max_face
+        mp_corr = np.maximum.reduce([
+            np.abs(mp),
+            min_face_pos,
+            np.full(3, min_global),
+        ])
 
-        for arr, sgn in ((mn_corr, -1), (mp_corr, 1)):
-            for i in range(len(arr)):
-                if abs(arr[i]) < floor:
-                    arr[i] = sgn * floor
+        mn_corr = -np.maximum(np.abs(mn), min_global)
 
         return mn_corr, mp_corr
 

@@ -260,6 +260,8 @@ primero convierte `vigapp060.png` a formato `.ico`. Luego usa
 
 - Los diagramas de momentos se ajustaron para mostrar los valores negativos
   hacia arriba y los positivos hacia abajo, respetando su posición habitual.
+- La función `correct_moments` aplica ahora los mínimos por cara y global
+  siguiendo los criterios de Dual 1 y Dual 2.
 
 ## Desarrollo de Refuerzo
 
