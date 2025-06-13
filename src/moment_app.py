@@ -1,4 +1,3 @@
-import sys
 import logging
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QGridLayout, QLabel,

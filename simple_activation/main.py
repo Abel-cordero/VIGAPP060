@@ -12,7 +12,7 @@ def obtener_serial() -> str:
             stderr=subprocess.DEVNULL,
             text=True,
         )
-        lineas = [l.strip() for l in salida.splitlines() if l.strip()]
+        lineas = [line.strip() for line in salida.splitlines() if line.strip()]
         return lineas[1] if len(lineas) > 1 else ""
     except Exception:
         return ""

@@ -61,14 +61,14 @@ def _disk_serial() -> str:
                 stderr=subprocess.DEVNULL,
                 text=True,
             )
-            lines = [l.strip() for l in out.splitlines() if l.strip()][1:]
+            lines = [line.strip() for line in out.splitlines() if line.strip()][1:]
             return lines[0] if lines else ""
         out = subprocess.check_output(
             ["lsblk", "-dn", "-o", "serial"],
             stderr=subprocess.DEVNULL,
             text=True,
         )
-        lines = [l.strip() for l in out.splitlines() if l.strip()]
+        lines = [line.strip() for line in out.splitlines() if line.strip()]
         return lines[0] if lines else ""
     except Exception:
         return ""

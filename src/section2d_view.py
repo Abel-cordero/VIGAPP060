@@ -87,7 +87,6 @@ class Section2DView(QWidget):
             self.longitudCambiada.emit(idx, value)
 
     def _on_drag_finished(self, roi):
-        idx = roi.bar_index
         center_x = roi.pos()[0] + roi.size()[0] / 2
         self._bars.sort(key=lambda r: r.pos()[0])
         for i, r in enumerate(self._bars):
