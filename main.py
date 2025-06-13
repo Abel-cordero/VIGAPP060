@@ -19,12 +19,10 @@ def main():
     """Start the Qt application."""
     logging.basicConfig(level=logging.ERROR)
 
-    if not run_activation():
-        return
+    app = QApplication(sys.argv)
 
     if os.name == "nt":
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("VigApp060")
-    app = QApplication(sys.argv)
     icon_path = os.path.join(
         os.path.dirname(__file__), "icon", "vigapp060.png")
     if os.path.exists(icon_path):
@@ -34,6 +32,9 @@ def main():
 
 
     app.setStyle("Fusion")
+
+    if not run_activation():
+        return
 
     # Keep a reference to the main window so it isn't garbage collected
     _window = MomentApp()
