@@ -277,46 +277,52 @@ primero convierte `vigapp060.png` a formato `.ico`. Luego usa
 
 ### Sistema de Activación y Validación de Licencias – VIGA_FINAL (Versión Beta)
 
-Este sistema protege la aplicación contra uso no autorizado, ligando la licencia a una única computadora mediante el número de serie del disco duro (S/N). La activación es completamente local, sin requerir conexión a internet, y es ideal para distribución controlada de versiones beta.
 
-La validación está contenida en un módulo independiente ubicado en la carpeta activacion/. El archivo principal del proyecto (main.py) no realiza la validación directamente, sino que llama a este módulo para verificar el estado de activación antes de continuar.
+---
 
-🧠 ¿Cómo funciona?
-La primera vez que se ejecuta la aplicación, se abre una ventana de activación (activacion/ventana_activacion.py). Esta obtiene automáticamente el serial del disco mediante el comando wmic, y lo muestra como un ID de solicitud. El usuario debe copiar ese ID y enviarlo al desarrollador.
+## 🧩 Funcionamiento del sistema
 
-El desarrollador, usando activacion/generador_licencia.py, genera una clave de activación alfanumérica de 6 caracteres. Esta clave se construye combinando el ID con una clave secreta interna, aplicando un hash SHA256, convirtiéndolo a base 36 y tomando los primeros 6 caracteres.
+1. Al ejecutar `main.py`, se invoca `activacion/ventana_activacion.py`, que abre una ventana para gestionar la activación.
+2. Se obtiene automáticamente el número de serie del disco duro mediante el comando `wmic`, y se muestra como un **ID de solicitud**.
+3. El usuario copia ese ID y lo envía al desarrollador.
+4. El desarrollador usa `generador_licencia.py` para generar una **clave de activación de 6 caracteres alfanuméricos en mayúscula** (ej. `A9F7D2`), basada en el ID.
+5. El usuario ingresa la clave en la ventana.
+6. Si la clave es válida, se guarda de forma local en el **Registro de Windows** (`HKEY_CURRENT_USER\SOFTWARE\MiApp\Licencia`), para que:
+   - La activación solo se requiera **una vez por equipo**.
+   - No se cree ningún archivo externo.
+   - La clave **no funcione en otra computadora**, ya que depende del ID del disco.
+7. En futuras ejecuciones, el sistema revisa automáticamente el Registro. Si la clave guardada es válida para el equipo actual, **la aplicación se inicia sin pedir activación**.
 
-El usuario ingresa esta clave en la ventana de activación. Si la clave es válida para ese equipo, el sistema:
+---
 
-Crea un archivo local de activación llamado licencia.key.
+## 🛠️ Características técnicas
 
-Este archivo almacena la clave validada y el ID del sistema.
+- El ID se genera con `wmic diskdrive get SerialNumber`.
+- La clave se obtiene aplicando `SHA256` al ID + secreto, luego transformada a **base 36**, y truncada a 6 caracteres.
+- El Registro de Windows se utiliza como almacenamiento persistente.
+- No se generan archivos `.dat`, `.key`, ni bases de datos.
+- El almacenamiento local es invisible al usuario casual y difícil de copiar entre equipos.
 
-En futuras ejecuciones, la app lee licencia.key y lo compara con el serial actual del disco.
+---
 
-Si coinciden, el programa se activa automáticamente y no vuelve a pedir código.
+## 🖥️ Sobre el generador de licencias
 
-Si el archivo se copia a otra máquina, el ID no coincide y la activación es rechazada.
+- Ubicado en `activacion/generador_licencia.py`.
+- Permite ingresar el ID del usuario, generar la clave, copiarla y cerrarlo.
+- Puede tener una GUI estilo keygen (500x200 px) con campos "Request", "Activation", y botones "Generate", "Copy", "Quit".
 
-🖥️ Sobre el generador de licencias
-El generador (generador_licencia.py) puede tener interfaz gráfica o ser por consola. Permite pegar el ID, generar la clave, copiarla, y cerrar. Su uso es exclusivo del desarrollador y está protegido por una clave secreta interna no compartida.
+---
 
-✅ En resumen:
-La activación solo se realiza una vez por máquina.
+## ✅ Ventajas
 
-Se guarda localmente en licencia.key.
+- **Activación única por equipo.**
+- **Persistencia sin archivos.**
+- **Protección simple y efectiva.**
+- **Sin conexión a internet.**
+- **No reutilizable entre PCs.**
+- **Ideal para pruebas beta de software técnico.**
 
-El sistema se asegura de que esa clave solo sea válida en la misma PC.
-
-No se requiere conexión a internet ni base de datos.
-
-Si se copia la app a otro equipo, no podrá validarse con ese archivo.
-
-main.py depende del módulo activacion/ para realizar la validación.
-
-Las claves son cortas, legibles y únicas: 6 caracteres alfanuméricos (ej. 8ZK7X1).
-
-El sistema es liviano, local y adecuado para versiones beta.
+---
 
 ### Cambios recientes
 
