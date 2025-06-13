@@ -288,6 +288,45 @@ solo para el equipo que generó el código y para un único contador. El contado
 se incrementa automáticamente después de una activación exitosa y ahora se
 muestra en la misma ventana para facilitar la generación de futuras licencias.
 
+### Sistema de Activación y Validación de Licencias – VIGA_FINAL (Versión Beta)
+
+Este sistema de activación permite proteger la aplicación contra uso no
+autorizado, ligando la licencia a una única computadora mediante el número de
+serie del disco duro (S/N). La activación es local, no requiere conexión a
+internet, y es ideal para distribución controlada de versiones beta.
+
+Al iniciar la aplicación (`main.py`) por primera vez, se obtiene
+automáticamente el número de serie del disco duro mediante el comando `wmic`.
+Ese valor se muestra como un **ID de solicitud** que el usuario debe copiar y
+enviar al desarrollador. Con el script `generador_licencia.py` incluido en el
+repositorio, el desarrollador genera una clave de activación basada en ese
+número de serie.
+
+La clave se crea concatenando el serial con una clave secreta interna y
+aplicando SHA256. El resultado se transforma a base 36 y se toman los primeros
+seis caracteres. Así se obtiene una clave corta y única, por ejemplo `A9F7D2`.
+
+El usuario ingresa la clave en la ventana de activación. La aplicación realiza
+el mismo proceso internamente y compara ambos valores. Si coinciden, la licencia
+se activa; de lo contrario, se rechaza automáticamente en otra computadora.
+
+El generador de licencias cuenta opcionalmente con una interfaz gráfica con los
+campos "Request" y "Activation", botones para generar la clave, copiarla al
+portapapeles y salir. Todo se muestra en una ventana compacta de 500x200
+pixeles, con estilo tipo *keygen* clásico.
+
+En resumen:
+
+- El sistema utiliza el número de serie del disco duro como base.
+- Las claves son únicas por máquina y constan de 6 caracteres alfanuméricos (ej.
+  `8ZK7X1`).
+- La validación es completamente local y no se crean archivos adicionales.
+- Si la aplicación se copia a otro equipo, la clave deja de ser válida.
+- El desarrollador genera las claves con el script incluido y una clave secreta
+  privada.
+- Es una protección ligera y efectiva para versiones beta de aplicaciones
+  técnicas.
+
 ### Cambios recientes
 
 - Los diagramas de momentos se ajustaron para mostrar los valores negativos
