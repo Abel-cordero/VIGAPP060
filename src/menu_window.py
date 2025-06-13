@@ -1,7 +1,7 @@
 import os
 from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QStackedWidget,
-    QMessageBox
+    QMessageBox, QSizePolicy
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QIcon
@@ -27,6 +27,8 @@ class MenuWindow(QMainWindow):
         self.stacked = QStackedWidget()
         self.setCentralWidget(self.stacked)
 
+        self.setFixedSize(560, 720)
+
         self.mn_corr = None
         self.mp_corr = None
         self.design_ready = False
@@ -46,23 +48,24 @@ class MenuWindow(QMainWindow):
         layout.addWidget(label_icon, alignment=Qt.AlignCenter)
         layout.addWidget(label_title)
 
-        btn_diag = QPushButton("Diagrama de Momentos")
-        btn_design = QPushButton("Diseño de Acero")
-        btn_dev = QPushButton("Desarrollo de Refuerzo")
+        btn_flex = QPushButton("Diseño por Flexión")
+        btn_cort = QPushButton("Diseño por Cortante")
         btn_mem = QPushButton("Memoria de Cálculo")
-        btn_clear = QPushButton("Limpiar Datos")
+        btn_exit = QPushButton("Salir")
 
-        layout.addWidget(btn_diag)
-        layout.addWidget(btn_design)
-        layout.addWidget(btn_dev)
+        for b in (btn_flex, btn_cort, btn_mem, btn_exit):
+            b.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            b.setStyleSheet("font-size:16pt;padding:20px;")
+
+        layout.addWidget(btn_flex)
+        layout.addWidget(btn_cort)
         layout.addWidget(btn_mem)
-        layout.addWidget(btn_clear)
+        layout.addWidget(btn_exit)
 
-        btn_diag.clicked.connect(self.open_diagrama)
-        btn_design.clicked.connect(self.open_diseno)
-        btn_dev.clicked.connect(self.open_desarrollo)
+        btn_flex.clicked.connect(self.open_diagrama)
+        btn_cort.clicked.connect(self.show_cortante_msg)
         btn_mem.clicked.connect(self.open_memoria)
-        btn_clear.clicked.connect(self.clear_data)
+        btn_exit.clicked.connect(self.close)
 
         self.menu_page = page
         self.stacked.addWidget(page)
@@ -74,7 +77,6 @@ class MenuWindow(QMainWindow):
             self.diagram_page = MomentApp(
                 show_window=False,
                 next_callback=self._diagram_next,
-                save_callback=self._save_diagram,
                 menu_callback=self.show_menu,
             )
             self.stacked.addWidget(self.diagram_page)
@@ -85,11 +87,6 @@ class MenuWindow(QMainWindow):
         self.mp_corr = mp
         self.design_ready = False
         self.open_diseno()
-
-    def _save_diagram(self, mn, mp):
-        self.mn_corr = mn
-        self.mp_corr = mp
-        QMessageBox.information(self, "Guardado", "Momentos guardados")
 
     # ------------------------------------------------------------------
     def open_diseno(self):
@@ -102,7 +99,6 @@ class MenuWindow(QMainWindow):
                 self.mp_corr,
                 show_window=False,
                 next_callback=self._design_next,
-                save_callback=self._save_design,
                 menu_callback=self.show_menu,
             )
             self.stacked.addWidget(self.design_page)
@@ -112,11 +108,6 @@ class MenuWindow(QMainWindow):
         self.design_ready = True
         self.open_desarrollo()
 
-    def _save_design(self):
-        self.design_ready = True
-        QMessageBox.information(self, "Guardado", "Diseño guardado")
-
-    # ------------------------------------------------------------------
     def open_desarrollo(self):
         if not self.design_ready:
             QMessageBox.warning(self, "Advertencia", "Primero complete el diseño")
@@ -148,6 +139,9 @@ class MenuWindow(QMainWindow):
             )
             self.stacked.addWidget(self.mem_page)
         self.stacked.setCurrentWidget(self.mem_page)
+
+    def show_cortante_msg(self):
+        QMessageBox.information(self, "En desarrollo", "Módulo en desarrollo")
 
     # ------------------------------------------------------------------
     def clear_data(self):
