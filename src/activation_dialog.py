@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QGuiApplication
 
-from .activation import machine_code, activate
+from .activation import machine_code, activate, license_counter
 
 
 class ActivationDialog(QDialog):
@@ -20,8 +20,10 @@ class ActivationDialog(QDialog):
         self.setWindowTitle("Activar VIGAPP 060")
         self.setModal(True)
         self._code = machine_code()
+        counter = license_counter()
         msg = (
-            f"ID de equipo: {self._code}\n\n"
+            f"ID de equipo: {self._code}\n"
+            f"Contador: {counter}\n\n"
             "Comparta este codigo al contacto para solicitar su clave de "
             "activacion. Si ya la tiene, ingrese la clave y presione Activar."
         )

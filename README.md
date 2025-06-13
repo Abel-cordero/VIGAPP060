@@ -284,7 +284,9 @@ python scripts/generate_license.py <codigo> --counter 1
 ```
 
 Ingrese la clave resultante en la ventana de activación. Cada clave es válida
-solo para el equipo que generó el código y para un único contador.
+solo para el equipo que generó el código y para un único contador. El contador
+se incrementa automáticamente después de una activación exitosa y ahora se
+muestra en la misma ventana para facilitar la generación de futuras licencias.
 
 ### Cambios recientes
 

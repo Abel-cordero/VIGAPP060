@@ -143,3 +143,8 @@ def check_activation() -> bool:
     with open(KEY_FILE) as f:
         stored = _decrypt(f.read().strip())
     return stored == hardware_id()
+
+
+def license_counter() -> int:
+    """Return the current activation counter."""
+    return _read_counter()
