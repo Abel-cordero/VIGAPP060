@@ -1,7 +1,7 @@
 import hashlib
 import sys
 
-SECRET_KEY = "mi_clave_secreta"  # Cambiar por la clave real
+SECRET_KEY = "mi_clave_sercreta"  # Cambiar por la clave real
 
 
 def generar_clave(serial: str) -> str:
