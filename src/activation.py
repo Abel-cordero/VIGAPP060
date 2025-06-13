@@ -91,6 +91,18 @@ def _write_counter(val: int) -> None:
         f.write(_encrypt(str(val)))
 
 
+def machine_code() -> str:
+    """Return the user-visible code for this machine."""
+    return hardware_id()[:16]
+
+
+def license_for(code: str, counter: int) -> str:
+    """Return the license string for ``code`` and ``counter``."""
+    raw = f"{code}:{counter}:{_SECRET.decode()}"
+    digest = hashlib.sha256(raw.encode()).hexdigest()[:8].upper()
+    return f"{LICENSE_PREFIX}{digest}{LICENSE_SUFFIX}"
+
+
 def current_license() -> str:
     """Return the expected license for activation."""
     counter = _read_counter()
