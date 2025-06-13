@@ -22,7 +22,7 @@ class MemoriaWindow(QMainWindow):
         super().__init__(parent)
         self.menu_callback = menu_callback
         self.setWindowTitle(title)
-        self.resize(700, 900)
+        self.setFixedSize(560, 720)
 
         central = QWidget()
         self.setCentralWidget(central)

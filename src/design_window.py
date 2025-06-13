@@ -59,7 +59,7 @@ class DesignWindow(QMainWindow):
         self.menu_callback = menu_callback
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
-        self.resize(700, 900)
+        self.setFixedSize(560, 720)
         if show_window:
             self.show()
 
@@ -283,20 +283,17 @@ class DesignWindow(QMainWindow):
         self.btn_capture = QPushButton("Capturar Diseño")
         self.btn_memoria = QPushButton("Memoria de Cálculo")
         self.btn_view3d = QPushButton("Continuar con Desarrollo")
-        self.btn_save = QPushButton("Guardar Diseño")
         self.btn_menu = QPushButton("Menú")
 
         self.btn_capture.clicked.connect(self._capture_design)
         self.btn_memoria.clicked.connect(self.show_memoria)
         self.btn_view3d.clicked.connect(self.on_next)
-        self.btn_save.clicked.connect(self.on_save)
         self.btn_menu.clicked.connect(self.on_menu)
 
-        layout.addWidget(self.btn_save,    row_start + 4, 0, 1, 2)
-        layout.addWidget(self.btn_capture, row_start + 4, 2, 1, 2)
-        layout.addWidget(self.btn_memoria, row_start + 4, 4, 1, 2)
-        layout.addWidget(self.btn_view3d,  row_start + 4, 6, 1, 2)
-        layout.addWidget(self.btn_menu,    row_start + 4, 8, 1, 2)
+        layout.addWidget(self.btn_capture, row_start + 4, 0, 1, 2)
+        layout.addWidget(self.btn_memoria, row_start + 4, 2, 1, 2)
+        layout.addWidget(self.btn_view3d,  row_start + 4, 4, 1, 2)
+        layout.addWidget(self.btn_menu,    row_start + 4, 6, 1, 2)
 
         for ed in self.edits.values():
             ed.editingFinished.connect(self._redraw)
@@ -511,7 +508,7 @@ class DesignWindow(QMainWindow):
         self.canvas_dist.draw()
 
     def _capture_design(self):
-        widgets = [self.btn_capture, self.btn_memoria, self.btn_view3d, self.btn_save, self.btn_menu]
+        widgets = [self.btn_capture, self.btn_memoria, self.btn_view3d, self.btn_menu]
         for w in widgets:
             w.hide()
         self.repaint()

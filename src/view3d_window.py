@@ -57,7 +57,7 @@ class View3DWindow(QMainWindow):
             b = h = 0
         default_title = f"SECCION DE VIGA {int(b)}X{int(h)}" if b and h else "SECCION DE VIGA"
         self.setWindowTitle(default_title)
-        self.resize(800, 600)
+        self.setFixedSize(560, 720)
 
         rng = np.random.default_rng(0)
         # Slightly darker texture for a gray concrete look

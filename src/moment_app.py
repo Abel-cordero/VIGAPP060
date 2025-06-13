@@ -35,7 +35,7 @@ class MomentApp(QMainWindow):
         self.mn_corr = None
         self.mp_corr = None
         self._build_ui()
-        self.resize(700, 900)
+        self.setFixedSize(560, 720)
         if show_window:
             self.show()
 
@@ -74,20 +74,17 @@ class MomentApp(QMainWindow):
         btn_calc = QPushButton("Calcular Diagramas")
         btn_next = QPushButton("Ir a Diseño de Acero")
         btn_capture = QPushButton("Capturar Diagramas")
-        btn_save = QPushButton("Guardar")
         btn_menu = QPushButton("Ir al Menú")
 
         btn_calc.clicked.connect(self.on_calculate)
         btn_next.clicked.connect(self.on_next)
         btn_capture.clicked.connect(self._capture_diagram)
-        btn_save.clicked.connect(self.on_save)
         btn_menu.clicked.connect(self.on_menu)
 
-        layout.addWidget(btn_save, 3, 2)
-        layout.addWidget(btn_calc, 3, 3)
-        layout.addWidget(btn_next, 3, 4)
-        layout.addWidget(btn_capture, 3, 5)
-        layout.addWidget(btn_menu, 3, 6)
+        layout.addWidget(btn_calc, 3, 2)
+        layout.addWidget(btn_next, 3, 3)
+        layout.addWidget(btn_capture, 3, 4)
+        layout.addWidget(btn_menu, 3, 5)
 
         self.fig, (self.ax1, self.ax2) = plt.subplots(2, 1, figsize=(6, 5), constrained_layout=True)
         self.canvas = FigureCanvas(self.fig)
