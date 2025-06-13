@@ -175,10 +175,10 @@ class MomentApp(QMainWindow):
                        abs(mp_corr[0]), abs(mp_corr[2]))
         floor = 0.25 * max_face
 
-        for arr in (mn_corr, mp_corr):
+        for arr, sgn in ((mn_corr, -1), (mp_corr, 1)):
             for i in range(len(arr)):
                 if abs(arr[i]) < floor:
-                    arr[i] = np.sign(arr[i]) * floor
+                    arr[i] = sgn * floor
 
         return mn_corr, mp_corr
 
