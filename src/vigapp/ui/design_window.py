@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import (
     QComboBox,
     QVBoxLayout,
     QHBoxLayout,
+    QScrollArea,
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGuiApplication
@@ -37,7 +38,6 @@ class DesignWindow(QMainWindow):
         self.menu_callback = menu_callback
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
-        self.setFixedSize(700, 1100)
         if show_window:
             self.show()
 
@@ -145,9 +145,14 @@ class DesignWindow(QMainWindow):
         return d
 
     def _build_ui(self):
-        central = QWidget()
-        self.setCentralWidget(central)
-        layout = QGridLayout(central)
+        content = QWidget()
+        layout = QGridLayout(content)
+
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(content)
+        self.setCentralWidget(scroll)
+        self.scroll_area = scroll
 
         labels = [
             ("b (cm)", "30"),
@@ -491,7 +496,8 @@ class DesignWindow(QMainWindow):
             w.hide()
         self.repaint()
         QApplication.processEvents()
-        pix = self.centralWidget().grab()
+        target = self.scroll_area.widget() if hasattr(self, "scroll_area") else self.centralWidget()
+        pix = target.grab()
         QGuiApplication.clipboard().setPixmap(pix)
         for w in widgets:
             w.show()
