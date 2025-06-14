@@ -1,42 +1,9 @@
-import hashlib
-import os
-import subprocess
+"""Tkinter-based activation dialog using :mod:`src.activation`."""
+
 import tkinter as tk
 from tkinter import messagebox
 
-SECRET = "MI_SECRETO_2024"
-
-
-def obtener_serial() -> str:
-    if os.name != "nt":
-        return ""
-    try:
-        out = subprocess.check_output([
-            "wmic",
-            "diskdrive",
-            "get",
-            "SerialNumber",
-        ], stderr=subprocess.DEVNULL, text=True)
-        lines = [line.strip() for line in out.splitlines() if line.strip()][1:]
-        return lines[0] if lines else ""
-    except Exception:
-        return ""
-
-
-def _base36(num: int) -> str:
-    chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    if num == 0:
-        return "0"
-    digits = []
-    while num:
-        num, rem = divmod(num, 36)
-        digits.append(chars[rem])
-    return "".join(reversed(digits))
-
-
-def clave_para(serial: str) -> str:
-    digest = hashlib.sha256((serial + SECRET).encode()).hexdigest()
-    return _base36(int(digest, 16))[:6].upper()
+from . import activate, check_activation, license_counter, machine_code
 
 
 class VentanaActivacion(tk.Tk):
@@ -46,12 +13,14 @@ class VentanaActivacion(tk.Tk):
         self.geometry("400x200")
         self.activated = False
 
-        self.serial = obtener_serial()
+        self.serial = machine_code()
+        self.counter = license_counter()
 
         tk.Label(self, text="ID de equipo:").pack(pady=5)
         self.id_var = tk.StringVar(value=self.serial)
         id_entry = tk.Entry(self, textvariable=self.id_var, width=30, state="readonly")
         id_entry.pack(pady=5)
+        tk.Label(self, text=f"Contador: {self.counter}").pack(pady=5)
 
         tk.Button(self, text="Copiar ID", command=self._copiar).pack(pady=5)
 
@@ -67,10 +36,9 @@ class VentanaActivacion(tk.Tk):
         messagebox.showinfo("Copiar", "ID copiado al portapapeles")
 
     def _verificar(self):
-        clave = self.clave_entry.get().strip().upper()
-        expected = clave_para(self.serial)
-        if clave == expected:
-            messagebox.showinfo("Licencia", "Clave correcta! Programa activado.")
+        clave = self.clave_entry.get().strip()
+        if activate(clave):
+            messagebox.showinfo("Licencia", "Programa activado correctamente!")
             self.activated = True
             self.destroy()
         else:
@@ -79,6 +47,8 @@ class VentanaActivacion(tk.Tk):
 
 def run_activation() -> bool:
     """Show the activation dialog and return ``True`` if validated."""
+    if check_activation():
+        return True
     win = VentanaActivacion()
     win.mainloop()
     return win.activated
