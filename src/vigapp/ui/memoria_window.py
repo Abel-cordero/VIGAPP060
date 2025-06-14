@@ -36,7 +36,7 @@ class MemoriaWindow(QMainWindow):
         self.text.setHtml(text)
         layout.addWidget(self.text)
 
-        self.btn_capture = QPushButton("Capturar Memoria")
+        self.btn_capture = QPushButton("CAPTURA")
         self.btn_export = QPushButton("Exportar…")
         self.btn_capture.clicked.connect(self._capture)
         self.btn_export.clicked.connect(self.export)

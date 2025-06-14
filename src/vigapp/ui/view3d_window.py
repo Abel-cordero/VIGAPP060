@@ -4,9 +4,11 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QWidget,
     QVBoxLayout,
+    QHBoxLayout,
     QPushButton,
     QApplication,
     QLineEdit,
+    QLabel,
 )
 from PyQt5.QtGui import QGuiApplication
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -31,10 +33,11 @@ CLEARANCE = 0.2
 class View3DWindow(QMainWindow):
     """Window that displays beam sections for M1, M2 and M3."""
 
-    def __init__(self, design, parent=None, *, show_window=True, menu_callback=None):
+    def __init__(self, design, parent=None, *, show_window=True, menu_callback=None, back_callback=None):
         super().__init__(parent)
         self.design = design
         self.menu_callback = menu_callback
+        self.back_callback = back_callback
         self.neg_orders = []
         self.pos_orders = []
         self.selected = None
@@ -57,12 +60,16 @@ class View3DWindow(QMainWindow):
         central = QWidget()
         self.setCentralWidget(central)
         layout = QVBoxLayout(central)
+        layout.setSpacing(10)
 
-        # Editable title. Moved below the canvas so it won't appear
-        # when capturing the view. The text is also printed as a bold
-        # heading above the section cuts.
+        self.label_title = QLabel(default_title)
+        self.label_title.setAlignment(Qt.AlignCenter)
+        self.label_title.setStyleSheet("font-size:16pt;font-weight:bold")
+        layout.addWidget(self.label_title)
+
         self.title_edit = QLineEdit(default_title)
         self.title_edit.textChanged.connect(self._on_title_change)
+        layout.addWidget(self.title_edit)
 
 
 
@@ -70,14 +77,18 @@ class View3DWindow(QMainWindow):
         self.ax_sections = [self.fig.add_subplot(1, 3, i + 1) for i in range(3)]
         self.canvas = FigureCanvas(self.fig)
         layout.addWidget(self.canvas)
-        # Place the editable title at the bottom
-        layout.addWidget(self.title_edit)
-        self.btn_capture = QPushButton("Capturar Vista")
+
+        btn_layout = QHBoxLayout()
+        self.btn_capture = QPushButton("CAPTURA")
         self.btn_capture.clicked.connect(self._capture_view)
-        self.btn_menu = QPushButton("Menú")
+        self.btn_back = QPushButton("RETROCEDER")
+        self.btn_back.clicked.connect(self.on_back)
+        self.btn_menu = QPushButton("MENÚ")
         self.btn_menu.clicked.connect(self.on_menu)
-        layout.addWidget(self.btn_capture)
-        layout.addWidget(self.btn_menu)
+        btn_layout.addWidget(self.btn_capture)
+        btn_layout.addWidget(self.btn_back)
+        btn_layout.addWidget(self.btn_menu)
+        layout.addLayout(btn_layout)
 
         self.canvas.mpl_connect("pick_event", self._on_pick)
         self.canvas.mpl_connect("key_press_event", self._on_key)
@@ -92,6 +103,7 @@ class View3DWindow(QMainWindow):
     def _on_title_change(self, text):
         """Update window title and figure heading."""
         self.setWindowTitle(text)
+        self.label_title.setText(text)
         self.fig.suptitle(text.upper(), fontweight="bold")
         self.canvas.draw_idle()
 
@@ -415,6 +427,12 @@ class View3DWindow(QMainWindow):
         QApplication.processEvents()
         pix = self.canvas.grab()
         QGuiApplication.clipboard().setPixmap(pix)
+
+    def on_back(self):
+        if self.back_callback:
+            self.back_callback()
+        else:
+            self.close()
 
     def on_menu(self):
         if self.menu_callback:
