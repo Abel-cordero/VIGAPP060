@@ -7,3 +7,6 @@ Desktop.ini
 
 # Icon files
 *.ico
+
+# Progress directory
+progreso/
