@@ -259,7 +259,7 @@ class DesignWindow(QMainWindow):
         layout.addLayout(self.combo_grid, row_start + 3, 0, 1, 8)
 
         self.btn_capture = QPushButton("Capturar Diseño")
-        self.btn_memoria = QPushButton("Memoria de Cálculo")
+        self.btn_memoria = QPushButton("REPORTES")
         self.btn_view3d = QPushButton("Continuar con Desarrollo")
         self.btn_menu = QPushButton("Menú")
 
