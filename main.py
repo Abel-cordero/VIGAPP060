@@ -18,6 +18,9 @@ from vigapp.activation.tk_dialog import run_activation
 # Toggle for enabling or disabling the license check. Set to ``True`` to
 # require activation again.
 ACTIVATION_ENABLED = False
+# Toggle the splash screen shown at startup. Set to ``False`` to
+# open the main window immediately.
+SPLASH_ENABLED = False
 
 
 
@@ -44,16 +47,23 @@ def main():
     if ACTIVATION_ENABLED and not run_activation():
         return
 
-    splash = QSplashScreen(QPixmap(icon_path).scaled(256, 256, Qt.KeepAspectRatio, Qt.SmoothTransformation))
-    splash.show()
+    if SPLASH_ENABLED:
+        splash = QSplashScreen(QPixmap(icon_path).scaled(
+            256, 256, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        splash.show()
 
-    def show_main():
-        splash.close()
+        def show_main():
+            splash.close()
+            main_win = MenuWindow()
+            main_win.show()
+            app._window = main_win
+
+        QTimer.singleShot(2000, show_main)
+    else:
         main_win = MenuWindow()
         main_win.show()
         app._window = main_win
 
-    QTimer.singleShot(2000, show_main)
     sys.exit(app.exec_())
 
 
