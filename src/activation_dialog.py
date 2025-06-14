@@ -7,7 +7,9 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QMessageBox,
 )
-from PyQt5.QtGui import QGuiApplication
+import os
+from PyQt5.QtGui import QGuiApplication, QIcon
+from PyQt5.QtCore import Qt
 
 from .activation import machine_code, activate, check_activation, license_counter
 
@@ -33,10 +35,36 @@ class ActivationDialog(QDialog):
         self.input = QLineEdit()
         self.input.setPlaceholderText("Clave de activacion")
 
-        contact_btn = QPushButton("Contacto")
-        copy_btn = QPushButton("Copiar ID")
-        activate_btn = QPushButton("Activar")
-        exit_btn = QPushButton("Salir")
+        icon_dir = os.path.join(os.path.dirname(__file__), "..", "ico")
+
+        contact_btn = QPushButton("CONTACTO")
+        copy_btn = QPushButton("COPIAR ID")
+        activate_btn = QPushButton("ACTIVAR")
+        exit_btn = QPushButton("SALIR")
+
+        for btn, name in [
+            (contact_btn, "CONTACTO"),
+            (exit_btn, "SALIR"),
+        ]:
+            ico = os.path.join(icon_dir, f"{name}.ico")
+            if os.path.exists(ico):
+                btn.setIcon(QIcon(ico))
+            btn.setCursor(Qt.PointingHandCursor)
+
+        style = (
+            "QPushButton {background-color:#3498db;color:white;font-size:10pt;"
+            "padding:8px;border-radius:5px;font-family:'Segoe UI';}"
+            "QPushButton:hover {background-color:#2980b9;}"
+        )
+        exit_style = (
+            "QPushButton {background-color:#e74c3c;color:white;font-size:10pt;"
+            "padding:8px;border-radius:5px;font-family:'Segoe UI';}"
+            "QPushButton:hover {background-color:#c0392b;}"
+        )
+
+        for b in (contact_btn, copy_btn, activate_btn):
+            b.setStyleSheet(style)
+        exit_btn.setStyleSheet(exit_style)
 
         contact_btn.clicked.connect(self._show_contact)
         copy_btn.clicked.connect(self._copy_id)

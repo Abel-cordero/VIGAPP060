@@ -6,7 +6,7 @@ import sys
 import ctypes
 
 from PyQt5.QtWidgets import QApplication, QSplashScreen
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QTimer
 
 from src.menu_window import MenuWindow
@@ -24,6 +24,7 @@ def main():
     logging.basicConfig(level=logging.ERROR)
 
     app = QApplication(sys.argv)
+    app.setFont(QFont("Segoe UI", 10))
 
     if os.name == "nt":
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("VigApp060")
