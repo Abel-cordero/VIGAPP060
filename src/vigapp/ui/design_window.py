@@ -37,7 +37,7 @@ class DesignWindow(QMainWindow):
         self.menu_callback = menu_callback
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
-        self.setFixedSize(700, 1000)
+        self.setFixedSize(700, 1100)
         if show_window:
             self.show()
 
@@ -505,6 +505,8 @@ class DesignWindow(QMainWindow):
     def show_memoria(self):
         """Show a detailed calculation window."""
         title, text = self._build_memoria()
+        if title is None or text is None:
+            return
         self.mem_win = MemoriaWindow(title, text)
         self.mem_win.show()
 
