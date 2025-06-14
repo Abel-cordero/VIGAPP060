@@ -11,21 +11,25 @@ from PyQt5.QtWidgets import (
     QSizePolicy,
     QSpacerItem,
     QFrame,
+    QGraphicsColorizeEffect,
 )
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap, QIcon
 
 
 class HoverIcon(QLabel):
-    """Icon label that slightly enlarges on hover."""
+    """Icon label that slightly enlarges and brightens on hover."""
 
-    def __init__(self, icon_path: str, size: int = 32, parent=None):
+    def __init__(self, icon_path: str, size: int = 64, parent=None):
         super().__init__(parent)
         self._pix = QPixmap(icon_path)
         self._base_size = size
         self._hover_size = int(size * 1.2)
         self.setFixedSize(self._hover_size, self._hover_size)
         self.setScaledContents(True)
+        self._effect = QGraphicsColorizeEffect(self)
+        self._effect.setStrength(0)
+        self.setGraphicsEffect(self._effect)
         if not self._pix.isNull():
             self.setPixmap(
                 self._pix.scaled(
@@ -46,6 +50,8 @@ class HoverIcon(QLabel):
                     Qt.SmoothTransformation,
                 )
             )
+        self._effect.setColor(Qt.white)
+        self._effect.setStrength(0.2)
         super().enterEvent(event)
 
     def leaveEvent(self, event):
@@ -58,6 +64,7 @@ class HoverIcon(QLabel):
                     Qt.SmoothTransformation,
                 )
             )
+        self._effect.setStrength(0)
         super().leaveEvent(event)
 
 
@@ -174,19 +181,33 @@ class MenuWindow(QMainWindow):
         btn_mem = QPushButton("MEMORIA DE C\u00c1LCULO")
         btn_contact = QPushButton("CONTACTO")
         btn_exit = QPushButton("SALIR")
+        btn_exit.setObjectName("Salir")
 
         btn_style = (
-            "QPushButton {background-color: rgba(255,255,255,0.7);"
-            "color:#2c3e50;font-size:14px;font-family:'Segoe UI';"
-            "padding:8px 20px;border-radius:8px;text-align:left;}"
-            "QPushButton:hover {background-color: rgba(255,255,255,0.9);}"
+            "QPushButton {"
+            "background-color: rgba(255, 255, 255, 0.75);"
+            "border-radius: 10px;"
+            "padding: 10px 20px;"
+            "font-family: 'Segoe UI';"
+            "font-size: 12pt;"
+            "color: #000;"
+            "}"
+            "QPushButton:hover {"
+            "background-color: rgba(255, 255, 255, 0.9);"
+            "border: 1px solid rgba(0, 0, 0, 0.1);"
+            "}"
         )
         exit_style = (
-            "QPushButton {background-color: rgba(231,76,60,0.7);"
-            "color:white;font-size:14px;font-family:'Segoe UI';"
-            "padding:8px 20px;border-radius:8px;text-align:left;}"
-            "QPushButton:hover {background-color: rgba(231,76,60,0.9);}"
+            "QPushButton#Salir {"
+            "background-color: rgba(230, 57, 70, 0.9);"
+            "color: white;"
+            "}"
+            "QPushButton#Salir:hover {"
+            "background-color: rgba(200, 40, 50, 1.0);"
+            "}"
         )
+
+        full_style = btn_style + exit_style
 
         button_box = QFrame()
         btn_layout = QVBoxLayout(button_box)
@@ -195,10 +216,12 @@ class MenuWindow(QMainWindow):
 
         def add_row(btn, name):
             icon_path = os.path.join(self._icon_dir, f"{name}.png")
-            icon_lbl = HoverIcon(icon_path, 32)
+            icon_lbl = HoverIcon(icon_path, 64)
             btn.setCursor(Qt.PointingHandCursor)
             btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-            btn.setStyleSheet(exit_style if name == "SALIR" else btn_style)
+            btn.setStyleSheet(full_style)
+            btn.setMinimumHeight(50)
+            btn.setMaximumWidth(300)
             row = QHBoxLayout()
             row.addWidget(icon_lbl)
             row.addWidget(btn)
