@@ -351,3 +351,16 @@ más completa descrita en [DESARROLLO_3D.md](DESARROLLO_3D.md).
 
 Este proyecto se distribuye bajo los términos de la [Licencia MIT](LICENSE).
 
+⚠️ NOTA IMPORTANTE:
+
+Todo el cálculo estructural en esta aplicación se realiza utilizando **unidades tradicionales** según lo estipulado en el **Anexo 2 de la NTP E.060**. Las unidades utilizadas en todos los módulos son:
+
+- Longitud: **cm**
+- Fuerza: **kgf**
+- Tensión: **kgf/cm²**
+- Momento: **tonf·m**
+- Área: **cm²**
+
+Este enfoque asegura coherencia con la práctica profesional en Perú y con los formatos establecidos por el reglamento nacional.
+
+No se usa el sistema internacional (SI) para los cálculos ni para el almacenamiento de variables internas.
