@@ -36,7 +36,6 @@ class DesignWindow(QDialog):
 
         self._build_ui()
         self.setWindowTitle(self._base.windowTitle())
-        self.resize(self._base.size())
         if show_window:
             self.show()
 
