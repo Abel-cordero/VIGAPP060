@@ -17,33 +17,11 @@ from PyQt5.QtGui import QGuiApplication
 from .view3d_window import View3DWindow
 from .memoria_window import MemoriaWindow
 from ..models.utils import latex_image
+from ..models.constants import DIAM_CM, BAR_DATA
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Tabla de diámetros y áreas (cm²) para barras de refuerzo
-BAR_DATA = {
-    '6mm': 0.28,
-    '8mm': 0.50,
-    '3/8"': 0.71,
-    '12mm': 1.13,
-    '1/2"': 1.29,
-    '5/8"': 1.99,
-    '3/4"': 2.84,
-    '1"': 5.10,
-}
-
-# Diámetros equivalentes en centímetros para las mismas claves que BAR_DATA
-DIAM_CM = {
-    '6mm': 0.6,
-    '8mm': 0.8,
-    '3/8"': 0.95,
-    '12mm': 1.2,
-    '1/2"': 1.27,
-    '5/8"': 1.59,
-    '3/4"': 1.91,
-    '1"': 2.54,
-}
 
 class DesignWindow(QMainWindow):
     """Ventana para la etapa de diseño de acero (solo interfaz gráfica)."""
