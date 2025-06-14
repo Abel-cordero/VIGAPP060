@@ -219,7 +219,7 @@ El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.
 - **`graphics/section2d_view.py`** — vista 2D interactiva que permite arrastrar varillas.
 - **`graphics/section3d_view.py`** — ventana 3D para inspeccionar la viga y su refuerzo.
 - **`bar_properties_panel.py`** — diálogo con propiedades detalladas de cada barra.
-- **`project_manager.py`** — gestor opcional para guardar o cargar configuraciones.
+- **`sistema/project_manager.py`** — gestor opcional para guardar o cargar configuraciones.
 - **`summary_view.py`** — previsualización dinámica de la memoria de cálculo.
 - **`models/utils.py`** — constantes y funciones auxiliares.
 
