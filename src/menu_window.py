@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (
     QFrame,
 )
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtGui import QPixmap, QIcon, QFont
 
 from .moment_app import MomentApp
 from .design_window import DesignWindow
@@ -34,6 +34,7 @@ class MenuWindow(QMainWindow):
             self._logo_path = icon_path
 
         self.setWindowTitle("VIGAPP060")
+        self._ico_dir = os.path.join(base_dir, "..", "ico")
 
         self.stacked = QStackedWidget()
         self.setCentralWidget(self.stacked)
@@ -48,26 +49,62 @@ class MenuWindow(QMainWindow):
         self._build_menu()
 
     # ------------------------------------------------------------------
+    def _update_logo(self):
+        pix = QPixmap(self._logo_path)
+        if pix.isNull():
+            return
+        size = int(min(self.width(), 300) * 0.5)
+        if size <= 0:
+            size = 150
+        self.label_icon.setPixmap(
+            pix.scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        )
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        if hasattr(self, "label_icon"):
+            self._update_logo()
+
+    # ------------------------------------------------------------------
     def _build_menu(self):
         page = QWidget()
         layout = QVBoxLayout(page)
         layout.setAlignment(Qt.AlignTop)
 
         label_icon = QLabel()
-        label_icon.setPixmap(QPixmap(self._logo_path).scaled(180, 180, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.label_icon = label_icon
+        self._update_logo()
         label_icon.setAlignment(Qt.AlignCenter)
         label_title = QLabel("VIGAPP060")
         label_title.setAlignment(Qt.AlignCenter)
-        label_title.setStyleSheet("font-size:24pt;font-weight:bold;padding:10px;")
+        label_title.setStyleSheet(
+            "font-size:24pt;font-weight:bold;padding:10px;font-family:'Segoe UI';"
+        )
 
         layout.addWidget(label_icon, alignment=Qt.AlignCenter)
         layout.addWidget(label_title)
 
-        btn_flex = QPushButton("Diseño por Flexión")
-        btn_flex_extra = QPushButton("Otro Diseño")
-        btn_cort = QPushButton("Diseño por Cortante")
-        btn_mem = QPushButton("Memoria de Cálculo")
-        btn_exit = QPushButton("Salir")
+        btn_flex = QPushButton("DISE\u00d1O POR FLEXI\u00d3N")
+        btn_flex_extra = QPushButton("DISE\u00d1O POR TORSI\u00d3N")
+        btn_cort = QPushButton("DISE\u00d1O POR CORTANTE")
+        btn_mem = QPushButton("MEMORIA DE C\u00c1LCULO")
+        btn_exit = QPushButton("SALIR")
+
+        for btn, name in [
+            (btn_flex, "DISE\u00d1O POR FLEXI\u00d3N"),
+            (btn_flex_extra, "DISE\u00d1O POR TORSI\u00d3N"),
+            (btn_cort, "DISE\u00d1O POR CORTANTE"),
+            (btn_mem, "MEMORIA DE C\u00c1LCULO"),
+        ]:
+            icon_path = os.path.join(self._ico_dir, f"{name}.ico")
+            if os.path.exists(icon_path):
+                btn.setIcon(QIcon(icon_path))
+            btn.setCursor(Qt.PointingHandCursor)
+
+        exit_icon = os.path.join(self._ico_dir, "SALIR.ico")
+        if os.path.exists(exit_icon):
+            btn_exit.setIcon(QIcon(exit_icon))
+        btn_exit.setCursor(Qt.PointingHandCursor)
 
         button_box = QFrame()
         btn_layout = QVBoxLayout(button_box)
@@ -76,8 +113,8 @@ class MenuWindow(QMainWindow):
 
         default_style = (
             "QPushButton {background-color:#3498db;color:white;font-size:16pt;"
-            "padding:15px;border-radius:10px;}"
-            "QPushButton:hover {background-color:#2980b9;}"
+            "padding:15px;border-radius:10px;font-family:'Segoe UI';}"
+            "QPushButton:hover {background-color:#2980b9;transform:scale(1.02);}"
         )
 
         for b in (btn_flex, btn_flex_extra, btn_cort, btn_mem):
@@ -87,11 +124,12 @@ class MenuWindow(QMainWindow):
 
         exit_style = (
             "QPushButton {background-color:#e74c3c;color:white;font-size:16pt;"
-            "padding:15px;border-radius:10px;}"
+            "padding:15px;border-radius:10px;font-family:'Segoe UI';}"
             "QPushButton:hover {background-color:#c0392b;}"
         )
         btn_exit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         btn_exit.setStyleSheet(exit_style)
+        btn_layout.addSpacing(20)
         btn_layout.addWidget(btn_exit)
 
         layout.addWidget(button_box)
