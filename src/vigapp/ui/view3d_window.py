@@ -14,17 +14,7 @@ import matplotlib.pyplot as plt
 from matplotlib import patches
 import numpy as np
 
-
-DIAM_CM = {
-    "6mm": 0.6,
-    "8mm": 0.8,
-    '3/8"': 0.95,
-    "12mm": 1.2,
-    '1/2"': 1.27,
-    '5/8"': 1.59,
-    '3/4"': 1.91,
-    '1"': 2.54,
-}
+from ..models.constants import DIAM_CM
 
 # Simple color mapping per diameter key using primary colors
 COLOR_MAP = {
