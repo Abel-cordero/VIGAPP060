@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QScrollArea,
+    QLayout,
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGuiApplication
@@ -148,6 +149,7 @@ class DesignWindow(QMainWindow):
         content = QWidget()
         layout = QGridLayout(content)
         layout.setVerticalSpacing(15)
+        layout.setSizeConstraint(QLayout.SetMinimumSize)
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
@@ -155,9 +157,6 @@ class DesignWindow(QMainWindow):
         scroll.setWidget(content)
         self.setCentralWidget(scroll)
         self.scroll_area = scroll
-
-        # Definir un tamaño inicial amplio para evitar contenido oculto
-        self.resize(1200, 800)
 
         labels = [
             ("b (cm)", "30"),
