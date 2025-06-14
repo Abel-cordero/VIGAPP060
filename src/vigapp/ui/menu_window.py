@@ -129,7 +129,8 @@ class MenuWindow(QMainWindow):
         self.setCentralWidget(self.stacked)
 
         self.setMinimumSize(700, 600)
-        self.resize(700, 800)
+        # Increase default height to provide more vertical space
+        self.resize(700, 900)
 
         self.mn_corr = None
         self.mp_corr = None
