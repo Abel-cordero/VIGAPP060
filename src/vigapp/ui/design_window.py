@@ -39,6 +39,8 @@ class DesignWindow(QMainWindow):
         self.menu_callback = menu_callback
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
+        # Provide enough vertical space so scrolling is rarely needed
+        self.resize(750, 1500)
         if show_window:
             self.show()
 
