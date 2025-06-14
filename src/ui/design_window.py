@@ -36,6 +36,8 @@ class DesignWindow(QDialog):
 
         self._build_ui()
         self.setWindowTitle(self._base.windowTitle())
+        # Force a large enough fixed size so all widgets are visible
+        self.setFixedSize(700, 1150)
         if show_window:
             self.show()
 
@@ -54,7 +56,7 @@ class DesignWindow(QDialog):
             content_layout.setSizeConstraint(QLayout.SetMinimumSize)
 
         # Ensure the window is large enough to show all widgets
-        self.setFixedSize(700, 1100)
+        # self.setFixedSize(700, 1100)
 
     def __getattr__(self, name):
         """Delegate attribute access to the underlying window."""
