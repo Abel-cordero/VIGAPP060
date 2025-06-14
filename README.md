@@ -215,7 +215,7 @@ El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.
 
 - **`beam_model.py`** — clase `BeamModel` con geometría, barras y lógicas de cálculo.
 - **`rebar_editor_widget.py`** — panel lateral para editar rápidamente las barras.
-- **`length_input_toolbar.py`** — barra de entrada de longitud con atajos `L/3`, `L/2` y `L`.
+- **`ui/length_input_toolbar.py`** — barra de entrada de longitud con atajos `L/3`, `L/2` y `L`.
 - **`section2d_view.py`** — vista 2D interactiva que permite arrastrar varillas.
 - **`section3d_view.py`** — ventana 3D para inspeccionar la viga y su refuerzo.
 - **`bar_properties_panel.py`** — diálogo con propiedades detalladas de cada barra.
@@ -223,13 +223,13 @@ El código se encuentra organizado en la carpeta `src/` y se inicia desde `main.
 - **`summary_view.py`** — previsualización dinámica de la memoria de cálculo.
 - **`utils.py`** — constantes y funciones auxiliares.
 
-- **`moment_app.py`** — ventana de ingreso de momentos y corrección.
-- **`design_window.py`** — etapa de diseño principal.
-- **`view3d_window.py`** — vista tridimensional simplificada.
-- **`memoria_window.py`** — ventana con memoria de cálculo detallada.
+- **`ui/moment_app.py`** — ventana de ingreso de momentos y corrección.
+- **`ui/design_window.py`** — etapa de diseño principal.
+- **`ui/view3d_window.py`** — vista tridimensional simplificada.
+- **`ui/memoria_window.py`** — ventana con memoria de cálculo detallada.
 Las clases principales son:
 
-- **`MomentApp`** (en `src/moment_app.py`)
+- **`MomentApp`** (en `src/ui/moment_app.py`)
   - `get_moments()` — lee los valores ingresados.
   - `get_length()` — obtiene la longitud de la viga.
   - `correct_moments(mn, mp, sys_t)` — aplica la corrección de la NTP E.060.
@@ -237,7 +237,7 @@ Las clases principales son:
   - `on_calculate()` — coordina lectura y graficado.
   - `on_next()` — abre la ventana de diseño con los momentos corregidos.
 
-- **`DesignWindow`** (en `src/design_window.py`)
+- **`DesignWindow`** (en `src/ui/design_window.py`)
   - `_calc_as_req()` y `_calc_as_limits()` — cálculos de acero requerido y límites.
   - `_required_areas()` — devuelve las áreas necesarias por posición.
   - `draw_section()`, `draw_required_distribution()` y `draw_design_distribution()` — funciones de representación gráfica.
@@ -245,12 +245,12 @@ Las clases principales son:
   - `_capture_design()` — copia la vista al portapapeles.
   - `show_view3d()` — abre una vista 3D simplificada.
 
-- **`View3DWindow`** (en `src/view3d_window.py`)
+- **`View3DWindow`** (en `src/ui/view3d_window.py`)
   - `draw_views()` — genera la visualización 2D y 3D de la viga.
 
-- **`MemoriaWindow`** (en `src/memoria_window.py`)
+- **`MemoriaWindow`** (en `src/ui/memoria_window.py`)
   - `_capture()` — guarda una captura de la memoria de cálculo.
-- **`FormulaWindow`** (en `src/formula_window.py`)
+- **`FormulaWindow`** (en `src/ui/formula_window.py`)
   - Permite escribir una fórmula en texto y visualizarla en formato LaTeX.
   - Botones para capturar la vista o exportarla a PNG/PDF/DOCX.
 
