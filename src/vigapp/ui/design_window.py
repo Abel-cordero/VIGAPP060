@@ -147,6 +147,7 @@ class DesignWindow(QMainWindow):
     def _build_ui(self):
         content = QWidget()
         layout = QGridLayout(content)
+        layout.setVerticalSpacing(15)
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
@@ -267,9 +268,9 @@ class DesignWindow(QMainWindow):
 
         layout.addLayout(self.combo_grid, row_start + 3, 0, 1, 8)
 
-        self.btn_capture = QPushButton("Capturar Diseño")
+        self.btn_capture = QPushButton("CAPTURA")
         self.btn_memoria = QPushButton("REPORTES")
-        self.btn_view3d = QPushButton("Continuar con Desarrollo")
+        self.btn_view3d = QPushButton("SECCIONES")
         self.btn_menu = QPushButton("Menú")
 
         self.btn_capture.clicked.connect(self._capture_design)
