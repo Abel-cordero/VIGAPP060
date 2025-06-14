@@ -3,15 +3,94 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QWidget,
     QVBoxLayout,
+    QHBoxLayout,
     QPushButton,
     QLabel,
     QStackedWidget,
     QMessageBox,
     QSizePolicy,
+    QSpacerItem,
     QFrame,
 )
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap, QIcon
+
+
+class HoverIcon(QLabel):
+    """Icon label that slightly enlarges on hover."""
+
+    def __init__(self, icon_path: str, size: int = 32, parent=None):
+        super().__init__(parent)
+        self._pix = QPixmap(icon_path)
+        self._base_size = size
+        self._hover_size = int(size * 1.2)
+        self.setFixedSize(self._hover_size, self._hover_size)
+        self.setScaledContents(True)
+        if not self._pix.isNull():
+            self.setPixmap(
+                self._pix.scaled(
+                    self._base_size,
+                    self._base_size,
+                    Qt.KeepAspectRatio,
+                    Qt.SmoothTransformation,
+                )
+            )
+
+    def enterEvent(self, event):
+        if not self._pix.isNull():
+            self.setPixmap(
+                self._pix.scaled(
+                    self._hover_size,
+                    self._hover_size,
+                    Qt.KeepAspectRatio,
+                    Qt.SmoothTransformation,
+                )
+            )
+        super().enterEvent(event)
+
+    def leaveEvent(self, event):
+        if not self._pix.isNull():
+            self.setPixmap(
+                self._pix.scaled(
+                    self._base_size,
+                    self._base_size,
+                    Qt.KeepAspectRatio,
+                    Qt.SmoothTransformation,
+                )
+            )
+        super().leaveEvent(event)
+
+
+class BackgroundWidget(QWidget):
+    """Widget that displays a scalable background image."""
+
+    def __init__(self, image_path: str, parent=None):
+        super().__init__(parent)
+        self._pix = QPixmap(image_path)
+        self._label = QLabel(self)
+        self._label.setScaledContents(True)
+        self._label.lower()
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet("background: transparent;")
+        self._update_bg()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._update_bg()
+
+    def _update_bg(self):
+        if self._pix.isNull():
+            self._label.hide()
+            return
+        self._label.show()
+        self._label.setGeometry(0, 0, self.width(), self.height())
+        self._label.setPixmap(
+            self._pix.scaled(
+                self.size(),
+                Qt.IgnoreAspectRatio,
+                Qt.SmoothTransformation,
+            )
+        )
 
 from .moment_app import MomentApp
 from .design_window import DesignWindow
@@ -35,6 +114,9 @@ class MenuWindow(QMainWindow):
 
         self.setWindowTitle("VIGAPP060")
         self._icon_dir = os.path.join(base_dir, "..", "icon")
+        self._bg_path = os.path.join(base_dir, "..", "FONDO_MENU.png")
+        if not os.path.exists(self._bg_path):
+            self._bg_path = os.path.join(base_dir, "..", "icon", "fondo.png")
 
         self.stacked = QStackedWidget()
         self.setCentralWidget(self.stacked)
@@ -67,10 +149,11 @@ class MenuWindow(QMainWindow):
 
     # ------------------------------------------------------------------
     def _build_menu(self):
-        page = QWidget()
+        page = BackgroundWidget(self._bg_path)
         layout = QVBoxLayout(page)
         layout.setAlignment(Qt.AlignTop)
-        layout.setSpacing(20)
+        layout.setSpacing(15)
+        layout.setContentsMargins(40, 20, 40, 20)
 
         label_icon = QLabel()
         self.label_icon = label_icon
@@ -86,63 +169,58 @@ class MenuWindow(QMainWindow):
         layout.addWidget(label_title)
 
         btn_flex = QPushButton("DISE\u00d1O POR FLEXI\u00d3N")
-        btn_flex_extra = QPushButton("DISE\u00d1O POR TORSI\u00d3N")
+        btn_torsion = QPushButton("DISE\u00d1O POR TORSI\u00d3N")
         btn_cort = QPushButton("DISE\u00d1O POR CORTANTE")
         btn_mem = QPushButton("MEMORIA DE C\u00c1LCULO")
+        btn_contact = QPushButton("CONTACTO")
         btn_exit = QPushButton("SALIR")
 
-        for btn, name in [
-            (btn_flex, "DISE\u00d1O POR FLEXI\u00d3N"),
-            (btn_flex_extra, "DISE\u00d1O POR TORSI\u00d3N"),
-            (btn_cort, "DISE\u00d1O POR CORTANTE"),
-            (btn_mem, "MEMORIA DE C\u00c1LCULO"),
-        ]:
-            icon_path = os.path.join(self._icon_dir, f"{name}.png")
-            if os.path.exists(icon_path):
-                btn.setIcon(QIcon(icon_path))
-            btn.setIconSize(QSize(32, 32))
-            btn.setCursor(Qt.PointingHandCursor)
-
-        exit_icon = os.path.join(self._icon_dir, "SALIR.png")
-        if os.path.exists(exit_icon):
-            btn_exit.setIcon(QIcon(exit_icon))
-        btn_exit.setIconSize(QSize(32, 32))
-        btn_exit.setCursor(Qt.PointingHandCursor)
+        btn_style = (
+            "QPushButton {background-color: rgba(255,255,255,0.7);"
+            "color:#2c3e50;font-size:14px;font-family:'Segoe UI';"
+            "padding:8px 20px;border-radius:8px;text-align:left;}"
+            "QPushButton:hover {background-color: rgba(255,255,255,0.9);}"
+        )
+        exit_style = (
+            "QPushButton {background-color: rgba(231,76,60,0.7);"
+            "color:white;font-size:14px;font-family:'Segoe UI';"
+            "padding:8px 20px;border-radius:8px;text-align:left;}"
+            "QPushButton:hover {background-color: rgba(231,76,60,0.9);}"
+        )
 
         button_box = QFrame()
         btn_layout = QVBoxLayout(button_box)
         btn_layout.setSpacing(15)
-        btn_layout.setContentsMargins(40, 20, 40, 20)
+        btn_layout.setContentsMargins(0, 0, 0, 0)
 
-        default_style = (
-            "QPushButton {background-color:#3498db;color:white;font-size:16pt;"
-            "padding:12px 20px;border-radius:8px;font-family:'Segoe UI';"
-            "text-align:left;}"
-            "QPushButton:hover {background-color:#2980b9;}"
-        )
+        def add_row(btn, name):
+            icon_path = os.path.join(self._icon_dir, f"{name}.png")
+            icon_lbl = HoverIcon(icon_path, 32)
+            btn.setCursor(Qt.PointingHandCursor)
+            btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            btn.setStyleSheet(exit_style if name == "SALIR" else btn_style)
+            row = QHBoxLayout()
+            row.addWidget(icon_lbl)
+            row.addWidget(btn)
+            row.setAlignment(Qt.AlignLeft)
+            row.setSpacing(10)
+            btn_layout.addLayout(row)
 
-        for b in (btn_flex, btn_flex_extra, btn_cort, btn_mem):
-            b.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            b.setStyleSheet(default_style)
-            btn_layout.addWidget(b)
-
-        exit_style = (
-            "QPushButton {background-color:#e74c3c;color:white;font-size:16pt;"
-            "padding:12px 20px;border-radius:8px;font-family:'Segoe UI';"
-            "text-align:left;}"
-            "QPushButton:hover {background-color:#c0392b;}"
-        )
-        btn_exit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        btn_exit.setStyleSheet(exit_style)
-        btn_layout.addSpacing(20)
-        btn_layout.addWidget(btn_exit)
+        add_row(btn_flex, "DISE\u00d1O POR FLEXI\u00d3N")
+        add_row(btn_torsion, "DISE\u00d1O POR TORSI\u00d3N")
+        add_row(btn_cort, "DISE\u00d1O POR CORTANTE")
+        add_row(btn_mem, "MEMORIA DE C\u00c1LCULO")
+        add_row(btn_contact, "CONTACTO")
+        btn_layout.addItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        add_row(btn_exit, "SALIR")
 
         layout.addWidget(button_box)
 
         btn_flex.clicked.connect(self.open_diagrama)
-        btn_flex_extra.clicked.connect(self.show_cortante_msg)
+        btn_torsion.clicked.connect(self.show_cortante_msg)
         btn_cort.clicked.connect(self.show_cortante_msg)
         btn_mem.clicked.connect(self.open_memoria)
+        btn_contact.clicked.connect(self.show_contact)
         btn_exit.clicked.connect(self.close)
 
         self.menu_page = page
@@ -222,6 +300,16 @@ class MenuWindow(QMainWindow):
 
     def show_cortante_msg(self):
         QMessageBox.information(self, "En desarrollo", "Módulo en desarrollo")
+
+    def show_contact(self):
+        QMessageBox.information(
+            self,
+            "Contacto",
+            (
+                "COMUNICARSE AL SIGUIENTE CORREO PARA SOLICTAR LA CLAVE DE "
+                "ACTIVACION: abelcorderotineo99@gmail.com  cel y wsp : 922148420"
+            ),
+        )
 
     # ------------------------------------------------------------------
     def clear_data(self):
