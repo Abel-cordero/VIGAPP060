@@ -11,7 +11,7 @@ def color_for_diameter(diam):
     return "#000000"
 
 
-def latex_image(latex: str, fontsize: int = 8) -> str:
+def latex_image(latex: str, fontsize: int = 6) -> str:
     """Return an HTML ``<img>`` tag with a LaTeX expression rendered to PNG."""
     fig = Figure(figsize=(0.01, 0.01))
     ax = fig.add_subplot(111)
@@ -21,14 +21,14 @@ def latex_image(latex: str, fontsize: int = 8) -> str:
     fig.savefig(
         buf,
         format="png",
-        dpi=200,
+        dpi=300,
         bbox_inches="tight",
         pad_inches=0.0,
         transparent=True,
     )
     fig.clf()
     data = base64.b64encode(buf.getvalue()).decode()
-    style = "height:0.8em;vertical-align:middle;"
+    style = "height:0.7em;vertical-align:middle;"
     return f'<img src="data:image/png;base64,{data}" style="{style}"/>'
 
 
