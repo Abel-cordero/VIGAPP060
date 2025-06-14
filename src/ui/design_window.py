@@ -16,7 +16,7 @@ from PyQt5.QtGui import QGuiApplication
 
 from .view3d_window import View3DWindow
 from .memoria_window import MemoriaWindow
-from .utils import latex_image
+from ..models.utils import latex_image
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import numpy as np
