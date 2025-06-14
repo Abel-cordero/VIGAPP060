@@ -10,8 +10,8 @@ from PyQt5.QtWidgets import (
     QSizePolicy,
     QFrame,
 )
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap, QIcon, QFont
+from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtGui import QPixmap, QIcon
 
 from .moment_app import MomentApp
 from .design_window import DesignWindow
@@ -34,7 +34,7 @@ class MenuWindow(QMainWindow):
             self._logo_path = icon_path
 
         self.setWindowTitle("VIGAPP060")
-        self._ico_dir = os.path.join(base_dir, "..", "ico")
+        self._icon_dir = os.path.join(base_dir, "..", "icon")
 
         self.stacked = QStackedWidget()
         self.setCentralWidget(self.stacked)
@@ -70,6 +70,7 @@ class MenuWindow(QMainWindow):
         page = QWidget()
         layout = QVBoxLayout(page)
         layout.setAlignment(Qt.AlignTop)
+        layout.setSpacing(20)
 
         label_icon = QLabel()
         self.label_icon = label_icon
@@ -96,14 +97,16 @@ class MenuWindow(QMainWindow):
             (btn_cort, "DISE\u00d1O POR CORTANTE"),
             (btn_mem, "MEMORIA DE C\u00c1LCULO"),
         ]:
-            icon_path = os.path.join(self._ico_dir, f"{name}.ico")
+            icon_path = os.path.join(self._icon_dir, f"{name}.png")
             if os.path.exists(icon_path):
                 btn.setIcon(QIcon(icon_path))
+            btn.setIconSize(QSize(32, 32))
             btn.setCursor(Qt.PointingHandCursor)
 
-        exit_icon = os.path.join(self._ico_dir, "SALIR.ico")
+        exit_icon = os.path.join(self._icon_dir, "SALIR.png")
         if os.path.exists(exit_icon):
             btn_exit.setIcon(QIcon(exit_icon))
+        btn_exit.setIconSize(QSize(32, 32))
         btn_exit.setCursor(Qt.PointingHandCursor)
 
         button_box = QFrame()
@@ -113,8 +116,9 @@ class MenuWindow(QMainWindow):
 
         default_style = (
             "QPushButton {background-color:#3498db;color:white;font-size:16pt;"
-            "padding:15px;border-radius:10px;font-family:'Segoe UI';}"
-            "QPushButton:hover {background-color:#2980b9;transform:scale(1.02);}"
+            "padding:12px 20px;border-radius:8px;font-family:'Segoe UI';"
+            "text-align:left;}"
+            "QPushButton:hover {background-color:#2980b9;}"
         )
 
         for b in (btn_flex, btn_flex_extra, btn_cort, btn_mem):
@@ -124,7 +128,8 @@ class MenuWindow(QMainWindow):
 
         exit_style = (
             "QPushButton {background-color:#e74c3c;color:white;font-size:16pt;"
-            "padding:15px;border-radius:10px;font-family:'Segoe UI';}"
+            "padding:12px 20px;border-radius:8px;font-family:'Segoe UI';"
+            "text-align:left;}"
             "QPushButton:hover {background-color:#c0392b;}"
         )
         btn_exit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
