@@ -186,7 +186,8 @@ class MomentApp(QMainWindow):
         ax.legend(loc='best')
         ax.grid(True)
 
-    def correct_moments(self, mn, mp, sys_t):
+    @staticmethod
+    def correct_moments(mn, mp, sys_t):
         """Return moments corrected by face and global rules.
 
         The positive moments at the beam ends (M1+ and M3+) must be at
@@ -223,7 +224,7 @@ class MomentApp(QMainWindow):
             logging.exception("Unexpected error while obtaining moments")
             return
         sys_t = 'dual2' if self.rb_dual2.isChecked() else 'dual1'
-        mn_c, mp_c = self.correct_moments(mn, mp, sys_t)
+        mn_c, mp_c = MomentApp.correct_moments(mn, mp, sys_t)
         self.plot_original()
         self.plot_corrected(mn_c, mp_c, mn_orig=mn, mp_orig=mp)
         self.mn_corr = mn_c
