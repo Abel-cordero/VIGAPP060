@@ -10,7 +10,7 @@ from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QTimer
 
 from src.ui.menu_window import MenuWindow
-from local_activation.activacion import run_activation
+from src.activacion.activacion import run_activation
 
 # Toggle for enabling or disabling the license check. Set to ``True`` to
 # require activation again.
