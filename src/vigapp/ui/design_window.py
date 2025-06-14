@@ -150,9 +150,13 @@ class DesignWindow(QMainWindow):
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
+        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         scroll.setWidget(content)
         self.setCentralWidget(scroll)
         self.scroll_area = scroll
+
+        # Definir un tamaño inicial amplio para evitar contenido oculto
+        self.resize(1200, 800)
 
         labels = [
             ("b (cm)", "30"),
@@ -564,8 +568,8 @@ class DesignWindow(QMainWindow):
             "<h3>Cálculo del peralte efectivo d</h3>",
             latex_image(
                 "d = h - r - \\phi_{estribo} - "
-                f"{frac('1','2')} \\phi_{barra} \\"
-                f"  = {h} - {r} - {de} - {frac('1','2')}\\times {db} \\"
+                f"{frac('1','2')} \\phi_{{barra}} \\"  # Escapar llaves en f-string
+                f"  = {h} - {r} - {de} - {frac('1','2')}\\times {db} \\" 
                 f"  = {d:.2f}\\,cm"
             ),
             "<h3>Cálculo de β<sub>1</sub></h3>",
