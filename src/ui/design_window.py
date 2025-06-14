@@ -45,6 +45,7 @@ DIAM_CM = {
     '1"': 2.54,
 }
 
+
 class DesignWindow(QMainWindow):
     """Ventana para la etapa de diseño de acero (solo interfaz gráfica)."""
 
@@ -563,7 +564,10 @@ class DesignWindow(QMainWindow):
 
         lines = [
             "<h1>DISE\u00d1O DE VIGAS</h1>",
-            "<h2>Datos de la viga del dise\u00f1o a flexi\u00f3n &gt; Dise\u00f1o de Acero</h2>",
+            (
+                "<h2>Datos de la viga del dise\u00f1o a flexi\u00f3n &gt; "
+                "Dise\u00f1o de Acero</h2>"
+            ),
             "<h2>DISE\u00d1O A FLEXI\u00d3N</h2>",
             "<h2>DATOS INGRESADOS</h2>",
             f"<p>b = {b} cm</p>",
@@ -577,27 +581,43 @@ class DesignWindow(QMainWindow):
             "<h2>CÁLCULOS</h2>",
             "<h3>Cálculo del peralte efectivo d</h3>",
             latex_image(
-                f"d = h - r - \\phi_{{estribo}} - {frac('1','2')} \\phi_{{barra}} = {h} - {r} - {de} - {frac('1','2')}\\times {db} = {d:.2f}\\,cm"
+                (
+                    f"d = h - r - \\phi_{{estribo}} - {frac('1', '2')} "
+                    f"\\phi_{{barra}} = {h} - {r} - {de} - {frac('1', '2')}"
+                    f"\\times {db} = {d:.2f}\\,cm"
+                )
             ),
             "<h3>Cálculo de β<sub>1</sub></h3>",
             (
                 latex_image("\\beta_{1} = 0.85")
                 if fc <= 280
                 else latex_image(
-                    f"\\beta_1 = 0.85 - 0.05\\times {frac(f'{fc}-280','70')} = {beta1:.3f}"
+                    f"\\beta_1 = 0.85 - 0.05\\times {frac(f'{fc}-280', '70')} = {beta1:.3f}"
                 )
             ),
             "<h3>Cálculo de As_min</h3>",
             latex_image(
-                f"A_s,_{{min}} = 0.7\\times {frac_root_fc_fy}\\times b\\times d = 0.7\\times {frac(sqrt_fc, str(fy))}\\times {b}\\times {d:.2f} = {as_min:.2f}\\,cm^2"
+                (
+                    f"A_s,_{{min}} = 0.7\\times {frac_root_fc_fy}\\times b\\times d = "
+                    f"0.7\\times {frac(sqrt_fc, str(fy))}\\times {b}\\times {d:.2f} ="
+                    f" {as_min:.2f}\\,cm^2"
+                )
             ),
             "<h3>Cálculo de As_max</h3>",
             latex_image(
-                f"A_s,_{{max}} = 0.75\\times {frac(num_as_max,'fy')}\\times {frac('6000', f'6000+{fy}')}\\times b\\times d = {as_max:.2f}\\,cm^2"
+                (
+                    f"A_s,_{{max}} = 0.75\\times {frac(num_as_max, 'fy')}\\times "
+                    f"{frac('6000', f'6000+{fy}')}\\times b\\times d = "
+                    f"{as_max:.2f}\\,cm^2"
+                )
             ),
             "<h3>Fórmula general para As</h3>",
             latex_image(
-                fr"A_s = {frac('1.7 f\'c b d','2 fy')} - {frac('1','2')}\sqrt{{{frac('2.89 (f\'c b d)^2','fy^2')} - {frac('6.8 f\'c b M_u','\\phi fy^2')}}}"
+                (
+                    fr"A_s = {frac('1.7 f\'c b d', '2 fy')} - "
+                    fr"{frac('1', '2')}\sqrt{{{frac('2.89 (f\'c b d)^2', 'fy^2')} - "
+                    fr"{frac('6.8 f\'c b M_u', '\\phi fy^2')}}}"
+                )
             ),
             "<h3>Detalle del cálculo de As por momento</h3>",
         ]
@@ -617,16 +637,24 @@ class DesignWindow(QMainWindow):
             )
             root = max(root, 0)
             calc = term - 0.5 * np.sqrt(root)
-            term_html = frac(f"1.7\\times{fc}\\times{b}\\times{d:.2f}", f"2\\times{fy}")
+            term_html = frac(
+                f"1.7\\times{fc}\\times{b}\\times{d:.2f}", f"2\\times{fy}"
+            )
             root_html = (
                 f"{frac(f'2.89\\times({fc}\\times{b}\\times{d:.2f})^2', f'{fy}^2')} - "
                 f"{frac(f'6.8\\times{fc}\\times{b}\\times{Mu_kgcm:.0f}', f'{phi}\\times{fy}^2')}"
             )
             lines.extend(
                 [
-                    f"<p><b>{lab}</b>: M<sub>u</sub> = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm</p>",
+                    (
+                        f"<p><b>{lab}</b>: M<sub>u</sub> = {m:.2f} TN·m = "
+                        f"{Mu_kgcm:.0f} kg·cm</p>"
+                    ),
                     latex_image(
-                        f"A_s,calc = {term_html} - {frac('1','2')}\\sqrt{{{root_html}}} = {term:.2f} - {frac('1','2')}\\sqrt{{{root:.2f}}} = {calc:.2f}\\,cm^2"
+                        (
+                            f"A_s,calc = {term_html} - {frac('1', '2')}\\sqrt{{{root_html}}} = "
+                            f"{term:.2f} - {frac('1', '2')}\\sqrt{{{root:.2f}}} = {calc:.2f}\\,cm^2"
+                        )
                     ),
                     f"<p>A<sub>s,req</sub> = <b>{a:.2f} cm²</b></p>",
                 ]
@@ -660,4 +688,3 @@ class DesignWindow(QMainWindow):
     def on_menu(self):
         if self.menu_callback:
             self.menu_callback()
-

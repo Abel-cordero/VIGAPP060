@@ -73,9 +73,6 @@ class View3DWindow(QMainWindow):
         # heading above the section cuts.
         self.title_edit = QLineEdit(default_title)
         self.title_edit.textChanged.connect(self._on_title_change)
-
-
-
         self.fig = plt.figure(figsize=(8, 3), constrained_layout=True)
         self.ax_sections = [self.fig.add_subplot(1, 3, i + 1) for i in range(3)]
         self.canvas = FigureCanvas(self.fig)
@@ -286,7 +283,7 @@ class View3DWindow(QMainWindow):
             [r + de, b - r - de, b - r - de, r + de, r + de],
             [r + de, r + de, h - r - de, h - r - de, r + de],
             color="0.6",
-            ls=":" ,
+            ls=":",
             lw=0.8,
         )
 
@@ -429,4 +426,3 @@ class View3DWindow(QMainWindow):
     def on_menu(self):
         if self.menu_callback:
             self.menu_callback()
-

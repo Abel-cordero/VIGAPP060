@@ -13,7 +13,9 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGuiApplication
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import (
+    FigureCanvasQTAgg as FigureCanvas,
+)
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import CubicSpline
@@ -25,8 +27,15 @@ from src.ui.design_window import DesignWindow
 class MomentApp(QMainWindow):
     """Ventana principal para ingresar momentos y graficar diagramas."""
 
-    def __init__(self, parent=None, *, show_window=True, next_callback=None,
-                 save_callback=None, menu_callback=None):
+    def __init__(
+        self,
+        parent=None,
+        *,
+        show_window=True,
+        next_callback=None,
+        save_callback=None,
+        menu_callback=None,
+    ):
         super().__init__(parent)
         self.next_callback = next_callback
         self.save_callback = save_callback
@@ -49,7 +58,9 @@ class MomentApp(QMainWindow):
         layout.setColumnStretch(6, 1)
 
         self.m_neg_edits, self.m_pos_edits = [], []
-        for row, labels in enumerate([("M1–", "M2–", "M3–"), ("M1+", "M2+", "M3+")]):
+        for row, labels in enumerate(
+            [("M1–", "M2–", "M3–"), ("M1+", "M2+", "M3+")]
+        ):
             for i, text in enumerate(labels):
                 layout.addWidget(QLabel(text), row, 2 * i)
                 ed = QLineEdit("0.0")
@@ -86,7 +97,9 @@ class MomentApp(QMainWindow):
         layout.addWidget(btn_capture, 3, 4)
         layout.addWidget(btn_menu, 3, 5)
 
-        self.fig, (self.ax1, self.ax2) = plt.subplots(2, 1, figsize=(6, 5), constrained_layout=True)
+        self.fig, (self.ax1, self.ax2) = plt.subplots(
+            2, 1, figsize=(6, 5), constrained_layout=True
+        )
         self.canvas = FigureCanvas(self.fig)
         layout.addWidget(self.canvas, 4, 0, 1, 6)
 
@@ -105,7 +118,9 @@ class MomentApp(QMainWindow):
                 mp.append(abs(val))
             return np.array(mn), np.array(mp)
         except ValueError:
-            QMessageBox.warning(self, "Error", "Ingrese valores numéricos válidos.")
+            QMessageBox.warning(
+                self, "Error", "Ingrese valores numéricos válidos."
+            )
             raise
 
     def get_length(self):
@@ -122,12 +137,16 @@ class MomentApp(QMainWindow):
         self.ax1.clear()
         self.ax2.clear()
         for ax in (self.ax1, self.ax2):
-            ax.plot([0, L], [0, 0], 'k-', lw=6)
+            ax.plot([0, L], [0, 0], "k-", lw=6)
 
-        self.ax1.plot(xs, csn(xs), 'b-', lw=1.5, label='Neg original')
-        self.ax1.fill_between(xs, csn(xs), 0, color='b', alpha=0.25, hatch='//', edgecolor='b')
-        self.ax1.plot(xs, csp(xs), 'r-', lw=1.5, label='Pos original')
-        self.ax1.fill_between(xs, csp(xs), 0, color='r', alpha=0.25, hatch='\\', edgecolor='r')
+        self.ax1.plot(xs, csn(xs), "b-", lw=1.5, label="Neg original")
+        self.ax1.fill_between(
+            xs, csn(xs), 0, color="b", alpha=0.25, hatch="//", edgecolor="b"
+        )
+        self.ax1.plot(xs, csp(xs), "r-", lw=1.5, label="Pos original")
+        self.ax1.fill_between(
+            xs, csp(xs), 0, color="r", alpha=0.25, hatch="\\", edgecolor="r"
+        )
         self._draw_verticals(self.ax1, csn, csp, x_ctrl)
         self._label_points(self.ax1, csn, csp, x_ctrl)
         self._enable_hover(self.ax1, csn, csp)
@@ -142,16 +161,20 @@ class MomentApp(QMainWindow):
         csp = CubicSpline(x_ctrl, -mp_corr)
 
         self.ax2.clear()
-        self.ax2.plot(xs, csn(xs), 'b-', lw=1.5, label='Neg corregido')
-        self.ax2.fill_between(xs, csn(xs), 0, color='b', alpha=0.25, hatch='//', edgecolor='b')
-        self.ax2.plot(xs, csp(xs), 'r-', lw=1.5, label='Pos corregido')
-        self.ax2.fill_between(xs, csp(xs), 0, color='r', alpha=0.25, hatch='\\', edgecolor='r')
+        self.ax2.plot(xs, csn(xs), "b-", lw=1.5, label="Neg corregido")
+        self.ax2.fill_between(
+            xs, csn(xs), 0, color="b", alpha=0.25, hatch="//", edgecolor="b"
+        )
+        self.ax2.plot(xs, csp(xs), "r-", lw=1.5, label="Pos corregido")
+        self.ax2.fill_between(
+            xs, csp(xs), 0, color="r", alpha=0.25, hatch="\\", edgecolor="r"
+        )
 
         if mn_orig is not None and mp_orig is not None:
             csn_o = CubicSpline(x_ctrl, -mn_orig)
             csp_o = CubicSpline(x_ctrl, -mp_orig)
-            self.ax2.plot(xs, csn_o(xs), 'b--', alpha=0.5)
-            self.ax2.plot(xs, csp_o(xs), 'r--', alpha=0.5)
+            self.ax2.plot(xs, csn_o(xs), "b--", alpha=0.5)
+            self.ax2.plot(xs, csp_o(xs), "r--", alpha=0.5)
             self._draw_verticals(self.ax2, csn_o, csp_o, x_ctrl, dashed=True)
 
         self._draw_verticals(self.ax2, csn, csp, x_ctrl)
@@ -161,15 +184,25 @@ class MomentApp(QMainWindow):
         self.canvas.draw()
 
     def _draw_verticals(self, ax, csn, csp, x_ctrl, dashed=False):
-        style = ':' if dashed else '-'
+        style = ":" if dashed else "-"
         for x in x_ctrl:
-            ax.plot([x, x], [csn(x), 0], 'k' + style, lw=1)
-            ax.plot([x, x], [csp(x), 0], 'k' + style, lw=1)
+            ax.plot([x, x], [csn(x), 0], "k" + style, lw=1)
+            ax.plot([x, x], [csp(x), 0], "k" + style, lw=1)
 
     def _label_points(self, ax, csn, csp, x_ctrl):
         for x in x_ctrl:
-            ax.annotate(f"{-csn(x):.2f}", (x, csn(x)), xytext=(5, 5), textcoords='offset points')
-            ax.annotate(f"{abs(csp(x)):.2f}", (x, csp(x)), xytext=(5, -15), textcoords='offset points')
+            ax.annotate(
+                f"{-csn(x):.2f}",
+                (x, csn(x)),
+                xytext=(5, 5),
+                textcoords="offset points",
+            )
+            ax.annotate(
+                f"{abs(csp(x)):.2f}",
+                (x, csp(x)),
+                xytext=(5, -15),
+                textcoords="offset points",
+            )
 
     def _enable_hover(self, ax, csn, csp):
         cursor = mplcursors.cursor(ax.lines[:2], hover=True)
@@ -181,9 +214,9 @@ class MomentApp(QMainWindow):
             sel.annotation.set(text=f"{val:.2f}")
 
     def _format(self, ax):
-        ax.set_xlabel('Longitud (m)')
-        ax.set_ylabel('Momento (T·m)')
-        ax.legend(loc='best')
+        ax.set_xlabel("Longitud (m)")
+        ax.set_ylabel("Momento (T·m)")
+        ax.legend(loc="best")
         ax.grid(True)
 
     def correct_moments(self, mn, mp, sys_t):
@@ -204,11 +237,13 @@ class MomentApp(QMainWindow):
         m_max = max(np.max(np.abs(mn)), np.max(np.abs(mp)))
         min_global = m_max / 4.0
 
-        mp_corr = np.maximum.reduce([
-            np.abs(mp),
-            min_face_pos,
-            np.full(3, min_global),
-        ])
+        mp_corr = np.maximum.reduce(
+            [
+                np.abs(mp),
+                min_face_pos,
+                np.full(3, min_global),
+            ]
+        )
 
         mn_corr = -np.maximum(np.abs(mn), min_global)
 
@@ -222,7 +257,7 @@ class MomentApp(QMainWindow):
         except Exception:
             logging.exception("Unexpected error while obtaining moments")
             return
-        sys_t = 'dual2' if self.rb_dual2.isChecked() else 'dual1'
+        sys_t = "dual2" if self.rb_dual2.isChecked() else "dual1"
         mn_c, mp_c = self.correct_moments(mn, mp, sys_t)
         self.plot_original()
         self.plot_corrected(mn_c, mp_c, mn_orig=mn, mp_orig=mp)
@@ -231,7 +266,9 @@ class MomentApp(QMainWindow):
 
     def on_next(self):
         if self.mn_corr is None or self.mp_corr is None:
-            QMessageBox.warning(self, 'Advertencia', 'Primero calcule los momentos corregidos')
+            QMessageBox.warning(
+                self, "Advertencia", "Primero calcule los momentos corregidos"
+            )
             return
         if self.next_callback:
             self.next_callback(self.mn_corr, self.mp_corr)
@@ -253,4 +290,3 @@ class MomentApp(QMainWindow):
         pix = self.canvas.grab()
         QGuiApplication.clipboard().setPixmap(pix)
         # Sin mensaje emergente
-

@@ -11,7 +11,12 @@ import os
 from PyQt5.QtGui import QGuiApplication, QIcon
 from PyQt5.QtCore import Qt
 
-from .activation import machine_code, activate, check_activation, license_counter
+from .activation import (
+    machine_code,
+    activate,
+    check_activation,
+    license_counter,
+)
 
 
 class ActivationDialog(QDialog):
@@ -87,22 +92,31 @@ class ActivationDialog(QDialog):
             self,
             "Contacto",
             (
-                "COMUNICARSE AL SIGUIENTE CORREO PARA SOLICTAR LA CLAVE DE "
-                "ACTIVACION: abelcorderotineo99@gmail.com  cel y wsp : 922148420"
+                "COMUNICARSE AL SIGUIENTE CORREO PARA SOLICTAR "
+                "LA CLAVE DE ACTIVACION: abelcorderotineo99@gmail.com "
+                "cel y wsp : 922148420"
             ),
         )
 
     def _on_activate(self):
         key = self.input.text().strip()
         if activate(key):
-            QMessageBox.information(self, "Licencia", "Programa activado correctamente!")
+            QMessageBox.information(
+                self, "Licencia", "Programa activado correctamente!"
+            )
             self.accept()
         else:
-            QMessageBox.warning(self, "Licencia", "Clave invalida. Verifique e intente nuevamente.")
+            QMessageBox.warning(
+                self,
+                "Licencia",
+                "Clave invalida. Verifique e intente nuevamente.",
+            )
 
     def _copy_id(self):
         QGuiApplication.clipboard().setText(self._code)
-        QMessageBox.information(self, "Copiar ID", "ID copiado al portapapeles")
+        QMessageBox.information(
+            self, "Copiar ID", "ID copiado al portapapeles"
+        )
 
 
 def run_activation(parent=None) -> bool:
@@ -111,4 +125,3 @@ def run_activation(parent=None) -> bool:
         return True
     dialog = ActivationDialog(parent)
     return dialog.exec_() == QDialog.Accepted
-

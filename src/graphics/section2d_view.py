@@ -60,8 +60,10 @@ class Section2DView(QWidget):
         spacing = (self.b - 2 * self.cover) / max(len(diams) - 1, 1)
         xs = [self.cover + i * spacing for i in range(len(diams))]
         for idx, (x, d) in enumerate(zip(xs, diams)):
-            roi = BarROI([x - d/2, self.cover - d/2], [d, d], idx, pen=pg.mkPen('b'), brush=pg.mkBrush('b'))
-            roi.sigRegionChangeFinished.connect(lambda r=roi: self._on_drag_finished(r))
+            roi = BarROI([x - d/2, self.cover - d/2], [d, d], idx,
+                         pen=pg.mkPen('b'), brush=pg.mkBrush('b'))
+            roi.sigRegionChangeFinished.connect(
+                lambda r=roi: self._on_drag_finished(r))
             roi.clicked.connect(self._on_bar_clicked)
             self.plot.addItem(roi)
             self._bars.append(roi)
@@ -82,7 +84,8 @@ class Section2DView(QWidget):
         idx = roi.bar_index
         self._selected = idx
         self.barraSeleccionada.emit(idx)
-        value, ok = QInputDialog.getDouble(self, "Longitud", "L (m):", decimals=2)
+        value, ok = QInputDialog.getDouble(
+            self, "Longitud", "L (m):", decimals=2)
         if ok:
             self.longitudCambiada.emit(idx, value)
 

@@ -18,7 +18,8 @@ class VentanaActivacion(tk.Tk):
 
         tk.Label(self, text="ID de equipo:").pack(pady=5)
         self.id_var = tk.StringVar(value=self.serial)
-        id_entry = tk.Entry(self, textvariable=self.id_var, width=30, state="readonly")
+        id_entry = tk.Entry(self, textvariable=self.id_var,
+                            width=30, state="readonly")
         id_entry.pack(pady=5)
         tk.Label(self, text=f"Contador: {self.counter}").pack(pady=5)
 
@@ -28,7 +29,8 @@ class VentanaActivacion(tk.Tk):
         self.clave_entry = tk.Entry(self, width=20)
         self.clave_entry.pack(pady=5)
 
-        tk.Button(self, text="Verificar", command=self._verificar).pack(pady=10)
+        tk.Button(self, text="Verificar",
+                  command=self._verificar).pack(pady=10)
 
     def _copiar(self):
         self.clipboard_clear()

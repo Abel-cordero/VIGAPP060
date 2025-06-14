@@ -7,6 +7,7 @@ import socket
 import subprocess
 import uuid
 
+
 def _app_dir() -> str:
     """Return the application data folder."""
     if os.name == "nt":
@@ -61,7 +62,8 @@ def _disk_serial() -> str:
                 stderr=subprocess.DEVNULL,
                 text=True,
             )
-            lines = [line.strip() for line in out.splitlines() if line.strip()][1:]
+            lines = [line.strip()
+                     for line in out.splitlines() if line.strip()][1:]
             return lines[0] if lines else ""
         out = subprocess.check_output(
             ["lsblk", "-dn", "-o", "serial"],
@@ -115,6 +117,7 @@ def current_license() -> str:
     counter = _read_counter()
     return license_for(machine_code(), counter)
 
+
 def hardware_id() -> str:
     """Return a stable identifier for the current machine."""
     mac = uuid.getnode()
@@ -135,6 +138,7 @@ def activate(key: str) -> bool:
         f.write(_encrypt(hardware_id()))
     _write_counter(_read_counter() + 1)
     return True
+
 
 def check_activation() -> bool:
     """Check that this machine matches the stored activation."""

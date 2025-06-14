@@ -1,3 +1,7 @@
+from .moment_app import MomentApp
+from .memoria_window import MemoriaWindow
+from .view3d_window import View3DWindow
+from .design_window import DesignWindow
 import os
 from PyQt5.QtWidgets import (
     QMainWindow,
@@ -13,7 +17,7 @@ from PyQt5.QtWidgets import (
     QFrame,
     QGraphicsColorizeEffect,
 )
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QIcon
 
 
@@ -98,11 +102,6 @@ class BackgroundWidget(QWidget):
                 Qt.SmoothTransformation,
             )
         )
-
-from .moment_app import MomentApp
-from .design_window import DesignWindow
-from .view3d_window import View3DWindow
-from .memoria_window import MemoriaWindow
 
 
 class MenuWindow(QMainWindow):
@@ -234,7 +233,9 @@ class MenuWindow(QMainWindow):
         add_row(btn_cort, "DISE\u00d1O POR CORTANTE")
         add_row(btn_mem, "MEMORIA DE C\u00c1LCULO")
         add_row(btn_contact, "CONTACTO")
-        btn_layout.addItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        btn_layout.addItem(
+            QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        )
         add_row(btn_exit, "SALIR")
 
         layout.addWidget(button_box)
@@ -270,7 +271,9 @@ class MenuWindow(QMainWindow):
     # ------------------------------------------------------------------
     def open_diseno(self):
         if self.mn_corr is None or self.mp_corr is None:
-            QMessageBox.warning(self, "Advertencia", "Primero defina el diagrama")
+            QMessageBox.warning(
+                self, "Advertencia", "Primero defina el diagrama"
+            )
             return
         if not hasattr(self, "design_page"):
             self.design_page = DesignWindow(
@@ -289,7 +292,9 @@ class MenuWindow(QMainWindow):
 
     def open_desarrollo(self):
         if not self.design_ready:
-            QMessageBox.warning(self, "Advertencia", "Primero complete el diseño")
+            QMessageBox.warning(
+                self, "Advertencia", "Primero complete el diseño"
+            )
             return
         if not hasattr(self, "desarrollo_page"):
             self.desarrollo_page = View3DWindow(
@@ -303,7 +308,9 @@ class MenuWindow(QMainWindow):
     # ------------------------------------------------------------------
     def open_memoria(self):
         if not self.design_ready:
-            QMessageBox.warning(self, "Advertencia", "Debe completar el diseño")
+            QMessageBox.warning(
+                self, "Advertencia", "Debe completar el diseño"
+            )
             return
         title, html = self.design_page._build_memoria()
         if title is None:
@@ -343,4 +350,3 @@ class MenuWindow(QMainWindow):
 
     def show_menu(self):
         self.stacked.setCurrentWidget(self.menu_page)
-

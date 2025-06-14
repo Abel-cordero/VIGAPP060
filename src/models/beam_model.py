@@ -1,5 +1,6 @@
 """Data model representing a reinforced concrete beam."""
 
+
 class BeamModel:
     """Encapsulates beam geometry, loads and reinforcement."""
 
@@ -7,4 +8,3 @@ class BeamModel:
         self.sections = []
         self.bars = []
         self.layers = []
-

@@ -83,8 +83,7 @@ class MemoriaWindow(QMainWindow):
             self.text.document().print_(printer)
         else:
             pix.save(path)
-        
+
     def on_menu(self):
         if self.menu_callback:
             self.menu_callback()
-

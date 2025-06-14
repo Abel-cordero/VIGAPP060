@@ -9,4 +9,3 @@ class ProjectManager:
 
     def load(self, path):
         """Load the model from disk."""
-

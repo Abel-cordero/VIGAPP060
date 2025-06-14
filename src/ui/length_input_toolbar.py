@@ -13,4 +13,3 @@ class LengthInputToolbar(QToolBar):
         self.addAction(QAction("L/3", self))
         self.addAction(QAction("L/2", self))
         self.addAction(QAction("L", self))
-
