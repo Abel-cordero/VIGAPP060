@@ -157,10 +157,10 @@ Muestra un resumen detallado de cada operación realizada en el diseño. Las fó
 ## Instalación de dependencias
 
 1. Se recomienda crear un entorno virtual con `venv` o herramienta similar.
-2. Instalar las bibliotecas necesarias a partir del archivo `requirements.txt`:
+2. Instalar el proyecto en modo editable:
 
    ```bash
-   pip install -r requirements.txt
+   pip install -e .
    ```
 
    Para funciones opcionales de captura o exportación a Word se pueden agregar

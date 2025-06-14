@@ -9,7 +9,7 @@ Este documento reúne pautas básicas para contribuir al proyecto y mantener una
    ```bash
    python -m venv .venv
    source .venv/bin/activate
-   pip install -r requirements.txt
+   pip install -e .
    ```
 
 ## Organización del código
