@@ -1,4 +1,4 @@
-"""Tkinter-based activation dialog using :mod:`src.activation`."""
+"""Tkinter-based activation dialog using :mod:`vigapp.activation`."""
 
 import tkinter as tk
 from tkinter import messagebox

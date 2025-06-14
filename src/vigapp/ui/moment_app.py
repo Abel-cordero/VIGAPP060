@@ -19,7 +19,7 @@ import numpy as np
 from scipy.interpolate import CubicSpline
 import mplcursors
 
-from src.ui.design_window import DesignWindow
+from vigapp.ui.design_window import DesignWindow
 
 
 class MomentApp(QMainWindow):

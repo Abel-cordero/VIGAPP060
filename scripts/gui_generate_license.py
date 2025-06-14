@@ -13,10 +13,10 @@ from PyQt5.QtWidgets import (
     QMessageBox,
 )
 
-# Ensure the "src" package is importable when executing this script directly
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# Ensure the ``vigapp`` package is importable when executing this script directly
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
-from src.activation import license_for
+from vigapp.activation import license_for
 
 
 class LicenseGenerator(QWidget):
