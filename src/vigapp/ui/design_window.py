@@ -37,7 +37,7 @@ class DesignWindow(QMainWindow):
         self.menu_callback = menu_callback
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
-        self.setFixedSize(700, 900)
+        self.setFixedSize(700, 1000)
         if show_window:
             self.show()
 
@@ -555,7 +555,10 @@ class DesignWindow(QMainWindow):
             "<h2>CÁLCULOS</h2>",
             "<h3>Cálculo del peralte efectivo d</h3>",
             latex_image(
-                f"d = h - r - \\phi_{{estribo}} - {frac('1','2')} \\phi_{{barra}} = {h} - {r} - {de} - {frac('1','2')}\\times {db} = {d:.2f}\\,cm"
+                "d = h - r - \\phi_{estribo} - "
+                f"{frac('1','2')} \\phi_{barra} \\"
+                f"  = {h} - {r} - {de} - {frac('1','2')}\\times {db} \\"
+                f"  = {d:.2f}\\,cm"
             ),
             "<h3>Cálculo de β<sub>1</sub></h3>",
             (
