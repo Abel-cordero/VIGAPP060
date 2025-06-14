@@ -1,6 +1,6 @@
 """Wrapper for :mod:`vigapp.ui.design_window` with dynamic sizing fixes."""
 
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLayout
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLayout, QSizePolicy
 
 # Import the original implementation
 from ..vigapp.ui.design_window import DesignWindow as _BaseDesignWindow
@@ -36,8 +36,8 @@ class DesignWindow(QDialog):
 
         self._build_ui()
         self.setWindowTitle(self._base.windowTitle())
-        # Force a large enough fixed size so all widgets are visible
-        self.setFixedSize(700, 1150)
+        # Start with a height large enough to reveal all content
+        self.resize(750, 1250)
         if show_window:
             self.show()
 
@@ -49,11 +49,18 @@ class DesignWindow(QDialog):
         layout = QVBoxLayout(self)
         layout.setSizeConstraint(QLayout.SetMinimumSize)
         layout.addWidget(content)
+        content.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setLayout(layout)
 
         content_layout = content.layout()
         if content_layout is not None:
             content_layout.setSizeConstraint(QLayout.SetMinimumSize)
+
+        # Allow matplotlib canvases to expand with the window
+        if hasattr(self._base, "canvas_sec"):
+            self._base.canvas_sec.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        if hasattr(self._base, "canvas_dist"):
+            self._base.canvas_dist.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         # Ensure the window is large enough to show all widgets
         # self.setFixedSize(700, 1100)
