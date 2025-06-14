@@ -37,7 +37,7 @@ class DesignWindow(QDialog):
         self._build_ui()
         self.setWindowTitle(self._base.windowTitle())
         # Start with a height large enough to reveal all content
-        self.resize(750, 1250)
+        self.resize(750, 1500)
         if show_window:
             self.show()
 
