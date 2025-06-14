@@ -1,6 +1,6 @@
 """Wrapper for :mod:`vigapp.ui.design_window` with dynamic sizing fixes."""
 
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QScrollArea, QLayout
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLayout
 
 # Import the original implementation
 from ..vigapp.ui.design_window import DesignWindow as _BaseDesignWindow
@@ -40,21 +40,21 @@ class DesignWindow(QDialog):
             self.show()
 
     def _build_ui(self):
-        # Re-parent the base scroll area to this dialog and ensure it is
-        # resizable. Its internal layout is also configured to use the
-        # minimum required size so the scroll bars appear when necessary.
-        self.scroll_area = self._base.scroll_area
-        self.scroll_area.setParent(self)
-        self.scroll_area.setWidgetResizable(True)
+        """Re-parent the base content directly without scrollbars."""
+        content = self._base.scroll_area.widget()
+        content.setParent(self)
 
         layout = QVBoxLayout(self)
         layout.setSizeConstraint(QLayout.SetMinimumSize)
-        layout.addWidget(self.scroll_area)
+        layout.addWidget(content)
         self.setLayout(layout)
 
-        content_layout = self.scroll_area.widget().layout()
+        content_layout = content.layout()
         if content_layout is not None:
             content_layout.setSizeConstraint(QLayout.SetMinimumSize)
+
+        # Ensure the window is large enough to show all widgets
+        self.setFixedSize(700, 1100)
 
     def __getattr__(self, name):
         """Delegate attribute access to the underlying window."""
