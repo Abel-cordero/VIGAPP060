@@ -3,7 +3,7 @@ import sys
 import numpy as np
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from src.ui.moment_app import MomentApp
+from vigapp.ui.moment_app import MomentApp
 
 
 def test_correct_moments_dual1_dual2():
