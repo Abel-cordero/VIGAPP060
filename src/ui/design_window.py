@@ -1,4 +1,4 @@
-"""Wrapper for :mod:`vigapp.ui.design_window` with window sizing fixes."""
+"""Wrapper for :mod:`vigapp.ui.design_window` with dynamic sizing fixes."""
 
 from PyQt5.QtWidgets import QScrollArea
 
@@ -12,7 +12,8 @@ class DesignWindow(_BaseDesignWindow):
     def _build_ui(self):
         super()._build_ui()
 
-        # Ensure the central widget is a scroll area to allow vertical scrolling
+        # Ensure the central widget is wrapped in a scroll area to allow
+        # vertical scrolling when the contents exceed the available height.
         if not isinstance(self.centralWidget(), QScrollArea):
             content_widget = self.centralWidget()
             scroll = QScrollArea()
@@ -20,6 +21,8 @@ class DesignWindow(_BaseDesignWindow):
             scroll.setWidget(content_widget)
             self.setCentralWidget(scroll)
 
-        # Allow the window to be resized instead of fixing its size
-        self.resize(700, 1000)
+        # Do not force any fixed size for the window. The base implementation
+        # may have resized the window, but here we avoid calling ``resize`` or
+        # ``setFixedSize`` so that the geometry adapts naturally to the
+        # available space and scrolls when required.
 
