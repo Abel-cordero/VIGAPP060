@@ -5,12 +5,15 @@ import os
 import sys
 import ctypes
 
+# Allow importing the ``vigapp`` package from the ``src`` directory
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+
 from PyQt5.QtWidgets import QApplication, QSplashScreen
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QTimer
 
-from src.ui.menu_window import MenuWindow
-from src.activation.tk_dialog import run_activation
+from vigapp.ui.menu_window import MenuWindow
+from vigapp.activation.tk_dialog import run_activation
 
 # Toggle for enabling or disabling the license check. Set to ``True`` to
 # require activation again.
