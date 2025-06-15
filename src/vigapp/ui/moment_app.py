@@ -71,10 +71,10 @@ class MomentApp(QMainWindow):
         layout.addWidget(self.rb_dual1, 2, 1)
         layout.addWidget(self.rb_dual2, 2, 2)
 
-        btn_calc = QPushButton("Calcular Diagramas")
-        btn_next = QPushButton("Ir a Diseño de Acero")
-        btn_capture = QPushButton("Capturar Diagramas")
-        btn_menu = QPushButton("Ir al Menú")
+        btn_calc = QPushButton("Diagramar")
+        btn_next = QPushButton("Diseño")
+        btn_capture = QPushButton("Captura")
+        btn_menu = QPushButton("Menú")
 
         btn_calc.clicked.connect(self.on_calculate)
         btn_next.clicked.connect(self.on_next)
