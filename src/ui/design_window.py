@@ -48,6 +48,8 @@ class DesignWindow(QDialog):
 
         layout = QVBoxLayout(self)
         layout.setSizeConstraint(QLayout.SetMinimumSize)
+        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setSpacing(3)
         layout.addWidget(content)
         content.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setLayout(layout)
@@ -55,10 +57,10 @@ class DesignWindow(QDialog):
         content_layout = content.layout()
         if content_layout is not None:
             content_layout.setSizeConstraint(QLayout.SetMinimumSize)
-            # Compress the spacing between the input widgets so the
-            # middle portion of the window has more room.
+            # Compress spacing and margins so the middle portion has more room.
+            content_layout.setContentsMargins(5, 5, 5, 5)
             if hasattr(content_layout, "setVerticalSpacing"):
-                content_layout.setVerticalSpacing(5)
+                content_layout.setVerticalSpacing(3)
 
         # Allow matplotlib canvases to expand with the window
         if hasattr(self._base, "canvas_sec"):
@@ -66,7 +68,8 @@ class DesignWindow(QDialog):
             # Shrink the section figure height to prevent the top block from
             # dominating the vertical space.
             dpi = self._base.fig_sec.get_dpi() if hasattr(self._base, "fig_sec") else 100
-            new_inches = 2.4
+            # Slightly smaller figure so the inputs occupy less height
+            new_inches = 2.0
             if hasattr(self._base, "fig_sec"):
                 self._base.fig_sec.set_size_inches(new_inches, new_inches)
             new_px = int(new_inches * dpi)
