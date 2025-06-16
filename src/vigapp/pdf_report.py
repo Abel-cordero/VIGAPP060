@@ -3,6 +3,8 @@
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
@@ -15,6 +17,13 @@ import tempfile
 from .models.utils import parse_formula, latex_to_png
 import sympy as sp
 
+
+# Register a sans-serif font to mimic Arial if available
+try:
+    pdfmetrics.registerFont(TTFont("Arial", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"))
+    pdfmetrics.registerFont(TTFont("Arial-Bold", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"))
+except Exception:
+    pass
 
 def _formula_img(latex: str, max_width: float) -> Image:
     """Return a ReportLab Image with LaTeX rendered at small size."""
@@ -51,10 +60,10 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
         Ruta de la imagen de la sección a mostrar junto a la tabla de datos.
     """
     styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name="Titulo", fontName="Helvetica-Bold", fontSize=12, alignment=1))
-    styles.add(ParagraphStyle(name="Seccion", fontName="Helvetica-Bold", fontSize=11))
-    styles.add(ParagraphStyle(name="Sub", fontName="Helvetica", fontSize=10))
-    styles.add(ParagraphStyle(name="Tabla", fontName="Helvetica", fontSize=11))
+    styles.add(ParagraphStyle(name="Titulo", fontName="Arial-Bold", fontSize=12, alignment=1))
+    styles.add(ParagraphStyle(name="Seccion", fontName="Arial-Bold", fontSize=11))
+    styles.add(ParagraphStyle(name="Sub", fontName="Arial", fontSize=10))
+    styles.add(ParagraphStyle(name="Tabla", fontName="Arial", fontSize=11))
     doc = SimpleDocTemplate(path, pagesize=letter,
                             rightMargin=40, leftMargin=40,
                             topMargin=40, bottomMargin=40)
@@ -66,7 +75,7 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
         table = Table(data_section, hAlign="LEFT", style=TableStyle([
             ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
-            ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+            ("FONTNAME", (0, 0), (-1, -1), "Arial"),
             ("FONTSIZE", (0, 0), (-1, -1), 11),
         ]))
         elems = [table]
@@ -102,9 +111,14 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
             story.append(Spacer(1, 6))
 
     if result_section:
-        story.append(Paragraph("Resultados", styles["Seccion"]))
-        for text, value in result_section:
-            story.append(Paragraph(f"{text}: {value}", styles["Normal"]))
+        story.append(Spacer(1, 12))
+        story.append(Paragraph("RESULTADOS", styles["Seccion"]))
+        res_table = Table(result_section, style=TableStyle([
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
+            ("FONTNAME", (0, 0), (-1, -1), "Arial"),
+            ("FONTSIZE", (0, 0), (-1, -1), 11),
+        ]), hAlign="LEFT")
+        story.append(res_table)
 
     if images:
         for img_path in images:

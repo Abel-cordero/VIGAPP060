@@ -640,9 +640,13 @@ class DesignWindow(QMainWindow):
                 (r"$\beta_1 = 0.85$" if fc <= 280 else fr"$\beta_1 = 0.85 - 0.05\times\frac{{{fc}-280}}{{70}} = {beta1:.3f}$"),
             ]),
             ("Pbal (ART.1.1 E060)", [
+                r"$P_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y}$",
+                fr"$P_{{bal}}=\left(\frac{{0.85\,{fc}\,{beta1:.3f}}}{{{fy}}}\right)\,\frac{{6000}}{{6000+{fy}}}$",
                 fr"$P_{{bal}} = {p_bal:.4f}$",
             ]),
             ("Pmax (ART.1.1 E060)", [
+                r"$P_{max}=0.75\,P_{bal}$",
+                fr"$P_{{max}}=0.75\times{p_bal:.4f}$",
                 fr"$P_{{max}} = {p_max:.4f}$",
             ]),
             ("As mín (ART.1.1 E060)", [
