@@ -96,20 +96,47 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
 
     # Outer rectangle
     ax.plot([0, b, b, 0, 0], [0, 0, h, h, 0], "k-")
-    # Cover
-    ax.plot([r, b - r, b - r, r, r], [r, r, h - r, h - r, r], "r--")
-    # Stirrup offset
+    # Cover (continuous thin line)
+    ax.plot(
+        [r, b - r, b - r, r, r],
+        [r, r, h - r, h - r, r],
+        color="red",
+        linestyle="-",
+        linewidth=0.8,
+    )
+    # Stirrup offset (continuous thin line)
     off = r + de
-    ax.plot([off, b - off, b - off, off, off], [off, off, h - off, h - off, off], "b:")
+    ax.plot(
+        [off, b - off, b - off, off, off],
+        [off, off, h - off, h - off, off],
+        color="blue",
+        linestyle="-",
+        linewidth=0.8,
+    )
 
     y_d = h - d
-    ax.annotate("", xy=(0, -5), xytext=(b, -5), arrowprops=dict(arrowstyle="<->"))
+    ax.annotate(
+        "",
+        xy=(0, -5),
+        xytext=(b, -5),
+        arrowprops=dict(arrowstyle="<|-|>", linewidth=0.8),
+    )
     ax.text(b / 2, -6, f"b = {b:.0f} cm", ha="center", va="top", fontsize=6)
 
-    ax.annotate("", xy=(-5, h), xytext=(-5, y_d), arrowprops=dict(arrowstyle="<->"))
+    ax.annotate(
+        "",
+        xy=(-5, h),
+        xytext=(-5, y_d),
+        arrowprops=dict(arrowstyle="<|-|>", linewidth=0.8),
+    )
     ax.text(-6, (h + y_d) / 2, f"d = {d:.1f} cm", ha="right", va="center", rotation=90, fontsize=6)
 
-    ax.annotate("", xy=(-12, 0), xytext=(-12, h), arrowprops=dict(arrowstyle="<->"))
+    ax.annotate(
+        "",
+        xy=(-12, 0),
+        xytext=(-12, h),
+        arrowprops=dict(arrowstyle="<|-|>", linewidth=0.8),
+    )
     ax.text(-13, h / 2, f"h = {h:.0f} cm", ha="right", va="center", rotation=90, fontsize=6)
 
     ax.set_xlim(-15, b + 10)
@@ -138,6 +165,9 @@ def parse_formula(text: str):
 
 def formula_html(text: str, *, fontsize: int = 8) -> str:
     """Return HTML for ``text`` rendered as a LaTeX equation when possible."""
+    if text.startswith("$") and text.endswith("$"):
+        latex = text.strip("$")
+        return latex_image(latex, fontsize=fontsize)
     eq = parse_formula(text)
     if eq is None:
         return f"<pre>{text}</pre>"

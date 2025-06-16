@@ -630,24 +630,24 @@ class DesignWindow(QMainWindow):
 
         calc_sections = [
             ("Peralte: d", [
-                "d = h - ϕ estribo - r - 1/2 ϕ barra",
-                f"d = {h} - {de} - {r} - 1/2 * {db}",
-                f"d = {d:.2f} cm",
+                r"$d = h - d_e - r - \frac{1}{2} d_b$",
+                fr"$d = {h} - {de} - {r} - \frac{{1}}{{2}} {db}$",
+                fr"$d = {d:.2f}\,\text{{cm}}$",
             ]),
             ("Coeficiente B1", [
-                "β1 = 0.85" if fc <= 280 else f"β1 = 0.85 - 0.05*(({fc}-280)/70) = {beta1:.3f}",
+                (r"$\beta_1 = 0.85$" if fc <= 280 else fr"$\beta_1 = 0.85 - 0.05\times\frac{{{fc}-280}}{{70}} = {beta1:.3f}$"),
             ]),
             ("As mín", [
-                "As_min = 0.7 * sqrt(fc)/fy * b * d",
-                f"As_min = 0.7 * sqrt({fc})/{fy} * {b} * {d:.2f}",
-                f"As_min = {as_min:.2f} cm²",
+                r"$A_s^{\text{min}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d$",
+                fr"$A_s^{{\text{{min}}}} = 0.7\,\frac{{\sqrt{{{fc}}}}}{{{fy}}}\,{b}\,{d:.2f}$",
+                fr"$A_s^{{\text{{min}}}} = {as_min:.2f}\,\text{{cm}}^2$",
             ]),
             ("As máx", [
-                "As_max = 0.75*(0.85 fc β1 / fy)*(6000/(6000+fy))*b*d",
-                f"As_max = {as_max:.2f} cm²",
+                r"$A_s^{\text{max}} = 0.75\,(0.85 f_c \beta_1 / f_y)\,(6000/(6000+f_y))\,b\,d$",
+                fr"$A_s^{{\text{{max}}}} = {as_max:.2f}\,\text{{cm}}^2$",
             ]),
             ("Fórmula general del As", [
-                "As = (1.7 fc b d)/(2 fy) - 1/2 sqrt((2.89 (fc b d)^2)/fy^2 - (6.8 fc b Mu)/(φ fy^2))",
+                r"$A_s = \frac{1.7 f_c b d}{2 f_y} - \frac{1}{2} \sqrt{\frac{2.89(f_c b d)^2}{f_y^2} - \frac{6.8 f_c b M_u}{\phi f_y^2}}$",
             ]),
         ]
 
@@ -666,14 +666,16 @@ class DesignWindow(QMainWindow):
             )
             root = max(root, 0)
             calc = term - 0.5 * np.sqrt(root)
-            calc_sections.append((
-                f"As para {lab}",
-                [
-                    f"Mu = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm",
-                    f"As_calc = {calc:.2f} cm²",
-                    f"As_req = {a:.2f} cm²",
-                ],
-            ))
+            calc_sections.append(
+                (
+                    f"As para {lab}",
+                    [
+                        fr"$M_u = {m:.2f}\,\text{{TN·m}} = {Mu_kgcm:.0f}\,\text{{kg·cm}}$",
+                        fr"$A_s^{{\text{{calc}}}} = {calc:.2f}\,\text{{cm}}^2$",
+                        fr"$A_s^{{\text{{req}}}} = {a:.2f}\,\text{{cm}}^2$",
+                    ],
+                )
+            )
 
         result_section = [
             ("As_min", f"{as_min:.2f} cm²"),
@@ -683,9 +685,6 @@ class DesignWindow(QMainWindow):
             result_section.append((f"As req {lab}", f"{val:.2f} cm²"))
 
         images = []
-        img = capture_widget_temp(self.canvas_sec, "sec_")
-        if img:
-            images.append(img)
         try:
             view = View3DWindow(self, show_window=False)
             img_view = capture_widget_temp(view.canvas, "view3d_")
