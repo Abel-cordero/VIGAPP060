@@ -616,7 +616,8 @@ class DesignWindow(QMainWindow):
         as_p = np.clip(as_p_raw, as_min, as_max)
 
         def frac(num: str, den: str) -> str:
-            return f"\\dfrac{{{num}}}{{{den}}}"
+            """Return a visually compact fraction for LaTeX output."""
+            return f"\\tfrac{{{num}}}{{{den}}}"
 
         def eq_steps(*parts: str) -> str:
             imgs = [latex_image(p) for p in parts]
