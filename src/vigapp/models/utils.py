@@ -114,6 +114,24 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
         linewidth=0.8,
     )
 
+    # Cover dimension r
+    ax.annotate(
+        "",
+        xy=(b + 4, h),
+        xytext=(b + 4, h - r),
+        arrowprops=dict(arrowstyle="<->", linewidth=0.8),
+    )
+    ax.text(b + 5, h - r / 2, f"r = {r:.1f} cm", va="center", fontsize=6)
+
+    # Offset dimension de
+    ax.annotate(
+        "",
+        xy=(b + 11, h - r),
+        xytext=(b + 11, h - off),
+        arrowprops=dict(arrowstyle="<->", linewidth=0.8),
+    )
+    ax.text(b + 12, h - (r + off) / 2, f"de = {de:.1f} cm", va="center", fontsize=6)
+
     y_d = h - d
     ax.annotate(
         "",
@@ -139,7 +157,7 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
     )
     ax.text(-13, h / 2, f"h = {h:.0f} cm", ha="right", va="center", rotation=90, fontsize=6)
 
-    ax.set_xlim(-15, b + 10)
+    ax.set_xlim(-15, b + 20)
     ax.set_ylim(-10, h + 10)
 
     fig.savefig(path, dpi=300, bbox_inches="tight")
