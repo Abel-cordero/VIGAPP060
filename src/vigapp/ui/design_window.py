@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import (
     QLayout,
 )
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QGuiApplication
+from PyQt5.QtGui import QGuiApplication, QFont
 
 from .view3d_window import View3DWindow
 from .memoria_window import MemoriaWindow
@@ -150,7 +150,7 @@ class DesignWindow(QMainWindow):
     def _build_ui(self):
         content = QWidget()
         layout = QGridLayout(content)
-        layout.setVerticalSpacing(15)
+        layout.setVerticalSpacing(10)
         layout.setSizeConstraint(QLayout.SetMinimumSize)
 
         scroll = QScrollArea()
@@ -170,10 +170,16 @@ class DesignWindow(QMainWindow):
             ("φ", "0.9"),
         ]
 
+        small_font = QFont()
+        small_font.setPointSize(8)
+
         self.edits = {}
         for row, (text, val) in enumerate(labels):
-            layout.addWidget(QLabel(text), row, 0)
+            lbl = QLabel(text)
+            lbl.setFont(small_font)
+            layout.addWidget(lbl, row, 0)
             ed = QLineEdit(val)
+            ed.setFont(small_font)
             ed.setAlignment(Qt.AlignRight)
             ed.setFixedWidth(70)
             if text == "d (cm)":
@@ -183,21 +189,30 @@ class DesignWindow(QMainWindow):
 
         # Combos para diámetro de estribo y de varilla
         estribo_opts = ["8mm", "3/8\"", "1/2\""]
-        layout.addWidget(QLabel("ϕ estribo"), len(labels), 0)
+        lbl_estribo = QLabel("ϕ estribo")
+        lbl_estribo.setFont(small_font)
+        layout.addWidget(lbl_estribo, len(labels), 0)
         self.cb_estribo = QComboBox()
+        self.cb_estribo.setFont(small_font)
         self.cb_estribo.addItems(estribo_opts)
         self.cb_estribo.setCurrentText('3/8"')
         layout.addWidget(self.cb_estribo, len(labels), 1)
 
         varilla_opts = ["1/2\"", "5/8\"", "3/4\"", "1\""]
-        layout.addWidget(QLabel("ϕ varilla"), len(labels)+1, 0)
+        lbl_varilla = QLabel("ϕ varilla")
+        lbl_varilla.setFont(small_font)
+        layout.addWidget(lbl_varilla, len(labels)+1, 0)
         self.cb_varilla = QComboBox()
+        self.cb_varilla.setFont(small_font)
         self.cb_varilla.addItems(varilla_opts)
         self.cb_varilla.setCurrentText('5/8"')
         layout.addWidget(self.cb_varilla, len(labels)+1, 1)
 
-        layout.addWidget(QLabel("N\u00b0 capas"), len(labels)+2, 0)
+        lbl_capas = QLabel("N\u00b0 capas")
+        lbl_capas.setFont(small_font)
+        layout.addWidget(lbl_capas, len(labels)+2, 0)
         self.layer_combo = QComboBox()
+        self.layer_combo.setFont(small_font)
         self.layer_combo.addItems(["1", "2", "3", "4"])
         layout.addWidget(self.layer_combo, len(labels)+2, 1)
 
@@ -361,21 +376,40 @@ class DesignWindow(QMainWindow):
 
         self.ax_sec.annotate('', xy=(0, -5), xytext=(b, -5),
                              arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(b / 2, -6, f"b = {b:.0f} cm",
-                         ha='center', va='top')
+        self.ax_sec.text(
+            b / 2,
+            -6,
+            f"b = {b:.0f} cm",
+            ha='center',
+            va='top',
+            fontsize=8,
+        )
 
         # Cota de peralte pegada a la viga
         self.ax_sec.annotate('', xy=(-5, h), xytext=(-5, y_d),
                              arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(-6, (h + y_d) / 2,
-                         f"d = {d:.1f} cm",
-                         ha='right', va='center', rotation=90)
+        self.ax_sec.text(
+            -6,
+            (h + y_d) / 2,
+            f"d = {d:.1f} cm",
+            ha='right',
+            va='center',
+            rotation=90,
+            fontsize=8,
+        )
 
         # Cota de altura total hacia la izquierda
         self.ax_sec.annotate('', xy=(-12, 0), xytext=(-12, h),
                              arrowprops=dict(arrowstyle='<->'))
-        self.ax_sec.text(-13, h / 2, f"h = {h:.0f} cm",
-                         ha='right', va='center', rotation=90)
+        self.ax_sec.text(
+            -13,
+            h / 2,
+            f"h = {h:.0f} cm",
+            ha='right',
+            va='center',
+            rotation=90,
+            fontsize=8,
+        )
 
         self.ax_sec.set_xlim(-15, b + 10)
         self.ax_sec.set_ylim(-10, h + 10)
