@@ -9,3 +9,4 @@ python-docx
 pylatex
 Pillow
 reportlab
+sympy
