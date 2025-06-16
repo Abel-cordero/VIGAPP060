@@ -2,19 +2,21 @@
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
     Spacer,
     Table,
     TableStyle,
-    Preformatted,
     Image,
 )
+import tempfile
+from .models.utils import parse_formula, latex_to_png
+import sympy as sp
 
 
-def generate_memoria_pdf(title, data_section, calc_sections, result_section, path, images=None):
+def generate_memoria_pdf(title, data_section, calc_sections, result_section, path, images=None, section_img=None):
     """Create a calculation report as a PDF.
 
     Parameters
@@ -31,34 +33,66 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
         Ruta donde se guardará el PDF.
     images : list[str] | None
         Rutas de imágenes (fórmulas o capturas) a insertar en el reporte.
+    section_img : str | None
+        Ruta de la imagen de la sección a mostrar junto a la tabla de datos.
     """
     styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name="Titulo", fontName="Helvetica-Bold", fontSize=12, alignment=1))
+    styles.add(ParagraphStyle(name="Seccion", fontName="Helvetica-Bold", fontSize=11))
+    styles.add(ParagraphStyle(name="Sub", fontName="Helvetica", fontSize=10))
     doc = SimpleDocTemplate(path, pagesize=letter,
                             rightMargin=40, leftMargin=40,
                             topMargin=40, bottomMargin=40)
 
-    story = [Paragraph(title, styles["Title"]), Spacer(1, 12)]
+    story = [Paragraph(title, styles["Titulo"]), Spacer(1, 12)]
 
     if data_section:
-        story.append(Paragraph("Datos del proyecto", styles["Heading2"]))
+        story.append(Paragraph("DATOS", styles["Seccion"]))
         table = Table(data_section, hAlign="LEFT")
         table.setStyle(TableStyle([
             ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ]))
-        story.append(table)
+        elems = [table]
+        if section_img:
+            img = Image(section_img)
+            img.hAlign = "CENTER"
+            max_w = doc.width * 0.45
+            if img.drawWidth > max_w:
+                scale = max_w / img.drawWidth
+                img.drawWidth *= scale
+                img.drawHeight *= scale
+            elems.append(img)
+            data_table = Table([[elems[0], elems[1]]], colWidths=[doc.width*0.55, doc.width*0.45])
+            data_table.setStyle(TableStyle([("VALIGN", (0,0), (-1,-1), "TOP")]))
+            story.append(data_table)
+        else:
+            story.append(table)
         story.append(Spacer(1, 12))
 
     if calc_sections:
-        story.append(Paragraph("Cálculos", styles["Heading2"]))
+        story.append(Paragraph("CÁLCULOS", styles["Seccion"]))
         for subtitle, steps in calc_sections:
-            story.append(Paragraph(subtitle, styles["Heading3"]))
+            story.append(Paragraph(subtitle, styles["Sub"]))
             for step in steps:
-                story.append(Preformatted(step, styles["Code"]))
+                eq = parse_formula(step)
+                if eq is not None:
+                    tmp = tempfile.NamedTemporaryFile(prefix="form_", suffix=".png", delete=False)
+                    tmp.close()
+                    latex_to_png(sp.latex(eq), tmp.name, fontsize=10)
+                    img = Image(tmp.name)
+                    max_w = doc.width * 0.7
+                    if img.drawWidth > max_w:
+                        scale = max_w / img.drawWidth
+                        img.drawWidth *= scale
+                        img.drawHeight *= scale
+                    story.append(img)
+                else:
+                    story.append(Paragraph(step, styles["Sub"]))
             story.append(Spacer(1, 6))
 
     if result_section:
-        story.append(Paragraph("Resultados", styles["Heading2"]))
+        story.append(Paragraph("Resultados", styles["Seccion"]))
         for text, value in result_section:
             story.append(Paragraph(f"{text}: {value}", styles["Normal"]))
 

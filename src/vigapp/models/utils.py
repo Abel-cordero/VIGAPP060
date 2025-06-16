@@ -83,6 +83,41 @@ def capture_widget(widget: QWidget, path: str) -> Optional[str]:
 import tempfile
 import re
 import sympy as sp
+from matplotlib.figure import Figure
+
+
+def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, path: str) -> str:
+    """Draw a simple beam section and save it as PNG."""
+    d = h - r - de - 0.5 * db
+    fig = Figure(figsize=(2.4, 2.4))
+    ax = fig.add_subplot(111)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    # Outer rectangle
+    ax.plot([0, b, b, 0, 0], [0, 0, h, h, 0], "k-")
+    # Cover
+    ax.plot([r, b - r, b - r, r, r], [r, r, h - r, h - r, r], "r--")
+    # Stirrup offset
+    off = r + de
+    ax.plot([off, b - off, b - off, off, off], [off, off, h - off, h - off, off], "b:")
+
+    y_d = h - d
+    ax.annotate("", xy=(0, -5), xytext=(b, -5), arrowprops=dict(arrowstyle="<->"))
+    ax.text(b / 2, -6, f"b = {b:.0f} cm", ha="center", va="top", fontsize=6)
+
+    ax.annotate("", xy=(-5, h), xytext=(-5, y_d), arrowprops=dict(arrowstyle="<->"))
+    ax.text(-6, (h + y_d) / 2, f"d = {d:.1f} cm", ha="right", va="center", rotation=90, fontsize=6)
+
+    ax.annotate("", xy=(-12, 0), xytext=(-12, h), arrowprops=dict(arrowstyle="<->"))
+    ax.text(-13, h / 2, f"h = {h:.0f} cm", ha="right", va="center", rotation=90, fontsize=6)
+
+    ax.set_xlim(-15, b + 10)
+    ax.set_ylim(-10, h + 10)
+
+    fig.savefig(path, dpi=300, bbox_inches="tight")
+    fig.clf()
+    return path
 
 
 def parse_formula(text: str):
