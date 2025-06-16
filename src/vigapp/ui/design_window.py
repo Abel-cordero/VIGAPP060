@@ -615,7 +615,7 @@ class DesignWindow(QMainWindow):
         as_n = np.clip(as_n_raw, as_min, as_max)
         as_p = np.clip(as_p_raw, as_min, as_max)
 
-        title_text = f"Diseño a flexión de viga {int(b)}x{int(h)}"
+        title_text = f"DISEÑO A FLEXIÓN DE VIGA {int(b)}x{int(h)}"
 
         data_section = [
             ["b (cm)", f"{b}"],
@@ -629,24 +629,24 @@ class DesignWindow(QMainWindow):
         ]
 
         calc_sections = [
-            ("Cálculo del peralte efectivo", [
-                "d = h - r - ϕ estribo - 1/2 ϕ barra",
-                f"d = {h} - {r} - {de} - 1/2 * {db}",
+            ("Peralte: d", [
+                "d = h - ϕ estribo - r - 1/2 ϕ barra",
+                f"d = {h} - {de} - {r} - 1/2 * {db}",
                 f"d = {d:.2f} cm",
             ]),
-            ("Coeficiente β1", [
+            ("Coeficiente B1", [
                 "β1 = 0.85" if fc <= 280 else f"β1 = 0.85 - 0.05*(({fc}-280)/70) = {beta1:.3f}",
             ]),
-            ("As_min", [
+            ("As mín", [
                 "As_min = 0.7 * sqrt(fc)/fy * b * d",
                 f"As_min = 0.7 * sqrt({fc})/{fy} * {b} * {d:.2f}",
                 f"As_min = {as_min:.2f} cm²",
             ]),
-            ("As_max", [
+            ("As máx", [
                 "As_max = 0.75*(0.85 fc β1 / fy)*(6000/(6000+fy))*b*d",
                 f"As_max = {as_max:.2f} cm²",
             ]),
-            ("Fórmula general para As", [
+            ("Fórmula general del As", [
                 "As = (1.7 fc b d)/(2 fy) - 1/2 sqrt((2.89 (fc b d)^2)/fy^2 - (6.8 fc b Mu)/(φ fy^2))",
             ]),
         ]
@@ -695,12 +695,19 @@ class DesignWindow(QMainWindow):
         except Exception:
             pass
 
+        from ..models.utils import draw_beam_section_png
+        import tempfile
+        tmp = tempfile.NamedTemporaryFile(prefix="section_pdf_", suffix=".png", delete=False)
+        tmp.close()
+        section_img = draw_beam_section_png(b, h, r, de, db, tmp.name)
+
         title = title_text
         data = {
             "data_section": data_section,
             "calc_sections": calc_sections,
             "results": result_section,
             "images": images,
+            "section_img": section_img,
         }
         return title, data
 

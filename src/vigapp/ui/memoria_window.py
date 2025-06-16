@@ -77,17 +77,22 @@ class MemoriaWindow(QMainWindow):
         calc_sections = self.data.get("calc_sections", [])
         results = self.data.get("results", [])
         images = self.data.get("images", [])
+        section_img = self.data.get("section_img")
 
-        html = [f"<h1>{self.windowTitle()}</h1>"]
+        html = [f"<h1 style='text-align:center'>{self.windowTitle()}</h1>"]
         if data_section:
-            html.append("<h2>Datos del proyecto</h2>")
-            html.append("<table border='1' cellspacing='0' cellpadding='4'>")
+            html.append("<h2>DATOS</h2>")
+            html.append("<div style='display:flex;align-items:flex-start'>")
+            html.append("<table border='1' cellspacing='0' cellpadding='4' style='flex:1'>")
             for k, v in data_section:
                 html.append(f"<tr><td><b>{k}</b></td><td>{v}</td></tr>")
             html.append("</table>")
+            if section_img:
+                html.append(f"<div style='flex:1;text-align:center'><img src='file://{section_img}' style='max-width:100%;'/></div>")
+            html.append("</div>")
 
         if calc_sections:
-            html.append("<h2>Cálculos</h2>")
+            html.append("<h2>CÁLCULOS</h2>")
             for subtitle, steps in calc_sections:
                 html.append(f"<h3>{subtitle}</h3>")
                 for step in steps:
@@ -145,6 +150,7 @@ class MemoriaWindow(QMainWindow):
             self.data.get("results", []),
             path,
             images=self.data.get("images", []),
+            section_img=self.data.get("section_img"),
         )
 
     def edit_title(self):
