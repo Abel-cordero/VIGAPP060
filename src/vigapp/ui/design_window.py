@@ -150,7 +150,7 @@ class DesignWindow(QMainWindow):
     def _build_ui(self):
         content = QWidget()
         layout = QGridLayout(content)
-        layout.setVerticalSpacing(10)
+        layout.setVerticalSpacing(3)
         layout.setSizeConstraint(QLayout.SetMinimumSize)
 
         scroll = QScrollArea()
@@ -258,19 +258,36 @@ class DesignWindow(QMainWindow):
 
         row_start = len(labels) + 3
 
-        layout.addWidget(QLabel("As min (cm²):"), row_start, 2)
+        info_layout = QHBoxLayout()
+        info_layout.setSpacing(5)
+        info_layout.setContentsMargins(0, 0, 0, 0)
+
+        lbl_as_min = QLabel("As min (cm²):")
+        lbl_as_min.setFont(small_font)
         self.as_min_label = QLabel("0.00")
-        layout.addWidget(self.as_min_label, row_start, 3)
+        self.as_min_label.setFont(small_font)
+        info_layout.addWidget(lbl_as_min)
+        info_layout.addWidget(self.as_min_label)
 
-        layout.addWidget(QLabel("As max (cm²):"), row_start + 1, 2)
+        lbl_as_max = QLabel("As max (cm²):")
+        lbl_as_max.setFont(small_font)
         self.as_max_label = QLabel("0.00")
-        layout.addWidget(self.as_max_label, row_start + 1, 3)
+        self.as_max_label.setFont(small_font)
+        info_layout.addWidget(lbl_as_max)
+        info_layout.addWidget(self.as_max_label)
 
-        layout.addWidget(QLabel("Base req. (cm):"), row_start, 4)
+        lbl_base_req = QLabel("Base req. (cm):")
+        lbl_base_req.setFont(small_font)
         self.base_req_label = QLabel("-")
-        layout.addWidget(self.base_req_label, row_start, 5)
+        self.base_req_label.setFont(small_font)
+        info_layout.addWidget(lbl_base_req)
+        info_layout.addWidget(self.base_req_label)
+
         self.base_msg_label = QLabel("")
-        layout.addWidget(self.base_msg_label, row_start + 1, 4, 1, 2)
+        self.base_msg_label.setFont(small_font)
+        info_layout.addWidget(self.base_msg_label)
+
+        layout.addLayout(info_layout, row_start, 2, 1, 6)
 
         self.fig_sec, self.ax_sec = plt.subplots(figsize=(3, 3), constrained_layout=True)
         self.canvas_sec = FigureCanvas(self.fig_sec)
@@ -280,9 +297,9 @@ class DesignWindow(QMainWindow):
             2, 1, figsize=(5, 6), constrained_layout=True
         )
         self.canvas_dist = FigureCanvas(self.fig_dist)
-        layout.addWidget(self.canvas_dist, row_start + 2, 0, 1, 8)
+        layout.addWidget(self.canvas_dist, row_start + 1, 0, 1, 8)
 
-        layout.addLayout(self.combo_grid, row_start + 3, 0, 1, 8)
+        layout.addLayout(self.combo_grid, row_start + 2, 0, 1, 8)
 
         self.btn_capture = QPushButton("CAPTURA")
         self.btn_memoria = QPushButton("REPORTES")
@@ -294,10 +311,10 @@ class DesignWindow(QMainWindow):
         self.btn_view3d.clicked.connect(self.on_next)
         self.btn_menu.clicked.connect(self.on_menu)
 
-        layout.addWidget(self.btn_capture, row_start + 4, 0, 1, 2)
-        layout.addWidget(self.btn_memoria, row_start + 4, 2, 1, 2)
-        layout.addWidget(self.btn_view3d,  row_start + 4, 4, 1, 2)
-        layout.addWidget(self.btn_menu,    row_start + 4, 6, 1, 2)
+        layout.addWidget(self.btn_capture, row_start + 3, 0, 1, 2)
+        layout.addWidget(self.btn_memoria, row_start + 3, 2, 1, 2)
+        layout.addWidget(self.btn_view3d,  row_start + 3, 4, 1, 2)
+        layout.addWidget(self.btn_menu,    row_start + 3, 6, 1, 2)
 
         for ed in self.edits.values():
             ed.editingFinished.connect(self._redraw)
