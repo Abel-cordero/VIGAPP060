@@ -55,10 +55,23 @@ class DesignWindow(QDialog):
         content_layout = content.layout()
         if content_layout is not None:
             content_layout.setSizeConstraint(QLayout.SetMinimumSize)
+            # Compress the spacing between the input widgets so the
+            # middle portion of the window has more room.
+            if hasattr(content_layout, "setVerticalSpacing"):
+                content_layout.setVerticalSpacing(5)
 
         # Allow matplotlib canvases to expand with the window
         if hasattr(self._base, "canvas_sec"):
             self._base.canvas_sec.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            # Shrink the section figure height to prevent the top block from
+            # dominating the vertical space.
+            dpi = self._base.fig_sec.get_dpi() if hasattr(self._base, "fig_sec") else 100
+            new_inches = 2.4
+            if hasattr(self._base, "fig_sec"):
+                self._base.fig_sec.set_size_inches(new_inches, new_inches)
+            new_px = int(new_inches * dpi)
+            self._base.canvas_sec.setFixedHeight(new_px)
+            self._base.canvas_sec.setFixedWidth(new_px)
         if hasattr(self._base, "canvas_dist"):
             self._base.canvas_dist.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
