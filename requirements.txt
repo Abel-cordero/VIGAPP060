@@ -8,4 +8,4 @@ sympy
 python-docx
 pylatex
 Pillow
-pypi.org
+reportlab
