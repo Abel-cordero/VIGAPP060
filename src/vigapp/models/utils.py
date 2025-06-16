@@ -95,7 +95,7 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
     ax.axis("off")
 
     # Outer rectangle
-    ax.plot([0, b, b, 0, 0], [0, 0, h, h, 0], "k-")
+    ax.plot([0, b, b, 0, 0], [0, 0, h, h, 0], "k-", linewidth=0.8)
     # Cover (continuous thin line)
     ax.plot(
         [r, b - r, b - r, r, r],
@@ -119,7 +119,8 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
         "",
         xy=(b + 4, h),
         xytext=(b + 4, h - r),
-        arrowprops=dict(arrowstyle="<->", linewidth=0.8),
+        arrowprops=dict(arrowstyle="<->", linewidth=0.8, linestyle="-",
+                        mutation_scale=6, shrinkA=0, shrinkB=0),
     )
     ax.text(b + 5, h - r / 2, f"r = {r:.1f} cm", va="center", fontsize=6)
 
@@ -128,7 +129,8 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
         "",
         xy=(b + 11, h - r),
         xytext=(b + 11, h - off),
-        arrowprops=dict(arrowstyle="<->", linewidth=0.8),
+        arrowprops=dict(arrowstyle="<->", linewidth=0.8, linestyle="-",
+                        mutation_scale=6, shrinkA=0, shrinkB=0),
     )
     ax.text(b + 12, h - (r + off) / 2, f"de = {de:.1f} cm", va="center", fontsize=6)
 
@@ -137,7 +139,8 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
         "",
         xy=(0, -5),
         xytext=(b, -5),
-        arrowprops=dict(arrowstyle="<->", linewidth=0.8),
+        arrowprops=dict(arrowstyle="<->", linewidth=0.8, linestyle="-",
+                        mutation_scale=6, shrinkA=0, shrinkB=0),
     )
     ax.text(b / 2, -6, f"b = {b:.0f} cm", ha="center", va="top", fontsize=6)
 
@@ -145,7 +148,8 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
         "",
         xy=(-5, h),
         xytext=(-5, y_d),
-        arrowprops=dict(arrowstyle="<->", linewidth=0.8),
+        arrowprops=dict(arrowstyle="<->", linewidth=0.8, linestyle="-",
+                        mutation_scale=6, shrinkA=0, shrinkB=0),
     )
     ax.text(-6, (h + y_d) / 2, f"d = {d:.1f} cm", ha="right", va="center", rotation=90, fontsize=6)
 
@@ -153,7 +157,8 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
         "",
         xy=(-12, 0),
         xytext=(-12, h),
-        arrowprops=dict(arrowstyle="<->", linewidth=0.8),
+        arrowprops=dict(arrowstyle="<->", linewidth=0.8, linestyle="-",
+                        mutation_scale=6, shrinkA=0, shrinkB=0),
     )
     ax.text(-13, h / 2, f"h = {h:.0f} cm", ha="right", va="center", rotation=90, fontsize=6)
 
