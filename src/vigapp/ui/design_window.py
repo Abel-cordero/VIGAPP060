@@ -40,7 +40,7 @@ class DesignWindow(QMainWindow):
         self.setWindowTitle("Parte 2 – Diseño de Acero")
         self._build_ui()
         # Provide enough vertical space so scrolling is rarely needed
-        self.resize(750, 1500)
+        self.resize(800, 1500)
         if show_window:
             self.show()
 
@@ -172,6 +172,9 @@ class DesignWindow(QMainWindow):
 
         small_font = QFont()
         small_font.setPointSize(8)
+        # Font for the manual design widgets at the bottom
+        self.row_font = QFont()
+        self.row_font.setPointSize(8)
 
         self.edits = {}
         for row, (text, val) in enumerate(labels):
@@ -232,18 +235,22 @@ class DesignWindow(QMainWindow):
             header = QGridLayout()
 
             lbl_qty = QLabel("cant.")
+            lbl_qty.setFont(self.row_font)
             lbl_qty.setAlignment(Qt.AlignCenter)
             header.addWidget(lbl_qty, 0, 0)
 
-            lbl_dia = QLabel("\u00f8 varill")
+            lbl_dia = QLabel("\u00f8")
+            lbl_dia.setFont(self.row_font)
             lbl_dia.setAlignment(Qt.AlignCenter)
             header.addWidget(lbl_dia, 0, 1)
 
-            lbl_ncapas = QLabel("n\u00b0 capas")
+            lbl_ncapas = QLabel("capa")
+            lbl_ncapas.setFont(self.row_font)
             lbl_ncapas.setAlignment(Qt.AlignCenter)
             header.addWidget(lbl_ncapas, 0, 2)
 
             lbl_capas = QLabel("capas")
+            lbl_capas.setFont(self.row_font)
             lbl_capas.setAlignment(Qt.AlignCenter)
             header.addWidget(lbl_capas, 0, 3, 1, 2)
             cell.addLayout(header)
@@ -340,14 +347,25 @@ class DesignWindow(QMainWindow):
         qty_opts = [""] + [str(i) for i in range(1, 11)]
         dia_opts = ["", "1/2\"", "5/8\"", "3/4\"", "1\""]
         row_layout = QHBoxLayout()
+        row_layout.setSpacing(2)
+        row_layout.setContentsMargins(0, 0, 0, 0)
+
         q = QComboBox()
         q.addItems(qty_opts)
+        q.setFont(self.row_font)
+        q.setFixedWidth(50)
         q.setCurrentText("2")
+
         d = QComboBox()
         d.addItems(dia_opts)
+        d.setFont(self.row_font)
+        d.setFixedWidth(60)
         d.setCurrentText('1/2"')
+
         c = QComboBox()
         c.addItems(["1", "2", "3", "4"])
+        c.setFont(self.row_font)
+        c.setFixedWidth(50)
         c.setCurrentText("1")
         btn_add = QPushButton("+")
         btn_add.setFixedWidth(20)
