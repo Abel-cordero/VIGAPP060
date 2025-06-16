@@ -609,6 +609,8 @@ class DesignWindow(QMainWindow):
         d = h - r - de - 0.5 * db
         beta1 = 0.85 if fc <= 280 else 0.85 - ((fc - 280) / 70) * 0.05
         as_min, as_max = self._calc_as_limits(fc, fy, b, d)
+        p_bal = (0.85 * fc * beta1 / fy) * (6000 / (6000 + fy))
+        p_max = 0.75 * p_bal
 
         as_n_raw = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mn_corr]
         as_p_raw = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mp_corr]
@@ -629,24 +631,30 @@ class DesignWindow(QMainWindow):
         ]
 
         calc_sections = [
-            ("Peralte: d", [
-                r"$d = h - d_e - r - \frac{1}{2} d_b$",
-                fr"$d = {h} - {de} - {r} - \frac{{1}}{{2}} {db}$",
+            ("Peralte: d (ART.1.1 E060)", [
+                r"$d = h - d_e - \frac{1}{2} d_b - r$",
+                fr"$d = {h} - {de} - \frac{{1}}{{2}} {db} - {r}$",
                 fr"$d = {d:.2f}\,\text{{cm}}$",
             ]),
-            ("Coeficiente B1", [
+            ("Coeficiente B1 (ART.1.1 E060)", [
                 (r"$\beta_1 = 0.85$" if fc <= 280 else fr"$\beta_1 = 0.85 - 0.05\times\frac{{{fc}-280}}{{70}} = {beta1:.3f}$"),
             ]),
-            ("As mín", [
+            ("Pbal (ART.1.1 E060)", [
+                fr"$P_{{bal}} = {p_bal:.4f}$",
+            ]),
+            ("Pmax (ART.1.1 E060)", [
+                fr"$P_{{max}} = {p_max:.4f}$",
+            ]),
+            ("As mín (ART.1.1 E060)", [
                 r"$A_s^{\text{min}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d$",
                 fr"$A_s^{{\text{{min}}}} = 0.7\,\frac{{\sqrt{{{fc}}}}}{{{fy}}}\,{b}\,{d:.2f}$",
                 fr"$A_s^{{\text{{min}}}} = {as_min:.2f}\,\text{{cm}}^2$",
             ]),
-            ("As máx", [
-                r"$A_s^{\text{max}} = 0.75\,(0.85 f_c \beta_1 / f_y)\,(6000/(6000+f_y))\,b\,d$",
+            ("As máx (ART.1.1 E060)", [
+                r"$A_s^{\text{max}} = 0.75\,\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d$",
                 fr"$A_s^{{\text{{max}}}} = {as_max:.2f}\,\text{{cm}}^2$",
             ]),
-            ("Fórmula general del As", [
+            ("Fórmula general del As (ART.1.1 E060)", [
                 r"$A_s = \frac{1.7 f_c b d}{2 f_y} - \frac{1}{2} \sqrt{\frac{2.89(f_c b d)^2}{f_y^2} - \frac{6.8 f_c b M_u}{\phi f_y^2}}$",
             ]),
         ]
