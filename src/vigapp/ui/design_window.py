@@ -18,7 +18,6 @@ from PyQt5.QtGui import QGuiApplication, QFont
 
 from .view3d_window import View3DWindow
 from .memoria_window import MemoriaWindow
-from ..models.utils import latex_image
 from ..models.constants import DIAM_CM, BAR_DATA
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -585,14 +584,14 @@ class DesignWindow(QMainWindow):
 
     def show_memoria(self):
         """Show a detailed calculation window."""
-        title, text = self._build_memoria()
-        if title is None or text is None:
+        title, data = self._build_memoria()
+        if title is None or data is None:
             return
-        self.mem_win = MemoriaWindow(title, text)
+        self.mem_win = MemoriaWindow(title, data)
         self.mem_win.show()
 
     def _build_memoria(self):
-        """Return title and HTML for the calculation memory."""
+        """Return title and structured data for the calculation memory."""
         try:
             b = float(self.edits["b (cm)"].text())
             h = float(self.edits["h (cm)"].text())
@@ -603,7 +602,7 @@ class DesignWindow(QMainWindow):
             de = DIAM_CM.get(self.cb_estribo.currentText(), 0)
             db = DIAM_CM.get(self.cb_varilla.currentText(), 0)
         except ValueError:
-            QMessageBox.warning(self, "Error", "Datos num\u00e9ricos inv\u00e1lidos")
+            QMessageBox.warning(self, "Error", "Datos numéricos inválidos")
             return None, None
 
         d = h - r - de - 0.5 * db
@@ -615,63 +614,40 @@ class DesignWindow(QMainWindow):
         as_n = np.clip(as_n_raw, as_min, as_max)
         as_p = np.clip(as_p_raw, as_min, as_max)
 
-        def frac(num: str, den: str) -> str:
-            """Return a visually compact fraction for LaTeX output."""
-            return f"\\tfrac{{{num}}}{{{den}}}"
+        title_text = f"Diseño a flexión de viga {int(b)}x{int(h)}"
 
-        def eq_steps(*parts: str) -> str:
-            imgs = [latex_image(p) for p in parts]
-            return "<div class='eq'>" + "<br/>".join(imgs) + "</div>"
+        data_section = [
+            ["b (cm)", f"{b}"],
+            ["h (cm)", f"{h}"],
+            ["r (cm)", f"{r}"],
+            ["f'c (kg/cm²)", f"{fc}"],
+            ["fy (kg/cm²)", f"{fy}"],
+            ["φ", f"{phi}"],
+            ["ϕ estribo (cm)", f"{de}"],
+            ["ϕ varilla (cm)", f"{db}"],
+        ]
 
-        frac_root_fc_fy = frac("\\sqrt{f'c}", "fy")
-        sqrt_fc = f"\\sqrt{{{fc}}}"
-        num_as_max = "0.85 f'c \\beta_1"
-
-        title_text = f"Dise\u00f1o a flexi\u00f3n de viga {int(b)}x{int(h)}"
-
-        lines = [
-            f"<h1>{title_text}</h1>",
-            "<h2>Datos ingresados</h2>",
-            f"<p>b = {b} cm</p>",
-            f"<p>h = {h} cm</p>",
-            f"<p>r = {r} cm</p>",
-            f"<p>f'c = {fc} kg/cm²</p>",
-            f"<p>fy = {fy} kg/cm²</p>",
-            f"<p>φ = {phi}</p>",
-            f"<p>ϕ estribo = {de} cm</p>",
-            f"<p>ϕ varilla = {db} cm</p>",
-            "<h2>C\u00e1lculos</h2>",
-            "<h3>Peralte efectivo d</h3>",
-            eq_steps(
-                "d = h - r - \\phi_{estribo} - " + frac('1','2') + " \\phi_{barra}",
-                f"d = {h} - {r} - {de} - {frac('1','2')}\\times {db}",
-                f"d = {d:.2f}\\,cm",
-            ),
-            "<h3>Coeficiente \u03b2<sub>1</sub></h3>",
-            (
-                eq_steps("\\beta_{1} = 0.85")
-                if fc <= 280
-                else eq_steps(
-                    "\\beta_1 = 0.85 - 0.05\\times " + frac(f"{fc}-280", "70"),
-                    f"\\beta_1 = {beta1:.3f}",
-                )
-            ),
-            "<h3>C\u00e1lculo de A_s,\u200bmin</h3>",
-            eq_steps(
-                f"A_s,_{{min}} = 0.7\\times {frac_root_fc_fy}\\times b\\times d",
-                f"A_s,_{{min}} = 0.7\\times {frac(sqrt_fc, str(fy))}\\times {b}\\times {d:.2f}",
-                f"A_s,_{{min}} = {as_min:.2f}\\,cm^2",
-            ),
-            "<h3>C\u00e1lculo de A_s,\u200bmax</h3>",
-            eq_steps(
-                f"A_s,_{{max}} = 0.75\\times {frac(num_as_max,'fy')}\\times {frac('6000', f'6000+{fy}')}\\times b\\times d",
-                f"A_s,_{{max}} = {as_max:.2f}\\,cm^2",
-            ),
-            "<h3>F\u00f3rmula general para A_s</h3>",
-            eq_steps(
-                fr"A_s = {frac('1.7 f\'c b d','2 fy')} - {frac('1','2')}\sqrt{{{frac('2.89 (f\'c b d)^2','fy^2')} - {frac('6.8 f\'c b M_u','\\phi fy^2')}}}",
-            ),
-            "<h3>Detalle del c\u00e1lculo de A_s por momento</h3>",
+        calc_sections = [
+            ("Cálculo del peralte efectivo", [
+                "d = h - r - ϕ estribo - 1/2 ϕ barra",
+                f"d = {h} - {r} - {de} - 1/2 * {db}",
+                f"d = {d:.2f} cm",
+            ]),
+            ("Coeficiente β1", [
+                "β1 = 0.85" if fc <= 280 else f"β1 = 0.85 - 0.05*(({fc}-280)/70) = {beta1:.3f}",
+            ]),
+            ("As_min", [
+                "As_min = 0.7 * sqrt(fc)/fy * b * d",
+                f"As_min = 0.7 * sqrt({fc})/{fy} * {b} * {d:.2f}",
+                f"As_min = {as_min:.2f} cm²",
+            ]),
+            ("As_max", [
+                "As_max = 0.75*(0.85 fc β1 / fy)*(6000/(6000+fy))*b*d",
+                f"As_max = {as_max:.2f} cm²",
+            ]),
+            ("Fórmula general para As", [
+                "As = (1.7 fc b d)/(2 fy) - 1/2 sqrt((2.89 (fc b d)^2)/fy^2 - (6.8 fc b Mu)/(φ fy^2))",
+            ]),
         ]
 
         labels = ["M1-", "M2-", "M3-", "M1+", "M2+", "M3+"]
@@ -689,37 +665,30 @@ class DesignWindow(QMainWindow):
             )
             root = max(root, 0)
             calc = term - 0.5 * np.sqrt(root)
-            term_html = frac(f"1.7\\times{fc}\\times{b}\\times{d:.2f}", f"2\\times{fy}")
-            root_html = (
-                f"{frac(f'2.89\\times({fc}\\times{b}\\times{d:.2f})^2', f'{fy}^2')} - "
-                f"{frac(f'6.8\\times{fc}\\times{b}\\times{Mu_kgcm:.0f}', f'{phi}\\times{fy}^2')}"
-            )
-            lines.extend([
-                f"<p><b>{lab}</b>: M<sub>u</sub> = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm</p>",
-                eq_steps(
-                    f"A_s,calc = {term_html} - {frac('1','2')}\\sqrt{{{root_html}}}",
-                    f"A_s,calc = {term:.2f} - {frac('1','2')}\\sqrt{{{root:.2f}}}",
-                    f"A_s,calc = {calc:.2f}\\,cm^2",
-                ),
-                f"<p>A<sub>s,req</sub> = <b>{a:.2f} cm²</b></p>",
-            ])
+            calc_sections.append((
+                f"As para {lab}",
+                [
+                    f"Mu = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm",
+                    f"As_calc = {calc:.2f} cm²",
+                    f"As_req = {a:.2f} cm²",
+                ],
+            ))
 
-        html = (
-            "<html><head>"
-            "<style>"
-            "body{font-size:11pt;font-family:'Times New Roman';}"
-            "h1{text-align:center;font-size:14pt;margin-bottom:10px;}"
-            "h2{font-size:12pt;margin-top:12px;margin-bottom:6px;border-bottom:1px solid #aaa;}"
-            "h3{font-size:11pt;margin:8px 0 4px 0;}"
-            "p{margin:4px 0 4px 20px;}"
-            ".eq{margin-left:40px;margin-bottom:6px;}"
-            "</style>"
-            "</head><body>"
-            + "\n".join(lines) +
-            "</body></html>"
-        )
+        result_section = [
+            ("As_min", f"{as_min:.2f} cm²"),
+            ("As_max", f"{as_max:.2f} cm²"),
+        ]
+        for lab, val in zip(labels, as_n.tolist() + as_p.tolist()):
+            result_section.append((f"As req {lab}", f"{val:.2f} cm²"))
+
         title = title_text
-        return title, html
+        data = {
+            "data_section": data_section,
+            "calc_sections": calc_sections,
+            "results": result_section,
+        }
+        return title, data
+
 
     def on_next(self):
         if self.next_callback:
