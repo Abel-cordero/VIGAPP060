@@ -60,7 +60,7 @@ class DesignWindow(QDialog):
             # Compress spacing and margins so the middle portion has more room.
             content_layout.setContentsMargins(5, 5, 5, 5)
             if hasattr(content_layout, "setVerticalSpacing"):
-                content_layout.setVerticalSpacing(3)
+                content_layout.setVerticalSpacing(2)
 
         # Allow matplotlib canvases to expand with the window
         if hasattr(self._base, "canvas_sec"):
