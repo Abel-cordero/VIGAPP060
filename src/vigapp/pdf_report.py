@@ -40,6 +40,7 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
     styles.add(ParagraphStyle(name="Titulo", fontName="Helvetica-Bold", fontSize=12, alignment=1))
     styles.add(ParagraphStyle(name="Seccion", fontName="Helvetica-Bold", fontSize=11))
     styles.add(ParagraphStyle(name="Sub", fontName="Helvetica", fontSize=10))
+    styles.add(ParagraphStyle(name="Tabla", fontName="Helvetica", fontSize=11))
     doc = SimpleDocTemplate(path, pagesize=letter,
                             rightMargin=40, leftMargin=40,
                             topMargin=40, bottomMargin=40)
@@ -48,10 +49,11 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
 
     if data_section:
         story.append(Paragraph("DATOS", styles["Seccion"]))
-        table = Table(data_section, hAlign="LEFT")
-        table.setStyle(TableStyle([
+        table = Table(data_section, hAlign="LEFT", style=TableStyle([
             ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+            ("FONTSIZE", (0, 0), (-1, -1), 11),
         ]))
         elems = [table]
         if section_img:
@@ -75,11 +77,10 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
         for subtitle, steps in calc_sections:
             story.append(Paragraph(subtitle, styles["Sub"]))
             for step in steps:
-                eq = parse_formula(step)
-                if eq is not None:
+                if isinstance(step, str) and step.startswith("$") and step.endswith("$"):
                     tmp = tempfile.NamedTemporaryFile(prefix="form_", suffix=".png", delete=False)
                     tmp.close()
-                    latex_to_png(sp.latex(eq), tmp.name, fontsize=10)
+                    latex_to_png(step.strip("$"), tmp.name, fontsize=10)
                     img = Image(tmp.name)
                     max_w = doc.width * 0.7
                     if img.drawWidth > max_w:
@@ -88,7 +89,20 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
                         img.drawHeight *= scale
                     story.append(img)
                 else:
-                    story.append(Paragraph(step, styles["Sub"]))
+                    eq = parse_formula(step)
+                    if eq is not None:
+                        tmp = tempfile.NamedTemporaryFile(prefix="form_", suffix=".png", delete=False)
+                        tmp.close()
+                        latex_to_png(sp.latex(eq), tmp.name, fontsize=10)
+                        img = Image(tmp.name)
+                        max_w = doc.width * 0.7
+                        if img.drawWidth > max_w:
+                            scale = max_w / img.drawWidth
+                            img.drawWidth *= scale
+                            img.drawHeight *= scale
+                        story.append(img)
+                    else:
+                        story.append(Paragraph(step, styles["Sub"]))
             story.append(Spacer(1, 6))
 
     if result_section:
