@@ -618,15 +618,19 @@ class DesignWindow(QMainWindow):
         def frac(num: str, den: str) -> str:
             return f"\\dfrac{{{num}}}{{{den}}}"
 
+        def eq_steps(*parts: str) -> str:
+            imgs = [latex_image(p) for p in parts]
+            return "<div class='eq'>" + "<br/>".join(imgs) + "</div>"
+
         frac_root_fc_fy = frac("\\sqrt{f'c}", "fy")
         sqrt_fc = f"\\sqrt{{{fc}}}"
         num_as_max = "0.85 f'c \\beta_1"
 
+        title_text = f"Dise\u00f1o a flexi\u00f3n de viga {int(b)}x{int(h)}"
+
         lines = [
-            "<h1>DISE\u00d1O DE VIGAS</h1>",
-            "<h2>Datos de la viga del dise\u00f1o a flexi\u00f3n &gt; Dise\u00f1o de Acero</h2>",
-            "<h2>DISE\u00d1O A FLEXI\u00d3N</h2>",
-            "<h2>DATOS INGRESADOS</h2>",
+            f"<h1>{title_text}</h1>",
+            "<h2>Datos ingresados</h2>",
             f"<p>b = {b} cm</p>",
             f"<p>h = {h} cm</p>",
             f"<p>r = {r} cm</p>",
@@ -635,35 +639,38 @@ class DesignWindow(QMainWindow):
             f"<p>φ = {phi}</p>",
             f"<p>ϕ estribo = {de} cm</p>",
             f"<p>ϕ varilla = {db} cm</p>",
-            "<h2>CÁLCULOS</h2>",
-            "<h3>Cálculo del peralte efectivo d</h3>",
-            latex_image(
-                "d = h - r - \\phi_{estribo} - "
-                f"{frac('1','2')} \\phi_{{barra}} \\"  # Escapar llaves en f-string
-                f"  = {h} - {r} - {de} - {frac('1','2')}\\times {db} \\" 
-                f"  = {d:.2f}\\,cm"
+            "<h2>C\u00e1lculos</h2>",
+            "<h3>Peralte efectivo d</h3>",
+            eq_steps(
+                "d = h - r - \\phi_{estribo} - " + frac('1','2') + " \\phi_{barra}",
+                f"d = {h} - {r} - {de} - {frac('1','2')}\\times {db}",
+                f"d = {d:.2f}\\,cm",
             ),
-            "<h3>Cálculo de β<sub>1</sub></h3>",
+            "<h3>Coeficiente \u03b2<sub>1</sub></h3>",
             (
-                latex_image("\\beta_{1} = 0.85")
+                eq_steps("\\beta_{1} = 0.85")
                 if fc <= 280
-                else latex_image(
-                    f"\\beta_1 = 0.85 - 0.05\\times {frac(f'{fc}-280','70')} = {beta1:.3f}"
+                else eq_steps(
+                    "\\beta_1 = 0.85 - 0.05\\times " + frac(f"{fc}-280", "70"),
+                    f"\\beta_1 = {beta1:.3f}",
                 )
             ),
-            "<h3>Cálculo de As_min</h3>",
-            latex_image(
-                f"A_s,_{{min}} = 0.7\\times {frac_root_fc_fy}\\times b\\times d = 0.7\\times {frac(sqrt_fc, str(fy))}\\times {b}\\times {d:.2f} = {as_min:.2f}\\,cm^2"
+            "<h3>C\u00e1lculo de A_s,\u200bmin</h3>",
+            eq_steps(
+                f"A_s,_{{min}} = 0.7\\times {frac_root_fc_fy}\\times b\\times d",
+                f"A_s,_{{min}} = 0.7\\times {frac(sqrt_fc, str(fy))}\\times {b}\\times {d:.2f}",
+                f"A_s,_{{min}} = {as_min:.2f}\\,cm^2",
             ),
-            "<h3>Cálculo de As_max</h3>",
-            latex_image(
-                f"A_s,_{{max}} = 0.75\\times {frac(num_as_max,'fy')}\\times {frac('6000', f'6000+{fy}')}\\times b\\times d = {as_max:.2f}\\,cm^2"
+            "<h3>C\u00e1lculo de A_s,\u200bmax</h3>",
+            eq_steps(
+                f"A_s,_{{max}} = 0.75\\times {frac(num_as_max,'fy')}\\times {frac('6000', f'6000+{fy}')}\\times b\\times d",
+                f"A_s,_{{max}} = {as_max:.2f}\\,cm^2",
             ),
-            "<h3>Fórmula general para As</h3>",
-            latex_image(
-                fr"A_s = {frac('1.7 f\'c b d','2 fy')} - {frac('1','2')}\sqrt{{{frac('2.89 (f\'c b d)^2','fy^2')} - {frac('6.8 f\'c b M_u','\\phi fy^2')}}}"
+            "<h3>F\u00f3rmula general para A_s</h3>",
+            eq_steps(
+                fr"A_s = {frac('1.7 f\'c b d','2 fy')} - {frac('1','2')}\sqrt{{{frac('2.89 (f\'c b d)^2','fy^2')} - {frac('6.8 f\'c b M_u','\\phi fy^2')}}}",
             ),
-            "<h3>Detalle del cálculo de As por momento</h3>",
+            "<h3>Detalle del c\u00e1lculo de A_s por momento</h3>",
         ]
 
         labels = ["M1-", "M2-", "M3-", "M1+", "M2+", "M3+"]
@@ -686,29 +693,31 @@ class DesignWindow(QMainWindow):
                 f"{frac(f'2.89\\times({fc}\\times{b}\\times{d:.2f})^2', f'{fy}^2')} - "
                 f"{frac(f'6.8\\times{fc}\\times{b}\\times{Mu_kgcm:.0f}', f'{phi}\\times{fy}^2')}"
             )
-            lines.extend(
-                [
-                    f"<p><b>{lab}</b>: M<sub>u</sub> = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm</p>",
-                    latex_image(
-                        f"A_s,calc = {term_html} - {frac('1','2')}\\sqrt{{{root_html}}} = {term:.2f} - {frac('1','2')}\\sqrt{{{root:.2f}}} = {calc:.2f}\\,cm^2"
-                    ),
-                    f"<p>A<sub>s,req</sub> = <b>{a:.2f} cm²</b></p>",
-                ]
-            )
+            lines.extend([
+                f"<p><b>{lab}</b>: M<sub>u</sub> = {m:.2f} TN·m = {Mu_kgcm:.0f} kg·cm</p>",
+                eq_steps(
+                    f"A_s,calc = {term_html} - {frac('1','2')}\\sqrt{{{root_html}}}",
+                    f"A_s,calc = {term:.2f} - {frac('1','2')}\\sqrt{{{root:.2f}}}",
+                    f"A_s,calc = {calc:.2f}\\,cm^2",
+                ),
+                f"<p>A<sub>s,req</sub> = <b>{a:.2f} cm²</b></p>",
+            ])
 
         html = (
             "<html><head>"
             "<style>"
             "body{font-size:11pt;font-family:'Times New Roman';}"
-            "h2{font-size:12pt;margin:8px 0;}"
-            "h3{font-size:11pt;margin:6px 0;}"
-            "p{margin:6px 0;} .eq{margin-left:20px;}"
+            "h1{text-align:center;font-size:14pt;margin-bottom:10px;}"
+            "h2{font-size:12pt;margin-top:12px;margin-bottom:6px;border-bottom:1px solid #aaa;}"
+            "h3{font-size:11pt;margin:8px 0 4px 0;}"
+            "p{margin:4px 0 4px 20px;}"
+            ".eq{margin-left:40px;margin-bottom:6px;}"
             "</style>"
             "</head><body>"
             + "\n".join(lines) +
             "</body></html>"
         )
-        title = f"DISE\u00d1O DE VIGA {int(b)}X{int(h)}"
+        title = title_text
         return title, html
 
     def on_next(self):
