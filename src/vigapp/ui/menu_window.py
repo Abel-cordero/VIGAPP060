@@ -307,20 +307,27 @@ class MenuWindow(QMainWindow):
         if not self.design_ready:
             QMessageBox.warning(self, "Advertencia", "Debe completar el diseño")
             return
-        title, html = self.design_page._build_memoria()
+        title, data = self.design_page._build_memoria()
         if title is None:
             return
+        images = data.get("images", [])
+        if hasattr(self, "diagram_page") and hasattr(self.diagram_page, "canvas"):
+            from ..models.utils import capture_widget_temp
+            img = capture_widget_temp(self.diagram_page.canvas, "diagram_")
+            if img:
+                images.append(img)
+        data["images"] = images
         if not hasattr(self, "mem_page"):
             self.mem_page = MemoriaWindow(
                 title,
-                html,
+                data,
                 show_window=False,
                 menu_callback=self.show_menu,
             )
             self.stacked.addWidget(self.mem_page)
         else:
             self.mem_page.setWindowTitle(title)
-            self.mem_page.text.setHtml(html)
+            self.mem_page.set_data(data)
         self.stacked.setCurrentWidget(self.mem_page)
 
     def show_design(self):

@@ -10,10 +10,12 @@ from PyQt5.QtWidgets import (
     QLabel,
     QFileDialog,
     QInputDialog,
+    QTextBrowser,
 )
 import re
 
 from ..pdf_report import generate_memoria_pdf
+from ..models.utils import formula_html
 
 
 class MemoriaWindow(QMainWindow):
@@ -25,7 +27,7 @@ class MemoriaWindow(QMainWindow):
         self.menu_callback = menu_callback
         self.data = data
         self.setWindowTitle(title)
-        self.setFixedSize(500, 200)
+        self.setFixedSize(600, 800)
 
         central = QWidget()
         self.setCentralWidget(central)
@@ -39,9 +41,14 @@ class MemoriaWindow(QMainWindow):
         layout.addLayout(top)
 
         self.label = QLabel(
-            "Presione 'Captura' o 'Exportar…' para guardar la memoria en PDF.")
+            "Vista previa completa. Presione 'Captura' o 'Exportar…' para guardar la memoria en PDF.")
         self.label.setWordWrap(True)
         layout.addWidget(self.label)
+
+        self.text = QTextBrowser()
+        layout.addWidget(self.text, 1)
+
+        self._refresh_html()
 
         self.btn_capture = QPushButton("CAPTURA")
         self.btn_export = QPushButton("Exportar…")
@@ -62,6 +69,50 @@ class MemoriaWindow(QMainWindow):
 
         if show_window:
             self.show()
+
+    # ------------------------------------------------------------------
+    def _build_html(self) -> str:
+        """Return an HTML representation of the stored data."""
+        data_section = self.data.get("data_section", [])
+        calc_sections = self.data.get("calc_sections", [])
+        results = self.data.get("results", [])
+        images = self.data.get("images", [])
+
+        html = [f"<h1>{self.windowTitle()}</h1>"]
+        if data_section:
+            html.append("<h2>Datos del proyecto</h2>")
+            html.append("<table border='1' cellspacing='0' cellpadding='4'>")
+            for k, v in data_section:
+                html.append(f"<tr><td><b>{k}</b></td><td>{v}</td></tr>")
+            html.append("</table>")
+
+        if calc_sections:
+            html.append("<h2>Cálculos</h2>")
+            for subtitle, steps in calc_sections:
+                html.append(f"<h3>{subtitle}</h3>")
+                for step in steps:
+                    html.append(formula_html(step))
+
+        if results:
+            html.append("<h2>Resultados</h2>")
+            html.append("<ul>")
+            for text, value in results:
+                html.append(f"<li>{text}: {value}</li>")
+            html.append("</ul>")
+
+        for img in images:
+            html.append("<p style='text-align:center'>")
+            html.append(f"<img src='file://{img}' style='max-width:90%;'/>")
+            html.append("</p>")
+
+        return "\n".join(html)
+
+    def _refresh_html(self):
+        self.text.setHtml(self._build_html())
+
+    def set_data(self, data: dict):
+        self.data = data
+        self._refresh_html()
 
     def _capture(self):
         """Generate the PDF and ask for a save location."""
@@ -93,6 +144,7 @@ class MemoriaWindow(QMainWindow):
             self.data.get("calc_sections", []),
             self.data.get("results", []),
             path,
+            images=self.data.get("images", []),
         )
 
     def edit_title(self):
@@ -100,6 +152,7 @@ class MemoriaWindow(QMainWindow):
         title, ok = QInputDialog.getText(self, "Editar título", "Título:", text=self.windowTitle())
         if ok and title:
             self.setWindowTitle(title)
+            self._refresh_html()
 
     def on_menu(self):
         if self.menu_callback:

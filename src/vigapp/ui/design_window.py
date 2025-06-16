@@ -19,6 +19,7 @@ from PyQt5.QtGui import QGuiApplication, QFont
 from .view3d_window import View3DWindow
 from .memoria_window import MemoriaWindow
 from ..models.constants import DIAM_CM, BAR_DATA
+from ..models.utils import capture_widget_temp
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import numpy as np
@@ -681,11 +682,25 @@ class DesignWindow(QMainWindow):
         for lab, val in zip(labels, as_n.tolist() + as_p.tolist()):
             result_section.append((f"As req {lab}", f"{val:.2f} cm²"))
 
+        images = []
+        img = capture_widget_temp(self.canvas_sec, "sec_")
+        if img:
+            images.append(img)
+        try:
+            view = View3DWindow(self, show_window=False)
+            img_view = capture_widget_temp(view.canvas, "view3d_")
+            view.close()
+            if img_view:
+                images.append(img_view)
+        except Exception:
+            pass
+
         title = title_text
         data = {
             "data_section": data_section,
             "calc_sections": calc_sections,
             "results": result_section,
+            "images": images,
         }
         return title, data
 
