@@ -119,7 +119,7 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
         "",
         xy=(0, -5),
         xytext=(b, -5),
-        arrowprops=dict(arrowstyle="<|-|>", linewidth=0.8),
+        arrowprops=dict(arrowstyle="<->", linewidth=0.8),
     )
     ax.text(b / 2, -6, f"b = {b:.0f} cm", ha="center", va="top", fontsize=6)
 
@@ -127,7 +127,7 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
         "",
         xy=(-5, h),
         xytext=(-5, y_d),
-        arrowprops=dict(arrowstyle="<|-|>", linewidth=0.8),
+        arrowprops=dict(arrowstyle="<->", linewidth=0.8),
     )
     ax.text(-6, (h + y_d) / 2, f"d = {d:.1f} cm", ha="right", va="center", rotation=90, fontsize=6)
 
@@ -135,7 +135,7 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
         "",
         xy=(-12, 0),
         xytext=(-12, h),
-        arrowprops=dict(arrowstyle="<|-|>", linewidth=0.8),
+        arrowprops=dict(arrowstyle="<->", linewidth=0.8),
     )
     ax.text(-13, h / 2, f"h = {h:.0f} cm", ha="right", va="center", rotation=90, fontsize=6)
 

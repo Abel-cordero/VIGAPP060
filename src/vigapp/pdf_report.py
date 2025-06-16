@@ -16,6 +16,20 @@ from .models.utils import parse_formula, latex_to_png
 import sympy as sp
 
 
+def _formula_img(latex: str, max_width: float) -> Image:
+    """Return a ReportLab Image with LaTeX rendered at small size."""
+    tmp = tempfile.NamedTemporaryFile(prefix="form_", suffix=".png", delete=False)
+    tmp.close()
+    latex_to_png(latex, tmp.name, fontsize=7)
+    img = Image(tmp.name)
+    img.hAlign = "CENTER"
+    if img.drawWidth > max_width:
+        scale = max_width / img.drawWidth
+        img.drawWidth *= scale
+        img.drawHeight *= scale
+    return img
+
+
 def generate_memoria_pdf(title, data_section, calc_sections, result_section, path, images=None, section_img=None):
     """Create a calculation report as a PDF.
 
@@ -78,29 +92,11 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
             story.append(Paragraph(subtitle, styles["Sub"]))
             for step in steps:
                 if isinstance(step, str) and step.startswith("$") and step.endswith("$"):
-                    tmp = tempfile.NamedTemporaryFile(prefix="form_", suffix=".png", delete=False)
-                    tmp.close()
-                    latex_to_png(step.strip("$"), tmp.name, fontsize=10)
-                    img = Image(tmp.name)
-                    max_w = doc.width * 0.7
-                    if img.drawWidth > max_w:
-                        scale = max_w / img.drawWidth
-                        img.drawWidth *= scale
-                        img.drawHeight *= scale
-                    story.append(img)
+                    story.append(_formula_img(step.strip("$"), doc.width * 0.7))
                 else:
                     eq = parse_formula(step)
                     if eq is not None:
-                        tmp = tempfile.NamedTemporaryFile(prefix="form_", suffix=".png", delete=False)
-                        tmp.close()
-                        latex_to_png(sp.latex(eq), tmp.name, fontsize=10)
-                        img = Image(tmp.name)
-                        max_w = doc.width * 0.7
-                        if img.drawWidth > max_w:
-                            scale = max_w / img.drawWidth
-                            img.drawWidth *= scale
-                            img.drawHeight *= scale
-                        story.append(img)
+                        story.append(_formula_img(sp.latex(eq), doc.width * 0.7))
                     else:
                         story.append(Paragraph(step, styles["Sub"]))
             story.append(Spacer(1, 6))
