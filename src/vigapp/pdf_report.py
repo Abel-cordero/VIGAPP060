@@ -10,11 +10,28 @@ from reportlab.platypus import (
     Table,
     TableStyle,
     Preformatted,
+    Image,
 )
 
 
-def generate_memoria_pdf(title, data_section, calc_sections, result_section, path):
-    """Create a calculation report as a PDF."""
+def generate_memoria_pdf(title, data_section, calc_sections, result_section, path, images=None):
+    """Create a calculation report as a PDF.
+
+    Parameters
+    ----------
+    title : str
+        Título del documento.
+    data_section : list
+        Tabla con los datos de entrada.
+    calc_sections : list
+        Pasos de cálculo descritos como listas de texto.
+    result_section : list
+        Resultados finales del diseño.
+    path : str
+        Ruta donde se guardará el PDF.
+    images : list[str] | None
+        Rutas de imágenes (fórmulas o capturas) a insertar en el reporte.
+    """
     styles = getSampleStyleSheet()
     doc = SimpleDocTemplate(path, pagesize=letter,
                             rightMargin=40, leftMargin=40,
@@ -44,6 +61,19 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
         story.append(Paragraph("Resultados", styles["Heading2"]))
         for text, value in result_section:
             story.append(Paragraph(f"{text}: {value}", styles["Normal"]))
+
+    if images:
+        for img_path in images:
+            story.append(Spacer(1, 12))
+            img = Image(img_path)
+            img.hAlign = "CENTER"
+            max_w = doc.width
+            if img.drawWidth > max_w:
+                scale = max_w / img.drawWidth
+                img.drawWidth *= scale
+                img.drawHeight *= scale
+            story.append(img)
+            story.append(Spacer(1, 12))
 
     doc.build(story)
     return path
