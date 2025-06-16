@@ -80,3 +80,40 @@ def capture_widget(widget: QWidget, path: str) -> Optional[str]:
     return path
 
 
+import tempfile
+import re
+import sympy as sp
+
+
+def parse_formula(text: str):
+    """Parse a simple equation string into a SymPy Eq if possible."""
+    if "=" not in text:
+        return None
+    left, right = text.split("=", 1)
+    left, right = left.strip(), right.strip()
+    tokens = set(re.findall(r"[A-Za-z_][A-Za-z0-9_]*", text))
+    symbols = {t: sp.symbols(t) for t in tokens}
+    try:
+        expr_l = symbols.get(left, sp.symbols(left))
+        expr_r = sp.sympify(right.replace("^", "**"), locals=symbols)
+    except Exception:
+        return None
+    return sp.Eq(expr_l, expr_r)
+
+
+def formula_html(text: str, *, fontsize: int = 8) -> str:
+    """Return HTML for ``text`` rendered as a LaTeX equation when possible."""
+    eq = parse_formula(text)
+    if eq is None:
+        return f"<pre>{text}</pre>"
+    latex = sp.latex(eq)
+    return latex_image(latex, fontsize=fontsize)
+
+
+def capture_widget_temp(widget: QWidget, prefix: str = "img") -> Optional[str]:
+    """Capture a widget to a temporary PNG and return the path."""
+    if widget is None:
+        return None
+    tmp = tempfile.NamedTemporaryFile(prefix=prefix, suffix=".png", delete=False)
+    tmp.close()
+    return capture_widget(widget, tmp.name)
