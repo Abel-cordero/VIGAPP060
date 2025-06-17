@@ -1,0 +1,73 @@
+\documentclass[letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\geometry{margin=2cm}
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textbf{{{ title }}}}
+\end{center}
+
+{% if section_img %}
+\begin{center}
+\includegraphics[width=0.6\linewidth]{ {{ section_img }} }
+\end{center}
+{% endif %}
+
+{% if data_section %}
+\section*{DATOS}
+\begin{tabular}{@{}ll@{}}
+\toprule
+{% for label, value in data_section %}
+{{ label }} & {{ value }} \\
+{% endfor %}
+\bottomrule
+\end{tabular}
+{% endif %}
+
+{% if calc_sections %}
+\section*{C\'ALCULOS}
+{% for subtitle, steps in calc_sections %}
+\subsection*{{ subtitle }}
+{% for step in steps %}
+{% if step.startswith('$') and step.endswith('$') %}
+\[
+{{ step[1:-1] }}
+\]
+{% else %}
+{{ step }}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+{% if results %}
+\section*{RESULTADOS}
+\begin{tabular}{@{}ll@{}}
+\toprule
+{% for label, value in results %}
+{{ label }} & {{ value }} \\
+{% endfor %}
+\bottomrule
+\end{tabular}
+{% endif %}
+
+{% for img in images %}
+\begin{center}
+\includegraphics[width=0.9\linewidth]{ {{ img }} }
+\end{center}
+{% endfor %}
+
+{% if formula_images %}
+{% for fig in formula_images %}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{ {{ fig }} }
+\end{center}
+{% endfor %}
+{% endif %}
+
+\end{document}
