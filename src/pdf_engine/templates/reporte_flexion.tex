@@ -31,7 +31,7 @@ fy & {{ fy|default('')|escape }} MPa \\
 {% if section_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[height=5cm]{ {{ section_img|escape }} }
+\includegraphics[height=5cm]{ {{- section_img|escape -}} }
 \end{figure}
 {% endif %}
 \end{minipage}
@@ -49,7 +49,7 @@ Valor calculado: \( d = {{ d }}\,\text{m} \)
 {% if peralte_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{ {{ peralte_img|escape }} }
+\includegraphics[width=0.5\textwidth]{ {{- peralte_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -66,7 +66,7 @@ Valor calculado: \( \beta_1 = {{ b1 }} \)
 {% if b1_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{ {{ b1_img|escape }} }
+\includegraphics[width=0.5\textwidth]{ {{- b1_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -83,7 +83,7 @@ Valor calculado: \( P_{bal} = {{ pbal }} \)
 {% if pbal_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{ {{ pbal_img|escape }} }
+\includegraphics[width=0.5\textwidth]{ {{- pbal_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -100,7 +100,7 @@ Valor calculado: \( \rho_{bal} = {{ rhobal }} \)
 {% if rhobal_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{ {{ rhobal_img|escape }} }
+\includegraphics[width=0.5\textwidth]{ {{- rhobal_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -117,7 +117,7 @@ Valor calculado: \( P_{max} = {{ pmax }} \)
 {% if pmax_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{ {{ pmax_img|escape }} }
+\includegraphics[width=0.5\textwidth]{ {{- pmax_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -134,7 +134,7 @@ Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }} \)
 {% if asmin_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{ {{ asmin_img|escape }} }
+\includegraphics[width=0.5\textwidth]{ {{- asmin_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -151,7 +151,7 @@ Valor calculado: \( A_{s}^{\text{max}} = {{ as_max }} \)
 {% if asmax_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{ {{ asmax_img|escape }} }
+\includegraphics[width=0.5\textwidth]{ {{- asmax_img|escape -}} }
 \end{figure}
 {% endif %}
 
