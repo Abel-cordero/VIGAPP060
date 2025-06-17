@@ -213,14 +213,10 @@ Los diagramas y resultados se actualizan cada vez que se modifican los datos o s
 
 El código se encuentra organizado en la carpeta `src/vigapp/` y se inicia desde `main.py`. El antiguo archivo `viga2.0.py` se eliminó en favor de `main.py` como punto de entrada. Los módulos principales son:
 
-- **`models/beam_model.py`** — clase `BeamModel` con geometría, barras y lógicas de cálculo.
-- **`graphics/rebar_editor_widget.py`** — panel lateral para editar rápidamente las barras.
 - **`ui/length_input_toolbar.py`** — barra de entrada de longitud con atajos `L/3`, `L/2` y `L`.
 - **`graphics/section2d_view.py`** — vista 2D interactiva que permite arrastrar varillas.
 - **`graphics/section3d_view.py`** — ventana 3D para inspeccionar la viga y su refuerzo.
-- **`bar_properties_panel.py`** — diálogo con propiedades detalladas de cada barra.
 - **`sistema/project_manager.py`** — gestor opcional para guardar o cargar configuraciones.
-- **`summary_view.py`** — previsualización dinámica de la memoria de cálculo.
 - **`models/utils.py`** — constantes y funciones auxiliares.
 
 - **`ui/moment_app.py`** — ventana de ingreso de momentos y corrección.
