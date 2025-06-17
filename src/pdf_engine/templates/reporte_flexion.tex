@@ -11,27 +11,29 @@
 
 \begin{document}
 
-\section*{ {{ title }} }
+\section*{ {{ title|default('')|escape }} }
 
 \begin{minipage}[t]{0.48\textwidth}
 \begin{tabular}{|l|c|}
 \hline
-Base (b) & {{ base }} m \\
-Altura (h) & {{ altura }} m \\
-Recubrimiento (r) & {{ recubrimiento }} m \\
-Estribo (\ensuremath{\phi_e}) & {{ diam_estribo }} m \\
-Varilla principal (\ensuremath{\phi_s}) & {{ diam_varilla }} m \\
-f'c & {{ fc }} MPa \\
-fy & {{ fy }} MPa \\
+Base (b) & {{ base|default('')|escape }} m \\
+Altura (h) & {{ altura|default('')|escape }} m \\
+Recubrimiento (r) & {{ recubrimiento|default('')|escape }} m \\
+Estribo (\ensuremath{\phi_e}) & {{ diam_estribo|default('')|escape }} m \\
+Varilla principal (\ensuremath{\phi_s}) & {{ diam_varilla|default('')|escape }} m \\
+f'c & {{ fc|default('')|escape }} MPa \\
+fy & {{ fy|default('')|escape }} MPa \\
 \hline
 \end{tabular}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
+{% if section_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[height=5cm]{figures/section.png}
+\includegraphics[height=5cm]{ {{ section_img|escape }} }
 \end{figure}
+{% endif %}
 \end{minipage}
 
 \vspace{0.5cm}
@@ -44,10 +46,12 @@ fy & {{ fy }} MPa \\
 
 Valor calculado: \( d = {{ d }}\,\text{m} \)
 
+{% if peralte_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{figures/peralte.png}
+\includegraphics[width=0.5\textwidth]{ {{ peralte_img|escape }} }
 \end{figure}
+{% endif %}
 
 \vspace{0.5cm}
 
@@ -59,10 +63,12 @@ Valor calculado: \( d = {{ d }}\,\text{m} \)
 
 Valor calculado: \( \beta_1 = {{ b1 }} \)
 
+{% if b1_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{figures/b1.png}
+\includegraphics[width=0.5\textwidth]{ {{ b1_img|escape }} }
 \end{figure}
+{% endif %}
 
 \vspace{0.5cm}
 
@@ -74,10 +80,12 @@ Valor calculado: \( \beta_1 = {{ b1 }} \)
 
 Valor calculado: \( P_{bal} = {{ pbal }} \)
 
+{% if pbal_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{figures/pbal.png}
+\includegraphics[width=0.5\textwidth]{ {{ pbal_img|escape }} }
 \end{figure}
+{% endif %}
 
 \vspace{0.5cm}
 
@@ -89,10 +97,12 @@ Valor calculado: \( P_{bal} = {{ pbal }} \)
 
 Valor calculado: \( \rho_{bal} = {{ rhobal }} \)
 
+{% if rhobal_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{figures/rhobal.png}
+\includegraphics[width=0.5\textwidth]{ {{ rhobal_img|escape }} }
 \end{figure}
+{% endif %}
 
 \vspace{0.5cm}
 
@@ -104,10 +114,12 @@ Valor calculado: \( \rho_{bal} = {{ rhobal }} \)
 
 Valor calculado: \( P_{max} = {{ pmax }} \)
 
+{% if pmax_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{figures/pmax.png}
+\includegraphics[width=0.5\textwidth]{ {{ pmax_img|escape }} }
 \end{figure}
+{% endif %}
 
 \vspace{0.5cm}
 
@@ -119,10 +131,12 @@ Valor calculado: \( P_{max} = {{ pmax }} \)
 
 Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }} \)
 
+{% if asmin_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{figures/asmin.png}
+\includegraphics[width=0.5\textwidth]{ {{ asmin_img|escape }} }
 \end{figure}
+{% endif %}
 
 \vspace{0.5cm}
 
@@ -134,9 +148,11 @@ Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }} \)
 
 Valor calculado: \( A_{s}^{\text{max}} = {{ as_max }} \)
 
+{% if asmax_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{figures/asmax.png}
+\includegraphics[width=0.5\textwidth]{ {{ asmax_img|escape }} }
 \end{figure}
+{% endif %}
 
 \end{document}
