@@ -31,7 +31,8 @@ def _tex_escape(value: Any) -> str:
 def _existing(path: str | None) -> str | None:
     """Return ``path`` only if it exists."""
     if path and os.path.exists(path):
-        return path
+        # Convert to POSIX style to avoid LaTeX issues with backslashes
+        return path.replace(os.sep, "/")
     return None
 
 
