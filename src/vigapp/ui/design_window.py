@@ -617,7 +617,8 @@ class DesignWindow(QMainWindow):
         as_n = np.clip(as_n_raw, as_min, as_max)
         as_p = np.clip(as_p_raw, as_min, as_max)
 
-        title_text = f"DISEÑO A FLEXIÓN DE VIGA {int(b)}x{int(h)}"
+        # Main title uses actual beam dimensions without truncating decimals
+        title_text = f"DISEÑO A FLEXIÓN DE VIGA {b:g}x{h:g}"
 
         data_section = [
             ["b (cm)", f"{b}"],
