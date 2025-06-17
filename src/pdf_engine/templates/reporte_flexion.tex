@@ -1,73 +1,142 @@
-\documentclass[letterpaper]{article}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
-\usepackage{geometry}
-\usepackage{graphicx}
-\usepackage{booktabs}
 \usepackage{amsmath}
-\geometry{margin=2cm}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{titlesec}
+\usepackage{float}
+\titleformat{\section}{\centering\bfseries\uppercase}{\thesection}{1em}{}
 
 \begin{document}
 
-\begin{center}
-{\LARGE \textbf{{{ title }}}}
-\end{center}
+\section*{{{{ title }}}}
 
-{% if section_img %}
-\begin{center}
-\includegraphics[width=0.6\linewidth]{ {{ section_img }} }
-\end{center}
-{% endif %}
-
-{% if data_section %}
-\section*{DATOS}
-\begin{tabular}{@{}ll@{}}
-\toprule
-{% for label, value in data_section %}
-{{ label }} & {{ value }} \\
-{% endfor %}
-\bottomrule
+\begin{minipage}[t]{0.48\textwidth}
+\begin{tabular}{|l|c|}
+\hline
+Base (b) & {{ base }} m \\
+Altura (h) & {{ altura }} m \\
+Recubrimiento (r) & {{ recubrimiento }} m \\
+Estribo (\ensuremath{\phi_e}) & {{ diam_estribo }} m \\
+Varilla principal (\ensuremath{\phi_s}) & {{ diam_varilla }} m \\
+f'c & {{ fc }} MPa \\
+fy & {{ fy }} MPa \\
+\hline
 \end{tabular}
-{% endif %}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{figure}[H]
+\centering
+\includegraphics[height=5cm]{figures/section.png}
+\end{figure}
+\end{minipage}
 
-{% if calc_sections %}
-\section*{C\'ALCULOS}
-{% for subtitle, steps in calc_sections %}
-\subsection*{{ subtitle }}
-{% for step in steps %}
-{% if step.startswith('$') and step.endswith('$') %}
+\vspace{0.5cm}
+
+\section*{Peralte: d (ART.PERALTE)}
+
 \[
-{{ step[1:-1] }}
+{{ formula_peralte }}
 \]
-{% else %}
-{{ step }}
-{% endif %}
-{% endfor %}
-{% endfor %}
-{% endif %}
 
-{% if results %}
-\section*{RESULTADOS}
-\begin{tabular}{@{}ll@{}}
-\toprule
-{% for label, value in results %}
-{{ label }} & {{ value }} \\
-{% endfor %}
-\bottomrule
-\end{tabular}
-{% endif %}
+Valor calculado: \( d = {{ d }}\,\text{m} \)
 
-{% for img in images %}
-\begin{center}
-\includegraphics[width=0.9\linewidth]{ {{ img }} }
-\end{center}
-{% endfor %}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/peralte.png}
+\end{figure}
 
-{% if formula_images %}
-{% for fig in formula_images %}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{ {{ fig }} }
-\end{center}
-{% endfor %}
-{% endif %}
+\vspace{0.5cm}
+
+\section*{Coeficiente B1 (ART.B1)}
+
+\[
+{{ formula_b1 }}
+\]
+
+Valor calculado: \( \beta_1 = {{ b1 }} \)
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/b1.png}
+\end{figure}
+
+\vspace{0.5cm}
+
+\section*{Pbal (ART.PBAL)}
+
+\[
+{{ formula_pbal }}
+\]
+
+Valor calculado: \( P_{bal} = {{ pbal }} \)
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/pbal.png}
+\end{figure}
+
+\vspace{0.5cm}
+
+\section*{\ensuremath{\rho_{bal}} (ART.RHOBAL)}
+
+\[
+{{ formula_rhobal }}
+\]
+
+Valor calculado: \( \rho_{bal} = {{ rhobal }} \)
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/rhobal.png}
+\end{figure}
+
+\vspace{0.5cm}
+
+\section*{Pmax (ART.PMAX)}
+
+\[
+{{ formula_pmax }}
+\]
+
+Valor calculado: \( P_{max} = {{ pmax }} \)
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/pmax.png}
+\end{figure}
+
+\vspace{0.5cm}
+
+\section*{As m\'in (ART.ASMIN)}
+
+\[
+{{ formula_asmin }}
+\]
+
+Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }} \)
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/asmin.png}
+\end{figure}
+
+\vspace{0.5cm}
+
+\section*{As m\'ax (ART.ASMAX)}
+
+\[
+{{ formula_asmax }}
+\]
+
+Valor calculado: \( A_{s}^{\text{max}} = {{ as_max }} \)
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{figures/asmax.png}
+\end{figure}
 
 \end{document}
