@@ -6,8 +6,5 @@ mplcursors
 pyqtgraph
 sympy
 python-docx
-pylatex
-Pillow
 reportlab
-sympy
 Jinja2
