@@ -115,27 +115,30 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
         linewidth=lw,
     )
 
-    # Cover dimension r
-    arrowargs = dict(arrowstyle="<->", linewidth=lw, linestyle="-",
-                     mutation_scale=5, shrinkA=0, shrinkB=0)
-    ax.annotate("", xy=(b + 4, h), xytext=(b + 4, h - r),
-                arrowprops=arrowargs)
-    ax.text(b + 5, h - r / 2, f"r = {r:.1f} cm", va="center", fontsize=6)
+    tick = 0.8
 
-    # Offset dimension de
-    ax.annotate("", xy=(b + 11, h - r), xytext=(b + 11, h - off),
-                arrowprops=arrowargs)
-    ax.text(b + 12, h - (r + off) / 2, f"de = {de:.1f} cm", va="center", fontsize=6)
+    def _dim_v(x, y1, y2, label, off_side="right"):
+        ax.plot([x, x], [y1, y2], color="black", linewidth=lw)
+        ax.plot([x - tick, x + tick], [y1, y1], color="black", linewidth=lw)
+        ax.plot([x - tick, x + tick], [y2, y2], color="black", linewidth=lw)
+        if off_side == "right":
+            ax.text(x + 1.5 * tick, (y1 + y2) / 2, label, va="center", fontsize=6)
+        else:
+            ax.text(x - 1.5 * tick, (y1 + y2) / 2, label, ha="right", va="center", fontsize=6, rotation=90)
+
+    def _dim_h(x1, x2, y, label):
+        ax.plot([x1, x2], [y, y], color="black", linewidth=lw)
+        ax.plot([x1, x1], [y - tick, y + tick], color="black", linewidth=lw)
+        ax.plot([x2, x2], [y - tick, y + tick], color="black", linewidth=lw)
+        ax.text((x1 + x2) / 2, y - 1.5 * tick, label, ha="center", va="top", fontsize=6)
+
+    _dim_v(b + 4, h, h - r, f"r = {r:.1f} cm")
+    _dim_v(b + 11, h - r, h - off, f"ϕ = {de:.1f} cm")
 
     y_d = h - d
-    ax.annotate("", xy=(0, -5), xytext=(b, -5), arrowprops=arrowargs)
-    ax.text(b / 2, -6, f"b = {b:.0f} cm", ha="center", va="top", fontsize=6)
-
-    ax.annotate("", xy=(-5, h), xytext=(-5, y_d), arrowprops=arrowargs)
-    ax.text(-6, (h + y_d) / 2, f"d = {d:.1f} cm", ha="right", va="center", rotation=90, fontsize=6)
-
-    ax.annotate("", xy=(-12, 0), xytext=(-12, h), arrowprops=arrowargs)
-    ax.text(-13, h / 2, f"h = {h:.0f} cm", ha="right", va="center", rotation=90, fontsize=6)
+    _dim_h(0, b, -5, f"b = {b:.0f} cm")
+    _dim_v(-5, h, y_d, f"d = {d:.1f} cm", off_side="left")
+    _dim_v(-12, 0, h, f"h = {h:.0f} cm", off_side="left")
 
     ax.set_xlim(-15, b + 20)
     ax.set_ylim(-10, h + 10)
