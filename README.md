@@ -364,3 +364,131 @@ Todo el cálculo estructural en esta aplicación se realiza utilizando **unidade
 Este enfoque asegura coherencia con la práctica profesional en Perú y con los formatos establecidos por el reglamento nacional.
 
 No se usa el sistema internacional (SI) para los cálculos ni para el almacenamiento de variables internas.
+
+
+# 📘 REESTRUCTURACIÓN MODULAR DE REPORTES – DISEÑO A FLEXIÓN
+
+Este documento describe cómo debe actualizarse de forma modular la generación del reporte en PDF del diseño a flexión, dentro del proyecto `VIGA_FINAL`. El objetivo es lograr una presentación editorial clara, técnica y profesional, siguiendo normas de estilo específicas. No se deben generar estructuras nuevas, solo mejorar la presentación del reporte generado actualmente con ReportLab.
+
+⚠️ Cada módulo de actualización debe ejecutarse de forma **secuencial y aislada** para evitar errores de interpretación por parte de Codex u otra IA.
+
+---
+
+## 📍 ETAPA 1 – TÍTULO PRINCIPAL
+
+### 🎯 Objetivo:
+Mostrar al inicio del reporte el título técnico con formato adecuado.
+
+### 🛠️ Especificaciones:
+- Texto: `"DISEÑO A FLEXIÓN DE VIGA bxh"`  
+  (reemplazar `b` y `h` con los valores reales de base y altura ingresados).
+- Fuente: `Arial`, tamaño `12`, estilo `negrita`.
+- Alineación: `centrado superior del documento`.
+- No debe repetirse en otra parte del reporte.
+
+---
+
+## 📍 ETAPA 2 – SECCIÓN DE DATOS
+
+### 🎯 Objetivo:
+Presentar los datos de entrada en una tabla clara, con encabezado correcto.
+
+### 🛠️ Especificaciones:
+- Encabezado: `"DATOS"` (en mayúsculas, reemplaza “Datos del Proyecto”).
+- Fuente: `Arial`, tamaño `11`.
+- Tabla de datos debe estar alineada y clara.
+- A la derecha de esta tabla, insertar un gráfico técnico de la sección de la viga.
+
+---
+
+## 📍 ETAPA 3 – GRÁFICO DE SECCIÓN DE VIGA
+
+### 🎯 Objetivo:
+Mostrar un dibujo técnico que represente visualmente la sección de la viga.
+
+### 🛠️ Especificaciones:
+- Ubicación: a la derecha de la tabla de datos.
+- Mostrar: base, altura, peralte (d), recubrimiento, estribo con offset.
+- Estilo:
+  - Líneas continuas finas (no punteadas).
+  - Cotas con estilo técnico (sin flechas dobles grandes).
+- Tamaño proporcional al bloque de datos.
+
+---
+
+## 📍 ETAPA 4 – SECCIÓN CÁLCULOS
+
+### 🎯 Objetivo:
+Mostrar el desarrollo técnico de cada fórmula del diseño a flexión.
+
+### 🛠️ Subtítulos fijos con artículo normativo:
+- Peralte: d (ART.1.1 E060)
+- Coeficiente B1 (ART.1.1 E060)
+- Pbal (ART.1.1 E060)
+- Pmax (ART.1.1 E060)
+- As mín (ART.1.1 E060)
+- As máx (ART.1.1 E060)
+- Fórmula general del As (ART.1.1 E060)
+- As para M1, M2, M3, etc.
+
+### 🧮 Formato del desarrollo:
+- Estilo escalonado, por ejemplo:
+
+- Cada fórmula debe mostrarse como imagen PNG renderizada desde LaTeX.
+- Fracciones deben verse con `\frac{a}{b}` (nunca `1/2`, ni `\tfrac`).
+- Usar `fontsize=6 o 7` para fracciones pequeñas.
+- No mostrar fórmulas como texto plano.
+
+---
+
+## 📍 ETAPA 5 – SECCIÓN DE RESULTADOS
+
+### 🎯 Objetivo:
+Mostrar de manera clara los resultados de diseño final.
+
+### 🛠️ Especificaciones:
+- Mostrar todos los valores de As para los momentos corregidos.
+- Ubicar esta sección al final del reporte como bloque bien separado.
+- Puede incluir resumen de selección de acero si aplica.
+
+---
+
+## 📍 ETAPA 6 – IMÁGENES COMPLEMENTARIAS
+
+### 🎯 Objetivo:
+Agregar al reporte las vistas gráficas del diseño estructural.
+
+### 🛠️ Incluir:
+- Gráfica de momentos positivos y negativos.
+- Secciones de acero (M1, M2, M3).
+- Cada imagen debe estar centrada, con márgenes consistentes.
+- No repetir imágenes innecesarias (por ejemplo, no duplicar sección).
+
+---
+
+## 📍 ETAPA 7 – VISTA PREVIA (ANTES DE EXPORTAR)
+
+### 🎯 Objetivo:
+Permitir al usuario visualizar el reporte completo antes de exportarlo como PDF.
+
+### 🛠️ Especificaciones:
+- Implementar ventana de vista previa.
+- Mostrar: título, datos, fórmulas, imágenes, resultados.
+- No exportar automáticamente: permitir confirmación manual.
+
+---
+
+## 🔒 RESTRICCIONES GENERALES
+
+- No crear nuevas estructuras ni modificar lógicas existentes.
+- No usar texto plano para fórmulas matemáticas.
+- No usar librerías externas nuevas (todo debe integrarse a ReportLab).
+- No modificar la lógica de cálculo, solo la presentación.
+
+---
+
+## 🧩 RECOMENDACIÓN DE USO
+
+Se recomienda aplicar una etapa a la vez, validando que Codex la interprete y aplique correctamente antes de pasar a la siguiente.
+
+
