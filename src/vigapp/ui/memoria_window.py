@@ -80,16 +80,14 @@ class MemoriaWindow(QMainWindow):
         section_img = self.data.get("section_img")
 
         html = [f"<h1 style='text-align:center'>{self.windowTitle()}</h1>"]
+        if section_img:
+            html.append(f"<p style='text-align:center'><img src='file://{section_img}' style='max-width:60%;'/></p>")
         if data_section:
             html.append("<h2>DATOS</h2>")
-            html.append("<div style='display:flex;align-items:flex-start'>")
-            html.append("<table border='1' cellspacing='0' cellpadding='4' style='flex:1'>")
+            html.append("<table border='1' cellspacing='0' cellpadding='4' style='width:100%'>")
             for k, v in data_section:
                 html.append(f"<tr><td><b>{k}</b></td><td>{v}</td></tr>")
             html.append("</table>")
-            if section_img:
-                html.append(f"<div style='flex:1;text-align:center'><img src='file://{section_img}' style='max-width:100%;'/></div>")
-            html.append("</div>")
 
         if calc_sections:
             html.append("<h2>CÁLCULOS</h2>")

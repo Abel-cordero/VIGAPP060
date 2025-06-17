@@ -57,7 +57,7 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
     images : list[str] | None
         Rutas de imágenes (fórmulas o capturas) a insertar en el reporte.
     section_img : str | None
-        Ruta de la imagen de la sección a mostrar junto a la tabla de datos.
+        Ruta de la imagen de la sección a mostrar en el encabezado del reporte.
     """
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name="Titulo", fontName="Arial-Bold", fontSize=12, alignment=1))
@@ -69,6 +69,16 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
                             topMargin=40, bottomMargin=40)
 
     story = [Paragraph(title, styles["Titulo"]), Spacer(1, 12)]
+    if section_img:
+        img = Image(section_img)
+        img.hAlign = "CENTER"
+        max_w = doc.width * 0.6
+        if img.drawWidth > max_w:
+            scale = max_w / img.drawWidth
+            img.drawWidth *= scale
+            img.drawHeight *= scale
+        story.append(img)
+        story.append(Spacer(1, 12))
 
     if data_section:
         story.append(Paragraph("DATOS", styles["Seccion"]))
@@ -79,21 +89,7 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
             ("FONTNAME", (0, 0), (-1, -1), "Arial"),
             ("FONTSIZE", (0, 0), (-1, -1), 11),
         ]))
-        elems = [table]
-        if section_img:
-            img = Image(section_img)
-            img.hAlign = "CENTER"
-            max_w = doc.width * 0.45
-            if img.drawWidth > max_w:
-                scale = max_w / img.drawWidth
-                img.drawWidth *= scale
-                img.drawHeight *= scale
-            elems.append(img)
-            data_table = Table([[elems[0], elems[1]]], colWidths=[doc.width*0.55, doc.width*0.45])
-            data_table.setStyle(TableStyle([("VALIGN", (0,0), (-1,-1), "TOP")]))
-            story.append(data_table)
-        else:
-            story.append(table)
+        story.append(table)
         story.append(Spacer(1, 12))
 
     if calc_sections:
