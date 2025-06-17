@@ -75,6 +75,7 @@ def generate_memoria_pdf(title, data_section, calc_sections, result_section, pat
         table = Table(data_section, hAlign="LEFT", style=TableStyle([
             ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("ALIGN", (0, 0), (-1, -1), "LEFT"),
             ("FONTNAME", (0, 0), (-1, -1), "Arial"),
             ("FONTSIZE", (0, 0), (-1, -1), 11),
         ]))
