@@ -10,3 +10,4 @@ pylatex
 Pillow
 reportlab
 sympy
+Jinja2

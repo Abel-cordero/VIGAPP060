@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import (
 )
 import re
 
-from ..pdf_report import generate_memoria_pdf
+from pdf_engine.latex_renderer import render_report
 from ..models.utils import formula_html
 
 
@@ -141,15 +141,35 @@ class MemoriaWindow(QMainWindow):
 
     def _generate(self, path: str):
         """Internal helper that builds the PDF using stored data."""
-        generate_memoria_pdf(
-            self.windowTitle(),
-            self.data.get("data_section", []),
-            self.data.get("calc_sections", []),
-            self.data.get("results", []),
-            path,
-            images=self.data.get("images", []),
-            section_img=self.data.get("section_img"),
-        )
+        data = {
+            "data_section": self.data.get("data_section", []),
+            "calc_sections": self.data.get("calc_sections", []),
+            "results": self.data.get("results", []),
+            "images": self.data.get("images", []),
+            "section_img": self.data.get("section_img"),
+            "formula_images": [
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "..",
+                    "..",
+                    "resources",
+                    "flexion",
+                    "figures",
+                    "peralte.png",
+                ),
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "..",
+                    "..",
+                    "resources",
+                    "flexion",
+                    "figures",
+                    "pb.png",
+                ),
+            ],
+        }
+
+        render_report(self.windowTitle(), data, path)
 
     def edit_title(self):
         """Allow user to manually edit the window and header title."""
