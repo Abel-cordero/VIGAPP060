@@ -4,6 +4,13 @@ Esta aplicación implementa una interfaz gráfica para el cálculo y diseño de 
 
 Para más detalles de configuración revisa [DESARROLLO.md](DESARROLLO.md).
 
+## Requisitos adicionales
+
+Para generar los reportes en PDF se necesita tener instalada una distribución de
+LaTeX que provea el ejecutable `pdflatex`. En Windows se recomienda instalar
+[MiKTeX](https://miktex.org/) y asegurarse de que `pdflatex` esté disponible en
+la variable de entorno `PATH`.
+
 # Alcance:
 
 INSTRUCCIÓN PARA GENERAR UNA APLICACIÓN EN PYTHON – DISEÑO DE VIGAS SEGÚN NTP E.060 (PERÚ)

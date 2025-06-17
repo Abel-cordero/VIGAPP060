@@ -99,8 +99,14 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-        except Exception as exc:  # pragma: no cover - pdflatex might not be present during tests
-            raise RuntimeError("pdflatex execution failed") from exc
+        except FileNotFoundError as exc:  # pragma: no cover - pdflatex not installed
+            raise RuntimeError(
+                "pdflatex executable not found. Please ensure LaTeX is installed and in PATH."
+            ) from exc
+        except subprocess.CalledProcessError as exc:  # pragma: no cover - LaTeX error
+            output = (exc.stdout or b"") + (exc.stderr or b"")
+            output = output.decode(errors="ignore")
+            raise RuntimeError(f"pdflatex execution failed:\n{output}") from exc
 
         pdf_src = os.path.join(tmpdir, "report.pdf")
         os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
