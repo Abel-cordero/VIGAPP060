@@ -589,6 +589,8 @@ class DesignWindow(QMainWindow):
         if title is None or data is None:
             return
         self.mem_win = MemoriaWindow(title, data)
+        # Provide section widget so the PDF can embed its snapshot
+        self.mem_win.widget_seccion = self.canvas_sec
         self.mem_win.show()
 
     def _build_memoria(self):
