@@ -3,3 +3,8 @@
 2025-06-17 19:45:07,748-0500 INFO  miktex-pdftex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
 2025-06-17 19:45:07,749-0500 INFO  miktex-pdftex - allowing known shell commands
 2025-06-17 19:45:12,388-0500 INFO  miktex-pdftex - this process (11144) finishes with exit code 0
+2025-06-17 19:52:10,348-0500 INFO  miktex-pdftex - this process (26612) started by miktex-makefmt in directory C:\Users\PC\AppData\Local\Temp\mik91281 with command line: miktex-pdftex.exe --miktex-disable-maintenance --miktex-disable-diagnose --interaction=nonstopmode --initialize --halt-on-error --alias=pdflatex --job-name=pdflatex -tcx=cp227.tcx --enable-etex pdflatex.ini
+2025-06-17 19:52:10,348-0500 INFO  miktex-pdftex - running on Windows 10.0.26100
+2025-06-17 19:52:10,348-0500 INFO  miktex-pdftex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-17 19:52:10,350-0500 INFO  miktex-pdftex - allowing known shell commands
+2025-06-17 19:52:14,986-0500 INFO  miktex-pdftex - this process (26612) finishes with exit code 0

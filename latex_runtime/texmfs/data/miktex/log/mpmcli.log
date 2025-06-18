@@ -46,3 +46,9 @@
 2025-06-17 19:51:20,755-0500 INFO  mpmcli - running: miktex packages install tcolorbox
 2025-06-17 19:51:20,755-0500 INFO  mpmcli.core - start process: miktex packages install tcolorbox
 2025-06-17 19:51:21,472-0500 INFO  mpmcli - this process (21680) finishes with exit code 0
+2025-06-17 19:52:44,489-0500 INFO  mpmcli - this is mpmcli 4.5 (MiKTeX 25.4 Portable)
+2025-06-17 19:52:44,489-0500 INFO  mpmcli - this process (29496) started by 'powershell' with command line: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\mpm.exe" --install=titlesec
+2025-06-17 19:52:44,489-0500 INFO  mpmcli - Operating on the private (per-user) MiKTeX setup
+2025-06-17 19:52:44,489-0500 INFO  mpmcli - running: miktex packages install titlesec
+2025-06-17 19:52:44,489-0500 INFO  mpmcli.core - start process: miktex packages install titlesec
+2025-06-17 19:52:47,822-0500 INFO  mpmcli - this process (29496) finishes with exit code 0

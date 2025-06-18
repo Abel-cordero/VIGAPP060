@@ -231,3 +231,64 @@
 2025-06-17 19:51:32,745-0500 WARN  miktex.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
 2025-06-17 19:51:32,774-0500 INFO  miktex - Refreshing FNDB for MPM...
 2025-06-17 19:51:33,952-0500 INFO  miktex - this process (12624) finishes with exit code 0
+2025-06-17 19:52:09,913-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-17 19:52:09,913-0500 INFO  miktex - this process (26692) started by pdflatex in directory C:\Users\PC\AppData\Local\Temp\tmpakzmxx5b with command line: miktex formats build pdflatex --engine pdftex
+2025-06-17 19:52:09,914-0500 INFO  miktex - Building format 'pdflatex' with engine 'pdftex'...
+2025-06-17 19:52:09,914-0500 INFO  miktex.core - start process: miktex-makefmt.exe --engine=pdftex --dest-name=pdflatex --no-dump pdflatex.ini --engine-option=-tcx=cp227.tcx --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-17 19:52:15,065-0500 INFO  miktex - this process (26692) finishes with exit code 0
+2025-06-17 19:52:44,659-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-17 19:52:44,660-0500 INFO  miktex - this process (22824) started by mpm in directory C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: miktex packages install titlesec
+2025-06-17 19:52:45,114-0500 WARN  miktex.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-17 19:52:45,114-0500 WARN  miktex.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-17 19:52:45,114-0500 WARN  miktex.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-17 19:52:45,115-0500 WARN  miktex.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-17 19:52:45,147-0500 INFO  miktex.packagemanager - going to download https://api2.miktex.org/repositories?&releaseState=Stable&orderBy=ranking&take=1&onlySecure=true
+2025-06-17 19:52:45,774-0500 INFO  miktex - starting package maintenance...
+2025-06-17 19:52:45,774-0500 INFO  miktex - installation directory: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install"
+2025-06-17 19:52:45,774-0500 INFO  miktex - package repository: https://mirrors.ucr.ac.cr/CTAN/systems/win32/miktex/tm/packages/
+2025-06-17 19:52:45,945-0500 INFO  miktex - package repository digest: 4e45ccf8138cdb971b961c394e59a055
+2025-06-17 19:52:45,945-0500 INFO  miktex - going to download 20053 bytes
+2025-06-17 19:52:45,945-0500 INFO  miktex - going to install 4 file(s) (1 package(s))
+2025-06-17 19:52:46,262-0500 INFO  miktex.packagemanager - installing package titlesec
+2025-06-17 19:52:46,262-0500 INFO  miktex - Installing package titlesec...
+2025-06-17 19:52:46,263-0500 INFO  miktex - downloading https://mirrors.ucr.ac.cr/CTAN/systems/win32/miktex/tm/packages/titlesec.tar.lzma...
+2025-06-17 19:52:46,263-0500 INFO  miktex.packagemanager - going to download https://mirrors.ucr.ac.cr/CTAN/systems/win32/miktex/tm/packages/titlesec.tar.lzma
+2025-06-17 19:52:46,962-0500 INFO  miktex - 0.02 MB, 0.23 Mbit/s
+2025-06-17 19:52:46,969-0500 INFO  miktex - extracting files from titlesec.tar.lzma...
+2025-06-17 19:52:47,285-0500 INFO  miktex.core - start process: miktex fontmaps configure
+2025-06-17 19:52:47,448-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-17 19:52:47,448-0500 INFO  miktex - this process (9704) started by miktex in directory C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: miktex fontmaps configure
+2025-06-17 19:52:47,449-0500 INFO  miktex - Parsing configuration file "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex/config\updmap.cfg"...
+2025-06-17 19:52:47,506-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvipdfmx\kanjix.map"...
+2025-06-17 19:52:47,506-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\builtin35.map"...
+2025-06-17 19:52:47,507-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\download35.map"...
+2025-06-17 19:52:47,508-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\ps2pk.map"...
+2025-06-17 19:52:47,511-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\psfonts_pk.map"...
+2025-06-17 19:52:47,514-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\psfonts_t1.map"...
+2025-06-17 19:52:47,518-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\pdftex\pdftex_dl14.map"...
+2025-06-17 19:52:47,521-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\pdftex\pdftex_ndl14.map"...
+2025-06-17 19:52:47,524-0500 INFO  miktex - Copying "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\psfonts_t1.map"
+2025-06-17 19:52:47,524-0500 INFO  miktex -      to "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\psfonts.map"...
+2025-06-17 19:52:47,525-0500 INFO  miktex - Copying "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\pdftex\pdftex_dl14.map"
+2025-06-17 19:52:47,525-0500 INFO  miktex -      to "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\pdftex\pdftex.map"...
+2025-06-17 19:52:47,528-0500 INFO  miktex - running: miktex-fc-cache --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-17 19:52:47,528-0500 INFO  miktex.core - start process: miktex-fc-cache --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-17 19:52:47,770-0500 WARN  miktex.core - still open: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\fontconfig/config\fonts.conf.in"
+2025-06-17 19:52:47,770-0500 WARN  miktex.core - still open: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/config\fontconfig\config\fonts.conf"
+2025-06-17 19:52:47,770-0500 INFO  miktex - this process (9704) finishes with exit code 0
+2025-06-17 19:52:47,796-0500 INFO  miktex - this process (22824) finishes with exit code 0
+2025-06-17 19:52:52,108-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-17 19:52:52,108-0500 INFO  miktex - this process (34576) started by initexmf in directory C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: miktex fndb refresh
+2025-06-17 19:52:52,142-0500 INFO  miktex - Creating FNDB for common root directory ("C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\config")...
+2025-06-17 19:52:52,145-0500 ERROR miktex.core - The process cannot access the file because it is being used by another process.
+
+2025-06-17 19:52:52,145-0500 ERROR miktex.core - Function: DeleteFileW
+2025-06-17 19:52:52,145-0500 ERROR miktex.core - Result: 32
+2025-06-17 19:52:52,145-0500 ERROR miktex.core - Data: path="C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\config\miktex\data\le\texmf.fndb-5"
+2025-06-17 19:52:52,145-0500 ERROR miktex.core - Source: Libraries\MiKTeX\Core\File\win\winFile.cpp:320
+2025-06-17 19:52:52,146-0500 FATAL miktex - Windows API error 32: The process cannot access the file because it is being used by another process.
+
+2025-06-17 19:52:52,146-0500 FATAL miktex - Info: path="C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\config\miktex\data\le\texmf.fndb-5"
+2025-06-17 19:52:52,146-0500 FATAL miktex - Source: Libraries\MiKTeX\Core\File\win\winFile.cpp
+2025-06-17 19:52:52,146-0500 FATAL miktex - Line: 320
+2025-06-17 19:52:52,146-0500 INFO  miktex - this process (34576) finishes with exit code 1

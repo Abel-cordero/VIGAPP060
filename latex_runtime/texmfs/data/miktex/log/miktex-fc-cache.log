@@ -7,3 +7,6 @@
 2025-06-17 19:51:18,251-0500 INFO  miktex-fc-cache - this process (11188) started by miktex in directory C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: miktex-fc-cache --miktex-disable-maintenance --miktex-disable-diagnose
 2025-06-17 19:51:18,251-0500 INFO  miktex-fc-cache - running on Windows 10.0.26100
 2025-06-17 19:51:18,281-0500 INFO  miktex-fc-cache - this process (11188) finishes with exit code 0
+2025-06-17 19:52:47,700-0500 INFO  miktex-fc-cache - this process (31188) started by miktex in directory C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: miktex-fc-cache --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-17 19:52:47,700-0500 INFO  miktex-fc-cache - running on Windows 10.0.26100
+2025-06-17 19:52:47,734-0500 INFO  miktex-fc-cache - this process (31188) finishes with exit code 0

@@ -10,3 +10,15 @@
 2025-06-17 19:45:12,475-0500 INFO  miktex-makefmt - this process (33648) finishes with exit code 0
 2025-06-17 19:45:12,475-0500 WARN  miktex-makefmt.core - still open: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/config\tex\generic\config\pdftexconfig.tex"
 2025-06-17 19:45:12,475-0500 WARN  miktex-makefmt.core - still open: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\tex/generic/config\pdftexconfig.tex.in"
+2025-06-17 19:52:10,071-0500 INFO  miktex-makefmt - this process (32852) started by miktex in directory C:\Users\PC\AppData\Local\Temp\tmpakzmxx5b with command line: miktex-makefmt.exe --engine=pdftex --dest-name=pdflatex --no-dump pdflatex.ini --engine-option=-tcx=cp227.tcx --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-17 19:52:10,072-0500 INFO  miktex-makefmt - running on Windows 10.0.26100
+2025-06-17 19:52:10,073-0500 INFO  makefmt - found input file: C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\tex\latex\tex-ini-files\pdflatex.ini
+2025-06-17 19:52:10,073-0500 INFO  makefmt - Creating the pdflatex format file...
+2025-06-17 19:52:10,076-0500 INFO  makefmt - Running miktex-pdftex.exe...
+2025-06-17 19:52:10,076-0500 INFO  makefmt - running: miktex-pdftex.exe --miktex-disable-maintenance --miktex-disable-diagnose --interaction=nonstopmode --initialize --halt-on-error --alias=pdflatex --job-name=pdflatex -tcx=cp227.tcx --enable-etex pdflatex.ini
+2025-06-17 19:52:10,076-0500 INFO  miktex-makefmt.core - start process: miktex-pdftex.exe --miktex-disable-maintenance --miktex-disable-diagnose --interaction=nonstopmode --initialize --halt-on-error --alias=pdflatex --job-name=pdflatex -tcx=cp227.tcx --enable-etex pdflatex.ini
+2025-06-17 19:52:15,026-0500 INFO  makefmt - Installing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\miktex\log\makefmt\pdflatex\2025-06-17-19-52-10.log"...
+2025-06-17 19:52:15,029-0500 INFO  makefmt - Installing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\miktex/data/le/pdftex\pdflatex.fmt"...
+2025-06-17 19:52:15,037-0500 INFO  miktex-makefmt - this process (32852) finishes with exit code 0
+2025-06-17 19:52:15,037-0500 WARN  miktex-makefmt.core - still open: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/config\tex\generic\config\pdftexconfig.tex"
+2025-06-17 19:52:15,037-0500 WARN  miktex-makefmt.core - still open: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\tex/generic/config\pdftexconfig.tex.in"

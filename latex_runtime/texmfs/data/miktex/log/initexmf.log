@@ -21,3 +21,14 @@
 2025-06-17 19:51:31,540-0500 INFO  initexmf - running: miktex fndb refresh
 2025-06-17 19:51:31,541-0500 INFO  initexmf.core - start process: miktex fndb refresh
 2025-06-17 19:51:33,956-0500 INFO  initexmf - this process (31728) finishes with exit code 0
+2025-06-17 19:52:51,929-0500 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4 Portable)
+2025-06-17 19:52:51,929-0500 INFO  initexmf - this process (16256) started by powershell in directory C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\initexmf.exe" --update-fndb
+2025-06-17 19:52:51,929-0500 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2025-06-17 19:52:51,930-0500 INFO  initexmf - running: miktex fndb refresh
+2025-06-17 19:52:51,930-0500 INFO  initexmf.core - start process: miktex fndb refresh
+2025-06-17 19:52:52,155-0500 ERROR initexmf - sub-process error output has been saved to 'C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\data\miktex\log\miktex_2025-06-17-195252.out'
+2025-06-17 19:52:52,156-0500 FATAL initexmf - Windows API error 32: The process cannot access the file because it is being used by another process.
+2025-06-17 19:52:52,156-0500 FATAL initexmf - Info: path="C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\config\miktex\data\le\texmf.fndb-5"
+2025-06-17 19:52:52,156-0500 FATAL initexmf - Source: Libraries\MiKTeX\Core\File\win\winFile.cpp
+2025-06-17 19:52:52,156-0500 FATAL initexmf - Line: 320
+2025-06-17 19:52:52,166-0500 INFO  initexmf - this process (16256) finishes with exit code 1
