@@ -324,10 +324,13 @@ class MenuWindow(QMainWindow):
                 show_window=False,
                 menu_callback=self.show_menu,
             )
+            # Attach section widget for automatic capture on export
+            self.mem_page.widget_seccion = self.design_page.canvas_sec
             self.stacked.addWidget(self.mem_page)
         else:
             self.mem_page.setWindowTitle(title)
             self.mem_page.set_data(data)
+            self.mem_page.widget_seccion = self.design_page.canvas_sec
         self.stacked.setCurrentWidget(self.mem_page)
 
     def show_design(self):
