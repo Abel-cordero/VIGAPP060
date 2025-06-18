@@ -28,10 +28,10 @@ fy & {{ fy|default('')|escape }} MPa \\
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
-{% if section_img %}
+{% if section_img and section_img.strip() %}
 \begin{figure}[H]
 \centering
-\includegraphics[height=5cm]{"{{ section_img|escape }}"}
+\includegraphics[height=5cm]{ {{- section_img|escape -}} }
 \end{figure}
 {% endif %}
 \end{minipage}
@@ -46,10 +46,10 @@ fy & {{ fy|default('')|escape }} MPa \\
 
 Valor calculado: \( d = {{ d }}\,\text{m} \)
 
-{% if peralte_img %}
+{% if peralte_img and peralte_img.strip() %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{"{{ peralte_img|escape }}"}
+\includegraphics[width=0.5\textwidth]{ {{- peralte_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -63,10 +63,10 @@ Valor calculado: \( d = {{ d }}\,\text{m} \)
 
 Valor calculado: \( \beta_1 = {{ b1 }} \)
 
-{% if b1_img %}
+{% if b1_img and b1_img.strip() %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{"{{ b1_img|escape }}"}
+\includegraphics[width=0.5\textwidth]{ {{- b1_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -80,10 +80,10 @@ Valor calculado: \( \beta_1 = {{ b1 }} \)
 
 Valor calculado: \( P_{bal} = {{ pbal }} \)
 
-{% if pbal_img %}
+{% if pbal_img and pbal_img.strip() %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{"{{ pbal_img|escape }}"}
+\includegraphics[width=0.5\textwidth]{ {{- pbal_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -97,10 +97,10 @@ Valor calculado: \( P_{bal} = {{ pbal }} \)
 
 Valor calculado: \( \rho_{bal} = {{ rhobal }} \)
 
-{% if rhobal_img %}
+{% if rhobal_img and rhobal_img.strip() %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{"{{ rhobal_img|escape }}"}
+\includegraphics[width=0.5\textwidth]{ {{- rhobal_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -114,10 +114,10 @@ Valor calculado: \( \rho_{bal} = {{ rhobal }} \)
 
 Valor calculado: \( P_{max} = {{ pmax }} \)
 
-{% if pmax_img %}
+{% if pmax_img and pmax_img.strip() %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{"{{ pmax_img|escape }}"}
+\includegraphics[width=0.5\textwidth]{ {{- pmax_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -131,10 +131,10 @@ Valor calculado: \( P_{max} = {{ pmax }} \)
 
 Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }} \)
 
-{% if asmin_img %}
+{% if asmin_img and asmin_img.strip() %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{"{{ asmin_img|escape }}"}
+\includegraphics[width=0.5\textwidth]{ {{- asmin_img|escape -}} }
 \end{figure}
 {% endif %}
 
@@ -148,10 +148,10 @@ Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }} \)
 
 Valor calculado: \( A_{s}^{\text{max}} = {{ as_max }} \)
 
-{% if asmax_img %}
+{% if asmax_img and asmax_img.strip() %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{"{{ asmax_img|escape }}"}
+\includegraphics[width=0.5\textwidth]{ {{- asmax_img|escape -}} }
 \end{figure}
 {% endif %}
 

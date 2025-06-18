@@ -28,16 +28,18 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
     context.setdefault("formula_images", [])
     context["title"] = title.upper()
 
-    # Corregir rutas de imágenes para LaTeX (escapar espacios)
+    # Validar rutas de imágenes: eliminar las vacías o inválidas, y estandarizar separadores
     for key in [
         "section_img", "peralte_img", "b1_img", "pbal_img",
         "rhobal_img", "pmax_img", "asmin_img", "asmax_img"
     ]:
-        if key in context and context[key]:
-            # Convertir \ a / y ENCERRAR ENTRE COMILLAS
-            ruta_segura = context[key].replace("\\", "/")
-            context[key] = f'"{ruta_segura}"'
+        value = context.get(key)
+        if not value or not value.strip():
+            context[key] = None
+        else:
+            context[key] = value.replace("\\", "/")
 
+    # Renderizar .tex
     tex_source = template.render(context)
 
     # Guardar .tex generado para depuración
