@@ -1,0 +1,3 @@
+2025-06-17 19:24:11,713-0500 INFO  miktex-fc-cache - this process (12784) started by miktex in directory C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64 with command line: miktex-fc-cache --verbose --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-17 19:24:11,713-0500 INFO  miktex-fc-cache - running on Windows 10.0.26100
+2025-06-17 19:24:12,956-0500 INFO  miktex-fc-cache - this process (12784) finishes with exit code 0

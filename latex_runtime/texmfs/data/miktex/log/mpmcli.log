@@ -1,0 +1,6 @@
+2025-06-17 19:24:08,085-0500 INFO  mpmcli - this is mpmcli 4.5 (MiKTeX 25.4 Portable)
+2025-06-17 19:24:08,085-0500 INFO  mpmcli - this process (24584) started by 'miktexsetup_standalone' with command line: mpm --register-components --verbose
+2025-06-17 19:24:08,085-0500 INFO  mpmcli - Operating on the private (per-user) MiKTeX setup
+2025-06-17 19:24:08,117-0500 WARN  mpmcli.core - still open: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\fontconfig\config\fonts.conf.in"
+2025-06-17 19:24:08,118-0500 WARN  mpmcli.core - still open: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/config\fontconfig\config\fonts.conf"
+2025-06-17 19:24:08,118-0500 INFO  mpmcli - this process (24584) finishes with exit code 0

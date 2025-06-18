@@ -43,7 +43,6 @@ def main():
 
 
     app.setStyle("Fusion")
-
     if ACTIVATION_ENABLED and not run_activation():
         return
 

@@ -1,0 +1,82 @@
+2025-06-17 19:24:07,894-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-17 19:24:07,894-0500 INFO  miktex - this process (19700) started by miktexsetup_standalone in directory C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64 with command line: miktex --disable-installer --verbose fndb remove
+2025-06-17 19:24:07,894-0500 INFO  miktex - Removing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\config\miktex\data\le\texmf.fndb-5"...
+2025-06-17 19:24:07,894-0500 ERROR miktex.core - The system cannot find the path specified.
+
+2025-06-17 19:24:07,894-0500 ERROR miktex.core - Function: GetFileAttributesW
+2025-06-17 19:24:07,894-0500 ERROR miktex.core - Result: 3
+2025-06-17 19:24:07,895-0500 ERROR miktex.core - Data: path="C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/config\miktex/data/le\texmf.fndb-5"
+2025-06-17 19:24:07,895-0500 ERROR miktex.core - Source: Libraries\MiKTeX\Core\File\win\winFile.cpp:132
+2025-06-17 19:24:07,895-0500 FATAL miktex - Windows API error 3: The system cannot find the path specified.
+
+2025-06-17 19:24:07,895-0500 FATAL miktex - Info: path="C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/config\miktex/data/le\texmf.fndb-5"
+2025-06-17 19:24:07,895-0500 FATAL miktex - Source: Libraries\MiKTeX\Core\File\win\winFile.cpp
+2025-06-17 19:24:07,895-0500 FATAL miktex - Line: 132
+2025-06-17 19:24:07,895-0500 INFO  miktex - this process (19700) finishes with exit code 1
+2025-06-17 19:24:08,158-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-17 19:24:08,158-0500 INFO  miktex - this process (14548) started by miktexsetup_standalone in directory C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64 with command line: miktex --disable-installer --verbose fndb refresh
+2025-06-17 19:24:08,158-0500 INFO  miktex - Creating FNDB for common root directory ("C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\config")...
+2025-06-17 19:24:08,165-0500 INFO  miktex - Creating FNDB for common root directory ("C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\data")...
+2025-06-17 19:24:08,169-0500 INFO  miktex - Creating FNDB for common root directory ("C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install")...
+2025-06-17 19:24:09,126-0500 WARN  miktex.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-17 19:24:09,126-0500 WARN  miktex.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-17 19:24:09,126-0500 WARN  miktex.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-17 19:24:09,128-0500 WARN  miktex.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-17 19:24:09,159-0500 INFO  miktex - Refreshing FNDB for MPM...
+2025-06-17 19:24:10,346-0500 INFO  miktex - this process (14548) finishes with exit code 0
+2025-06-17 19:24:10,515-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-17 19:24:10,515-0500 INFO  miktex - this process (10236) started by miktexsetup_standalone in directory C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64 with command line: miktex --disable-installer --verbose links install --force
+2025-06-17 19:24:10,516-0500 INFO  miktex - Installing links in target directory "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64"...
+2025-06-17 19:24:10,518-0500 WARN  miktex - "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex/bin/x64\miktex-eptex.exe": the link target does not exist
+2025-06-17 19:24:10,533-0500 WARN  miktex - eptex: engine 'eptex' not found
+2025-06-17 19:24:10,534-0500 WARN  miktex - platex: engine 'eptex' not found
+2025-06-17 19:24:10,534-0500 WARN  miktex - platex-dev: engine 'eptex' not found
+2025-06-17 19:24:11,125-0500 INFO  miktex - this process (10236) finishes with exit code 0
+2025-06-17 19:24:11,264-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-17 19:24:11,264-0500 INFO  miktex - this process (15476) started by miktexsetup_standalone in directory C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64 with command line: miktex --disable-installer --verbose fontmaps configure
+2025-06-17 19:24:11,264-0500 INFO  miktex - Parsing configuration file "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex/config\updmap.cfg"...
+2025-06-17 19:24:11,399-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvipdfmx\kanjix.map"...
+2025-06-17 19:24:11,401-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\builtin35.map"...
+2025-06-17 19:24:11,403-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\download35.map"...
+2025-06-17 19:24:11,406-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\ps2pk.map"...
+2025-06-17 19:24:11,412-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\psfonts_pk.map"...
+2025-06-17 19:24:11,416-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\psfonts_t1.map"...
+2025-06-17 19:24:11,421-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\pdftex\pdftex_dl14.map"...
+2025-06-17 19:24:11,426-0500 INFO  miktex - Writing "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\pdftex\pdftex_ndl14.map"...
+2025-06-17 19:24:11,432-0500 INFO  miktex - Copying "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\psfonts_t1.map"
+2025-06-17 19:24:11,432-0500 INFO  miktex -      to "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\dvips\psfonts.map"...
+2025-06-17 19:24:11,434-0500 INFO  miktex - Copying "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\pdftex\pdftex_dl14.map"
+2025-06-17 19:24:11,434-0500 INFO  miktex -      to "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/data\fonts\map\pdftex\pdftex.map"...
+2025-06-17 19:24:11,439-0500 INFO  miktex - running: miktex-fc-cache --verbose --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-17 19:24:11,439-0500 INFO  miktex.core - start process: miktex-fc-cache --verbose --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-17 19:24:12,945-0500 INFO  miktex - C:/Users/PC/AppData/Local/Microsoft/Windows/Fonts: skipping, existing cache is valid: 0 fonts, 0 dirs
+2025-06-17 19:24:12,945-0500 INFO  miktex - C:/WINDOWS/Fonts: skipping, existing cache is valid: 1081 fonts, 0 dirs
+2025-06-17 19:24:12,946-0500 INFO  miktex - C:/Users/PC/Desktop/LOCAL REPOSITORIE/VIGA_FINAL/latex_runtime/texmfs/install/fonts/opentype: skipping, existing cache is valid: 0 fonts, 1 dirs
+2025-06-17 19:24:12,946-0500 INFO  miktex - C:/Users/PC/Desktop/LOCAL REPOSITORIE/VIGA_FINAL/latex_runtime/texmfs/install/fonts/opentype/public: skipping, existing cache is valid: 0 fonts, 1 dirs
+2025-06-17 19:24:12,951-0500 INFO  miktex - C:/Users/PC/Desktop/LOCAL REPOSITORIE/VIGA_FINAL/latex_runtime/texmfs/install/fonts/opentype/public/lm: skipping, existing cache is valid: 72 fonts, 0 dirs
+2025-06-17 19:24:12,951-0500 INFO  miktex - C:/Users/PC/.local/share/fonts: skipping, no such directory
+2025-06-17 19:24:12,951-0500 INFO  miktex - C:/Users/PC/.fonts: skipping, no such directory
+2025-06-17 19:24:12,951-0500 INFO  miktex - C:/Users/PC/Desktop/LOCAL REPOSITORIE/VIGA_FINAL/latex_runtime/texmfs/install/fonts/opentype/public: skipping, looped directory detected
+2025-06-17 19:24:12,990-0500 INFO  miktex - C:/Users/PC/Desktop/LOCAL REPOSITORIE/VIGA_FINAL/latex_runtime/texmfs/install/fonts/opentype/public/lm: skipping, looped directory detected
+2025-06-17 19:24:12,990-0500 INFO  miktex - C:/Users/PC/Desktop/LOCAL REPOSITORIE/VIGA_FINAL/latex_runtime/texmfs/data/fontconfig/cache: cleaning cache directory
+2025-06-17 19:24:12,990-0500 INFO  miktex - C:/Users/PC/.cache/fontconfig: not cleaning non-existent cache directory
+2025-06-17 19:24:12,990-0500 INFO  miktex - C:/Users/PC/.fontconfig: not cleaning non-existent cache directory
+2025-06-17 19:24:12,991-0500 INFO  miktex - miktex-fc-cache: succeeded
+2025-06-17 19:24:12,994-0500 WARN  miktex.core - still open: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\fontconfig/config\fonts.conf.in"
+2025-06-17 19:24:12,994-0500 WARN  miktex.core - still open: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/config\fontconfig\config\fonts.conf"
+2025-06-17 19:24:12,994-0500 INFO  miktex - this process (15476) finishes with exit code 0
+2025-06-17 19:24:13,124-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-17 19:24:13,124-0500 INFO  miktex - this process (31348) started by miktexsetup_standalone in directory C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64 with command line: miktex --disable-installer --verbose languages configure
+2025-06-17 19:24:13,124-0500 INFO  miktex - Creating language.dat, language.dat.lua and language.def...
+2025-06-17 19:24:13,175-0500 INFO  miktex - this process (31348) finishes with exit code 0
+2025-06-17 19:24:13,671-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-17 19:24:13,671-0500 INFO  miktex - this process (33816) started by miktexsetup_standalone in directory C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64 with command line: miktex --disable-installer --verbose fndb refresh
+2025-06-17 19:24:13,705-0500 INFO  miktex - Creating FNDB for common root directory ("C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\config")...
+2025-06-17 19:24:13,715-0500 INFO  miktex - Creating FNDB for common root directory ("C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\data")...
+2025-06-17 19:24:13,721-0500 INFO  miktex - Creating FNDB for common root directory ("C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install")...
+2025-06-17 19:24:14,666-0500 WARN  miktex.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-17 19:24:14,666-0500 WARN  miktex.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-17 19:24:14,666-0500 WARN  miktex.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-17 19:24:14,667-0500 WARN  miktex.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-17 19:24:14,700-0500 INFO  miktex - Refreshing FNDB for MPM...
+2025-06-17 19:24:15,875-0500 INFO  miktex - this process (33816) finishes with exit code 0

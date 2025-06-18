@@ -1,0 +1,17 @@
+2025-06-17 19:24:13,321-0500 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4 Portable)
+2025-06-17 19:24:13,321-0500 INFO  initexmf - this process (25084) started by miktexsetup_standalone in directory C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64 with command line: initexmf --default-paper-size=A4 --disable-installer --verbose
+2025-06-17 19:24:13,321-0500 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2025-06-17 19:24:13,360-0500 INFO  initexmf - this process (25084) finishes with exit code 0
+2025-06-17 19:24:13,488-0500 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4 Portable)
+2025-06-17 19:24:13,488-0500 INFO  initexmf - this process (18964) started by miktexsetup_standalone in directory C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64 with command line: initexmf --set-config-value=[MPM]AutoInstall=2 --disable-installer --verbose
+2025-06-17 19:24:13,489-0500 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2025-06-17 19:24:13,489-0500 INFO  initexmf - Setting config value: [MPM]AutoInstall=2
+2025-06-17 19:24:13,530-0500 INFO  initexmf - this process (18964) finishes with exit code 0
+2025-06-17 19:24:16,001-0500 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4 Portable)
+2025-06-17 19:24:16,001-0500 INFO  initexmf - this process (34616) started by miktexsetup_standalone in directory C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64 with command line: initexmf --report --disable-installer --verbose
+2025-06-17 19:24:16,001-0500 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2025-06-17 19:24:16,003-0500 ERROR initexmf.core - Something is wrong with the PATH:
+2025-06-17 19:24:16,003-0500 ERROR initexmf.core - C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Zero Install;C:\Program Files\Git\cmd;C:\Users\PC\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\PC\AppData\Local\Programs\Python\Python313\;C:\Users\PC\AppData\Local\Microsoft\WindowsApps;C:\Users\PC\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\PC\AppData\Local\gitkraken\bin;C:\Users\PC\AppData\Local\GitHubDesktop\bin
+2025-06-17 19:24:16,007-0500 ERROR initexmf.core - Something is wrong with the PATH:
+2025-06-17 19:24:16,007-0500 ERROR initexmf.core - C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Zero Install;C:\Program Files\Git\cmd;C:\Users\PC\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\PC\AppData\Local\Programs\Python\Python313\;C:\Users\PC\AppData\Local\Microsoft\WindowsApps;C:\Users\PC\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\PC\AppData\Local\gitkraken\bin;C:\Users\PC\AppData\Local\GitHubDesktop\bin
+2025-06-17 19:24:16,049-0500 INFO  initexmf - this process (34616) finishes with exit code 0

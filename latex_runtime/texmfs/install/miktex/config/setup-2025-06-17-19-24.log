@@ -1,0 +1,29 @@
+
+
+MiKTeX Setup Utility (Standalone) 5.5.0+1763023 Report
+
+Date: Tuesday, June 17, 2025
+Time: 19:24:07
+OS version: Windows 10.0.26100
+SystemAdmin: false
+SharedSetup: false
+Setup path: C:\Users\PC\Downloads\miktexsetup-5.5.0+1763023-x64\miktexsetup_standalone.exe
+UserRoots: <none specified>
+UserData: <none specified>
+UserConfig: <none specified>
+CommonRoots: <none specified>
+CommonData: <none specified>
+CommonConfig: <none specified>
+Installation: C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/install
+initexmf --principal=setup "--portable=C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs/install" --disable-installer --verbose:
+miktex --disable-installer --verbose fndb remove:
+Warning: Windows API error 3: The system cannot find the path specified.
+mpm --register-components --verbose:
+miktex --disable-installer --verbose fndb refresh:
+miktex --disable-installer --verbose links install --force:
+miktex --disable-installer --verbose fontmaps configure:
+miktex --disable-installer --verbose languages configure:
+initexmf --default-paper-size=A4 --disable-installer --verbose:
+initexmf --set-config-value=[MPM]AutoInstall=2 --disable-installer --verbose:
+miktex --disable-installer --verbose fndb refresh:
+initexmf --report --disable-installer --verbose:
