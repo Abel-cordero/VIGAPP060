@@ -11,15 +11,14 @@ TEMPLATE_NAME = "reporte_flexion.tex"
 def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_diseño_flexion.pdf") -> str:
     """Renderiza una plantilla .tex y compila un PDF usando MiKTeX portable."""
 
-    # Ruta absoluta al pdflatex portable (construida desde este archivo)
+    # Ruta base segura al proyecto (sube 2 niveles desde /pdf_engine/)
     base_dir = Path(__file__).resolve().parents[2]
     pdflatex_path = base_dir / "latex_runtime" / "texmfs" / "install" / "miktex" / "bin" / "x64" / "pdflatex.exe"
-    pdflatex_path = str(pdflatex_path)
 
-    if not os.path.exists(pdflatex_path):
+    if not pdflatex_path.exists():
         raise FileNotFoundError("No se encontró pdflatex en latex_runtime. Verifica que MiKTeX portátil esté instalado correctamente.")
 
-    # Cargar plantilla LaTeX con Jinja2
+    # Preparar entorno Jinja2
     env = Environment(
         loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")),
         autoescape=False,
@@ -30,7 +29,12 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
     context["title"] = title.upper()
     tex_source = template.render(context)
 
-    # Compilar el .tex temporalmente
+    # Guardar .tex generado para depuración (si falla la compilación)
+    debug_tex = base_dir / "debug_report.tex"
+    with open(debug_tex, "w", encoding="utf-8") as f_debug:
+        f_debug.write(tex_source)
+
+    # Compilar con pdflatex portátil en carpeta temporal
     with tempfile.TemporaryDirectory() as tmpdir:
         tex_file = os.path.join(tmpdir, "report.tex")
         with open(tex_file, "w", encoding="utf-8") as fh:
@@ -38,14 +42,14 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
 
         try:
             subprocess.run(
-                [pdflatex_path, "-interaction=nonstopmode", tex_file],
+                [str(pdflatex_path), "-interaction=nonstopmode", tex_file],
                 cwd=tmpdir,
                 check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
         except Exception as exc:
-            raise RuntimeError("La compilación del PDF falló. Revisa el contenido del .tex.") from exc
+            raise RuntimeError("La compilación del PDF falló. Revisa el contenido del archivo debug_report.tex.") from exc
 
         # Mover el PDF generado al destino final
         pdf_src = os.path.join(tmpdir, "report.pdf")
