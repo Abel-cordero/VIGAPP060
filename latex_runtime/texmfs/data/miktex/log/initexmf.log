@@ -15,3 +15,9 @@
 2025-06-17 19:24:16,007-0500 ERROR initexmf.core - Something is wrong with the PATH:
 2025-06-17 19:24:16,007-0500 ERROR initexmf.core - C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Zero Install;C:\Program Files\Git\cmd;C:\Users\PC\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\PC\AppData\Local\Programs\Python\Python313\;C:\Users\PC\AppData\Local\Microsoft\WindowsApps;C:\Users\PC\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\PC\AppData\Local\gitkraken\bin;C:\Users\PC\AppData\Local\GitHubDesktop\bin
 2025-06-17 19:24:16,049-0500 INFO  initexmf - this process (34616) finishes with exit code 0
+2025-06-17 19:51:31,540-0500 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4 Portable)
+2025-06-17 19:51:31,540-0500 INFO  initexmf - this process (31728) started by powershell in directory C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\initexmf.exe" --update-fndb
+2025-06-17 19:51:31,540-0500 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2025-06-17 19:51:31,540-0500 INFO  initexmf - running: miktex fndb refresh
+2025-06-17 19:51:31,541-0500 INFO  initexmf.core - start process: miktex fndb refresh
+2025-06-17 19:51:33,956-0500 INFO  initexmf - this process (31728) finishes with exit code 0
