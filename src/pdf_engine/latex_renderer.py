@@ -2,14 +2,14 @@ import os
 import shutil
 import subprocess
 import tempfile
-from pathlib import Path
+from pathlib import Path, PurePath
 from typing import Any, Dict
 from jinja2 import Environment, FileSystemLoader
 
 TEMPLATE_NAME = "reporte_flexion.tex"
 
 def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_diseño_flexion.pdf") -> str:
-    """Renderiza una plantilla .tex y compila un PDF usando MiKTeX portable."""
+    """Renderiza una plantilla .tex y compila un PDF usando MiKTeX portátil."""
 
     # Ruta base segura al proyecto (sube 2 niveles desde /pdf_engine/)
     base_dir = Path(__file__).resolve().parents[2]
@@ -27,9 +27,19 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
     context = dict(data)
     context.setdefault("formula_images", [])
     context["title"] = title.upper()
+
+    # Corregir rutas de imágenes para LaTeX (sin comillas, con /, sin backslashes)
+    for key in [
+        "section_img", "peralte_img", "b1_img", "pbal_img",
+        "rhobal_img", "pmax_img", "asmin_img", "asmax_img"
+    ]:
+        if key in context and context[key]:
+            ruta = PurePath(context[key]).as_posix()
+            context[key] = ruta
+
     tex_source = template.render(context)
 
-    # Guardar .tex generado para depuración (si falla la compilación)
+    # Guardar .tex generado para depuración
     debug_tex = base_dir / "debug_report.tex"
     with open(debug_tex, "w", encoding="utf-8") as f_debug:
         f_debug.write(tex_source)
