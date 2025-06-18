@@ -13,10 +13,18 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
 
     # Ruta base segura al proyecto (sube 2 niveles desde /pdf_engine/)
     base_dir = Path(__file__).resolve().parents[2]
+    # Intenta usar la versión portátil incluida solo en Windows
     pdflatex_path = base_dir / "latex_runtime" / "texmfs" / "install" / "miktex" / "bin" / "x64" / "pdflatex.exe"
 
-    if not pdflatex_path.exists():
-        raise FileNotFoundError("No se encontró pdflatex en latex_runtime. Verifica que MiKTeX portátil esté instalado correctamente.")
+    if not pdflatex_path.exists() or not pdflatex_path.is_file():
+        # Si no existe, buscar pdflatex en el PATH del sistema
+        system_pdflatex = shutil.which("pdflatex")
+        if system_pdflatex:
+            pdflatex_path = Path(system_pdflatex)
+        else:
+            raise FileNotFoundError(
+                "No se encontró pdflatex. Instala una distribución LaTeX o coloca pdflatex en el PATH."
+            )
 
     # Preparar entorno Jinja2
     env = Environment(
