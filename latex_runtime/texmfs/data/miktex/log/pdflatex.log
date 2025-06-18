@@ -81,3 +81,21 @@
 2025-06-17 20:39:58,697-0500 INFO  pdflatex - allowing known shell commands
 2025-06-17 20:39:58,842-0500 INFO  pdflatex - this process (8116) finishes with exit code 1
 2025-06-17 20:39:58,842-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-17 20:55:34,994-0500 INFO  pdflatex - this process (35500) started by python in directory C:\Users\PC\AppData\Local\Temp\tmp1_r037om with command line: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\PC\AppData\Local\Temp\tmp1_r037om\report.tex
+2025-06-17 20:55:34,994-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-17 20:55:34,995-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-17 20:55:34,996-0500 INFO  pdflatex - allowing known shell commands
+2025-06-17 20:55:35,136-0500 INFO  pdflatex - this process (35500) finishes with exit code 1
+2025-06-17 20:55:35,136-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-17 21:06:17,532-0500 INFO  pdflatex - this process (25288) started by python in directory C:\Users\PC\AppData\Local\Temp\tmpfi3y4dme with command line: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\PC\AppData\Local\Temp\tmpfi3y4dme\report.tex
+2025-06-17 21:06:17,532-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-17 21:06:17,533-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-17 21:06:17,534-0500 INFO  pdflatex - allowing known shell commands
+2025-06-17 21:06:17,655-0500 INFO  pdflatex - this process (25288) finishes with exit code 1
+2025-06-17 21:06:17,656-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-17 21:08:19,585-0500 INFO  pdflatex - this process (34888) started by python in directory C:\Users\PC\AppData\Local\Temp\tmp1230mcci with command line: "C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\PC\AppData\Local\Temp\tmp1230mcci\report.tex
+2025-06-17 21:08:19,586-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-17 21:08:19,586-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-17 21:08:19,587-0500 INFO  pdflatex - allowing known shell commands
+2025-06-17 21:08:19,723-0500 INFO  pdflatex - this process (34888) finishes with exit code 1
+2025-06-17 21:08:19,724-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.

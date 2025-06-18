@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 import tempfile
-from pathlib import Path, PurePath
+from pathlib import Path
 from typing import Any, Dict
 from jinja2 import Environment, FileSystemLoader
 
@@ -28,14 +28,15 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
     context.setdefault("formula_images", [])
     context["title"] = title.upper()
 
-    # Corregir rutas de imágenes para LaTeX (sin comillas, con /, sin backslashes)
+    # Corregir rutas de imágenes para LaTeX (escapar espacios)
     for key in [
         "section_img", "peralte_img", "b1_img", "pbal_img",
         "rhobal_img", "pmax_img", "asmin_img", "asmax_img"
     ]:
         if key in context and context[key]:
-            ruta = PurePath(context[key]).as_posix()
-            context[key] = ruta
+            # Convertir \ a / y ENCERRAR ENTRE COMILLAS
+            ruta_segura = context[key].replace("\\", "/")
+            context[key] = f'"{ruta_segura}"'
 
     tex_source = template.render(context)
 
