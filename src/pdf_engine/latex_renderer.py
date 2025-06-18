@@ -28,18 +28,19 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
     context.setdefault("formula_images", [])
     context["title"] = title.upper()
 
-    # Validar rutas de imágenes: eliminar las vacías o inválidas, y estandarizar separadores
+    # Convertir rutas de imagen con barra normal para compatibilidad con LaTeX
     for key in [
         "section_img", "peralte_img", "b1_img", "pbal_img",
         "rhobal_img", "pmax_img", "asmin_img", "asmax_img"
     ]:
         value = context.get(key)
-        if not value or not value.strip():
-            context[key] = None
+        if value and isinstance(value, str) and value.strip():
+            normalized = value.replace("\\", "/")
+            context[key] = normalized
         else:
-            context[key] = value.replace("\\", "/")
+            context[key] = None
 
-    # Renderizar .tex
+    # Renderizar contenido .tex con Jinja2
     tex_source = template.render(context)
 
     # Guardar .tex generado para depuración
@@ -47,7 +48,7 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
     with open(debug_tex, "w", encoding="utf-8") as f_debug:
         f_debug.write(tex_source)
 
-    # Compilar con pdflatex portátil en carpeta temporal
+    # Compilar con pdflatex en carpeta temporal
     with tempfile.TemporaryDirectory() as tmpdir:
         tex_file = os.path.join(tmpdir, "report.tex")
         with open(tex_file, "w", encoding="utf-8") as fh:
@@ -64,7 +65,7 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
         except Exception as exc:
             raise RuntimeError("La compilación del PDF falló. Revisa el contenido del archivo debug_report.tex.") from exc
 
-        # Mover el PDF generado al destino final
+        # Mover PDF al destino final
         pdf_src = os.path.join(tmpdir, "report.pdf")
         os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
         shutil.move(pdf_src, output_path)

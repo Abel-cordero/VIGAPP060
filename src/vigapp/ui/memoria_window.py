@@ -71,7 +71,6 @@ class MemoriaWindow(QMainWindow):
         if show_window:
             self.show()
 
-    # ------------------------------------------------------------------
     def _build_html(self) -> str:
         """Return an HTML representation of the stored data."""
         data_section = self.data.get("data_section", [])
@@ -119,7 +118,6 @@ class MemoriaWindow(QMainWindow):
         self._refresh_html()
 
     def _capture(self):
-        """Generate the PDF and ask for a save location."""
         path, _ = QFileDialog.getSaveFileName(
             self,
             "Guardar PDF",
@@ -130,7 +128,6 @@ class MemoriaWindow(QMainWindow):
             self._generate(path)
 
     def export(self):
-        """Generate the PDF and let the user select the destination."""
         path, _ = QFileDialog.getSaveFileName(
             self,
             "Guardar PDF",
@@ -141,7 +138,6 @@ class MemoriaWindow(QMainWindow):
             self._generate(path)
 
     def _generate(self, path: str):
-        """Internal helper that builds the PDF using stored data."""
         data = {
             "data_section": self.data.get("data_section", []),
             "calc_sections": self.data.get("calc_sections", []),
@@ -151,35 +147,22 @@ class MemoriaWindow(QMainWindow):
             "formula_images": [
                 os.path.join(
                     os.path.dirname(__file__),
-                    "..",
-                    "..",
-                    "resources",
-                    "flexion",
-                    "figures",
-                    "peralte.png",
+                    "..", "..", "resources", "flexion", "figures", "peralte.png"
                 ),
                 os.path.join(
                     os.path.dirname(__file__),
-                    "..",
-                    "..",
-                    "resources",
-                    "flexion",
-                    "figures",
-                    "pb.png",
+                    "..", "..", "resources", "flexion", "figures", "pb.png"
                 ),
             ],
         }
 
-        # ------------------------------
-        # Capture the section widget if available
-        ruta_captura = os.path.join(
-            os.path.dirname(__file__),
-            "..",
-            "..",
-            "pdf_engine",
-            "figures",
-            "section.png",
+        # Captura del widget 'widget_seccion' como imagen fija
+        ruta_figures = os.path.join(
+            os.path.dirname(__file__), "..", "..", "pdf_engine", "figures"
         )
+        os.makedirs(ruta_figures, exist_ok=True)
+        ruta_captura = os.path.join(ruta_figures, "section.png")
+
         if hasattr(self, "widget_seccion") and isinstance(self.widget_seccion, QWidget):
             pixmap = self.widget_seccion.grab()
             pixmap.save(ruta_captura, "PNG")
@@ -188,7 +171,6 @@ class MemoriaWindow(QMainWindow):
         render_report(self.windowTitle(), data, path)
 
     def edit_title(self):
-        """Allow user to manually edit the window and header title."""
         title, ok = QInputDialog.getText(self, "Editar título", "Título:", text=self.windowTitle())
         if ok and title:
             self.setWindowTitle(title)
@@ -197,5 +179,3 @@ class MemoriaWindow(QMainWindow):
     def on_menu(self):
         if self.menu_callback:
             self.menu_callback()
-
-
