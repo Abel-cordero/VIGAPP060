@@ -50,6 +50,25 @@ FIGURE_FILES = {
 
 DEFAULT_FIG_DIR = os.path.join(os.path.dirname(__file__), "..", "resources", "flexion", "figures")
 
+# Absolute path to the bundled ``pdflatex`` executable. Construct the path
+# relative to this file to avoid issues with spaces in the project directory
+# name (e.g. "LOCAL REPOSITORIE"). ``os.getcwd`` is intentionally not used so
+# the path resolution does not depend on the current working directory.
+pdflatex_path = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "..",
+        "latex_runtime",
+        "texmfs",
+        "install",
+        "miktex",
+        "bin",
+        "x64",
+        "pdflatex.exe",
+    )
+)
+
 
 def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_dise\xf1o_flexion.pdf") -> str:
     """Render a LaTeX template and compile it to a PDF.
@@ -94,7 +113,7 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
 
         try:
             subprocess.run(
-                ["pdflatex", "-interaction=nonstopmode", tex_file],
+                [pdflatex_path, "-interaction=nonstopmode", tex_file],
                 cwd=tmpdir,
                 check=True,
                 stdout=subprocess.PIPE,
