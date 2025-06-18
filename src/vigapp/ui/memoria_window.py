@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (
     QInputDialog,
     QTextBrowser,
 )
+from PyQt5.QtGui import QPixmap
 import re
 
 from pdf_engine.latex_renderer import render_report
@@ -168,6 +169,21 @@ class MemoriaWindow(QMainWindow):
                 ),
             ],
         }
+
+        # ------------------------------
+        # Capture the section widget if available
+        ruta_captura = os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "..",
+            "pdf_engine",
+            "figures",
+            "section.png",
+        )
+        if hasattr(self, "widget_seccion") and isinstance(self.widget_seccion, QWidget):
+            pixmap = self.widget_seccion.grab()
+            pixmap.save(ruta_captura, "PNG")
+            data["section_img"] = ruta_captura.replace("\\", "/")
 
         render_report(self.windowTitle(), data, path)
 
