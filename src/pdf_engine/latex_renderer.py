@@ -64,11 +64,11 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
             context[key] = _format_num(val, unit, mpa=is_fc)
 
     if "d" in context:
-        context["d"] = _format_num(context["d"], "cm", False)
+        context["d"] = _format_num(context["d"], "cm", mpa=False)
 
     for a_key in ("as_min", "as_max"):
         if a_key in context:
-            context[a_key] = _format_num(context[a_key], "cm²", False)
+            context[a_key] = _format_num(context[a_key], "cm²", mpa=False)
 
     def _replace_units(text: str) -> str:
         return (text.replace("MPa", "kgf/cm²")
