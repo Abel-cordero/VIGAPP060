@@ -236,3 +236,8 @@
 2025-06-18 23:51:14,533-0500 INFO  pdflatex - going to create file: pdflatex.fmt
 2025-06-18 23:51:14,533-0500 INFO  pdflatex.core - start process: miktex --disable-installer formats build pdflatex --engine pdftex
 2025-06-18 23:51:31,613-0500 INFO  pdflatex - this process (22020) finishes with exit code 1
+2025-06-19 00:02:41,249-0500 INFO  pdflatex - this process (400) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmpph92nzq_ with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmpph92nzq_\report.tex
+2025-06-19 00:02:41,249-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-19 00:02:41,252-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-19 00:02:41,255-0500 INFO  pdflatex - allowing known shell commands
+2025-06-19 00:02:41,740-0500 INFO  pdflatex - this process (400) finishes with exit code 1

@@ -1,7 +1,7 @@
 This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4 Portable) (preloaded format=pdflatex.fmt)
  restricted \write18 enabled.
 entering extended mode
-(C:/Users/abemc/AppData/Local/Temp/tmpqqxg7xtv/report.tex
+(C:/Users/abemc/AppData/Local/Temp/tmpph92nzq_/report.tex
 LaTeX2e <2025-06-01>
 L3 programming layer <2025-05-26>
 
@@ -72,28 +72,48 @@ mfs\install\tex/latex/00miktex\epstopdf-sys.cfg))
 exmfs/data/fonts/map/pdftex/pdftex.map} <./section.png (PNG copy)>]
 [2]
 [3]
-! Missing $ inserted.
-<inserted text> 
-                $
-l.237 As_
-         min & 3.21 cm² \\
-! Missing $ inserted.
-<inserted text> 
-                $
-l.237 As_min &
-               3.21 cm² \\
-! Missing $ inserted.
-<inserted text> 
-                $
-l.239 As_
-         max & 21.16 cm² \\
-! Missing $ inserted.
-<inserted text> 
-                $
-l.239 As_max &
-               21.16 cm² \\
+! Undefined control sequence.
+<recently read> \textAs 
+                        
+l.237 $\textAs
+              _min$ & 3.21 cm² \\
+! Undefined control sequence.
+<recently read> \textAs 
+                        
+l.239 $\textAs
+              _max$ & 21.16 cm² \\
+! Undefined control sequence.
+<recently read> \textAs 
+                        
+l.241 $\textAs
+               req M1-$ & 3.21 cm² \\
+! Undefined control sequence.
+<recently read> \textAs 
+                        
+l.243 $\textAs
+               req M2-$ & 3.21 cm² \\
+! Undefined control sequence.
+<recently read> \textAs 
+                        
+l.245 $\textAs
+               req M3-$ & 3.21 cm² \\
+! Undefined control sequence.
+<recently read> \textAs 
+                        
+l.247 $\textAs
+               req M1+$ & 3.21 cm² \\
+! Undefined control sequence.
+<recently read> \textAs 
+                        
+l.249 $\textAs
+               req M2+$ & 3.21 cm² \\
+! Undefined control sequence.
+<recently read> \textAs 
+                        
+l.251 $\textAs
+               req M3+$ & 3.21 cm² \\
 
-[4 <C:/Users/abemc/AppData/Local/Temp/view3d_tr_jmoux.png (PNG copy)>]
+[4 <C:/Users/abemc/AppData/Local/Temp/view3d_taefj1kg.png (PNG copy)>]
 (report.aux) )
 (see the transcript file for additional information) <C:\Users\abemc\Desktop\GI
 T HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs/data\fonts/pk/ljfour/j
@@ -110,6 +130,6 @@ sktop/GIT HUB LENNOVO/viga final/VIGA_FINAL/latex_runtime/texmfs/install/fonts/
 type1/public/amsfonts/cm/cmr8.pfb><C:/Users/abemc/Desktop/GIT HUB LENNOVO/viga 
 final/VIGA_FINAL/latex_runtime/texmfs/install/fonts/type1/public/amsfonts/cm/cm
 sy10.pfb>
-Output written on report.pdf (4 pages, 164407 bytes).
+Output written on report.pdf (4 pages, 164222 bytes).
 Transcript written on report.log.
 

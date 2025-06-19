@@ -17,13 +17,13 @@
 \begin{minipage}[t]{0.48\textwidth}
 \begin{tabular}{|l|c|}
 \hline
-Base (b) & {{ base|default('')|escape }} \\ 
-Altura (h) & {{ altura|default('')|escape }} \\ 
-Recubrimiento (r) & {{ recubrimiento|default('')|escape }} \\ 
-Estribo (\ensuremath{\phi_e}) & {{ diam_estribo|default('')|escape }} \\ 
-Varilla principal (\ensuremath{\phi_s}) & {{ diam_varilla|default('')|escape }} \\ 
-f'c & {{ fc|default('')|escape }} \\ 
-fy & {{ fy|default('')|escape }} \\ 
+Base (b) & {{ base|default('')|escape }} \\
+Altura (h) & {{ altura|default('')|escape }} \\
+Recubrimiento (r) & {{ recubrimiento|default('')|escape }} \\
+Estribo (\ensuremath{\phi_e}) & {{ diam_estribo|default('')|escape }} \\
+Varilla principal (\ensuremath{\phi_s}) & {{ diam_varilla|default('')|escape }} \\
+f'c & {{ fc|default('')|escape }} \\
+fy & {{ fy|default('')|escape }} \\
 \hline
 \end{tabular}
 \end{minipage}
@@ -54,7 +54,7 @@ fy & {{ fy|default('')|escape }} \\
 \begin{tabular}{|l|c|}
 \hline
 {% for label, value in results %}
-$\text{{{{ label.replace('_', '\\_') }}}}$ & {{ value|escape }} \\
+$\text{{ label|escape }}$ & {{ value|escape }} \\
 {% endfor %}
 \hline
 \end{tabular}
