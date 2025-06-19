@@ -54,7 +54,7 @@ fy & {{ fy|default('')|escape }} \\
 \begin{tabular}{|l|c|}
 \hline
 {% for label, value in results %}
-{{ label }} & {{ value|escape }} \\
+$\text{{{{ label.replace('_', '\\_') }}}}$ & {{ value|escape }} \\
 {% endfor %}
 \hline
 \end{tabular}

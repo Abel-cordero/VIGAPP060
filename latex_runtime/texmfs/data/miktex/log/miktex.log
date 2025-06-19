@@ -455,3 +455,8 @@
 2025-06-18 23:49:45,088-0500 INFO  miktex - this process (18372) started by miktex-console in directory C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: miktex --disable-installer --verbose languages configure
 2025-06-18 23:49:45,089-0500 INFO  miktex - Creating language.dat, language.dat.lua and language.def...
 2025-06-18 23:49:45,197-0500 INFO  miktex - this process (18372) finishes with exit code 0
+2025-06-18 23:51:14,961-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-18 23:51:14,961-0500 INFO  miktex - this process (15428) started by pdflatex in directory C:\Users\abemc\AppData\Local\Temp\tmpqqxg7xtv with command line: miktex --disable-installer formats build pdflatex --engine pdftex
+2025-06-18 23:51:14,963-0500 INFO  miktex - Building format 'pdflatex' with engine 'pdftex'...
+2025-06-18 23:51:14,965-0500 INFO  miktex.core - start process: miktex-makefmt.exe --engine=pdftex --dest-name=pdflatex --no-dump pdflatex.ini --engine-option=-tcx=cp227.tcx --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-18 23:51:30,997-0500 INFO  miktex - this process (15428) finishes with exit code 0

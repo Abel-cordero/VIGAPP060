@@ -1,7 +1,7 @@
 This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4 Portable) (preloaded format=pdflatex.fmt)
  restricted \write18 enabled.
 entering extended mode
-(C:/Users/abemc/AppData/Local/Temp/tmpotwbizw4/report.tex
+(C:/Users/abemc/AppData/Local/Temp/tmpqqxg7xtv/report.tex
 LaTeX2e <2025-06-01>
 L3 programming layer <2025-05-26>
 
@@ -93,11 +93,11 @@ l.239 As_
 l.239 As_max &
                21.16 cm² \\
 
-[4 <C:/Users/abemc/AppData/Local/Temp/view3d_31wywslb.png (PNG copy)>]
+[4 <C:/Users/abemc/AppData/Local/Temp/view3d_tr_jmoux.png (PNG copy)>]
 (report.aux) )
 (see the transcript file for additional information) <C:\Users\abemc\Desktop\GI
-T HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs/data\fonts\pk\ljfour\j
-knappen\ec\dpi600\tcrm1200.pk><C:/Users/abemc/Desktop/GIT HUB LENNOVO/viga fina
+T HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs/data\fonts/pk/ljfour/j
+knappen/ec/dpi600\tcrm1200.pk><C:/Users/abemc/Desktop/GIT HUB LENNOVO/viga fina
 l/VIGA_FINAL/latex_runtime/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx12
 .pfb><C:/Users/abemc/Desktop/GIT HUB LENNOVO/viga final/VIGA_FINAL/latex_runtim
 e/texmfs/install/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/abemc/Desk
@@ -113,4 +113,3 @@ sy10.pfb>
 Output written on report.pdf (4 pages, 164407 bytes).
 Transcript written on report.log.
 
-pdflatex: major issue: So far, you have not checked for MiKTeX updates.
