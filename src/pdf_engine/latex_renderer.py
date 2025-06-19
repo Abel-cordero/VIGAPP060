@@ -8,21 +8,39 @@ from jinja2 import Environment, FileSystemLoader
 
 TEMPLATE_NAME = "reporte_flexion.tex"
 
-def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_diseño_flexion.pdf") -> str:
+
+def render_report(
+    title: str,
+    data: Dict[str, Any],
+    output_path: str = "reporte_diseño_flexion.pdf",
+) -> str:
     """Renderiza una plantilla .tex y compila un PDF usando MiKTeX portátil."""
 
     base_dir = Path(__file__).resolve().parents[2]
-    pdflatex_path = base_dir / "latex_runtime" / "texmfs" / "install" / "miktex" / "bin" / "x64" / "pdflatex.exe"
+    pdflatex_path = (
+        base_dir
+        / "latex_runtime"
+        / "texmfs"
+        / "install"
+        / "miktex"
+        / "bin"
+        / "x64"
+        / "pdflatex.exe"
+    )
 
     if not pdflatex_path.exists() or not pdflatex_path.is_file():
         system_pdflatex = shutil.which("pdflatex")
         if system_pdflatex:
             pdflatex_path = Path(system_pdflatex)
         else:
-            raise FileNotFoundError("No se encontró pdflatex. Instala LaTeX o colócalo en el PATH.")
+            raise FileNotFoundError(
+                "No se encontró pdflatex. Instala LaTeX o colócalo en el PATH."
+            )
 
     env = Environment(
-        loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")),
+        loader=FileSystemLoader(
+            os.path.join(os.path.dirname(__file__), "templates")
+        ),
         autoescape=False,
     )
     template = env.get_template(TEMPLATE_NAME)
@@ -32,7 +50,11 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
 
     def _extract_from_data_section(label: str):
         for row in context.get("data_section", []):
-            if isinstance(row, (list, tuple)) and row and str(row[0]).startswith(label):
+            if (
+                isinstance(row, (list, tuple))
+                and row
+                and str(row[0]).startswith(label)
+            ):
                 return row[1]
         return None
 
@@ -71,13 +93,20 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
             context[a_key] = _format_num(context[a_key], "cm²", mpa=False)
 
     def _replace_units(text: str) -> str:
-        return (text.replace("MPa", "kgf/cm²")
-                    .replace("m^2", "cm^2")
-                    .replace("m^{2}", "cm^{2}"))
+        return (
+            text.replace("MPa", "kgf/cm²")
+            .replace("m^2", "cm^2")
+            .replace("m^{2}", "cm^{2}")
+        )
 
     for key in [
-        "formula_peralte", "formula_b1", "formula_pbal", "formula_rhobal",
-        "formula_pmax", "formula_asmin", "formula_asmax",
+        "formula_peralte",
+        "formula_b1",
+        "formula_pbal",
+        "formula_rhobal",
+        "formula_pmax",
+        "formula_asmin",
+        "formula_asmax",
     ]:
         if key in context and isinstance(context[key], str):
             context[key] = _replace_units(context[key])
@@ -93,8 +122,14 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
         context["calc_sections"] = new_sections
 
     for key in [
-        "section_img", "peralte_img", "b1_img", "pbal_img",
-        "rhobal_img", "pmax_img", "asmin_img", "asmax_img"
+        "section_img",
+        "peralte_img",
+        "b1_img",
+        "pbal_img",
+        "rhobal_img",
+        "pmax_img",
+        "asmin_img",
+        "asmax_img",
     ]:
         value = context.get(key)
         if value and isinstance(value, str) and value.strip():
@@ -146,8 +181,24 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
+        except subprocess.CalledProcessError as exc:
+            log = (
+                exc.stdout.decode("utf-8", "ignore")
+                + "\n"
+                + exc.stderr.decode("utf-8", "ignore")
+            )
+            error_log = base_dir / "pdflatex_error.log"
+            with open(error_log, "w", encoding="utf-8") as fh:
+                fh.write(log)
+            raise RuntimeError(
+                "La compilación del PDF falló. Revisa pdflatex_error.log y "
+                "debug_report.tex."
+            ) from exc
         except Exception as exc:
-            raise RuntimeError("La compilación del PDF falló. Revisa debug_report.tex.") from exc
+            raise RuntimeError(
+                "La compilación del PDF falló. Verifica tu instalación de "
+                "LaTeX."
+            ) from exc
 
         pdf_src = os.path.join(tmpdir, "report.pdf")
         os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
