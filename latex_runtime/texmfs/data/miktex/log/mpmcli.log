@@ -52,3 +52,9 @@
 2025-06-17 19:52:44,489-0500 INFO  mpmcli - running: miktex packages install titlesec
 2025-06-17 19:52:44,489-0500 INFO  mpmcli.core - start process: miktex packages install titlesec
 2025-06-17 19:52:47,822-0500 INFO  mpmcli - this process (29496) finishes with exit code 0
+2025-06-18 23:49:31,679-0500 INFO  mpmcli - this is mpmcli 4.5 (MiKTeX 25.4 Portable)
+2025-06-18 23:49:31,681-0500 INFO  mpmcli - this process (11920) started by 'miktex-console' with command line: mpm --register-components --verbose
+2025-06-18 23:49:31,681-0500 INFO  mpmcli - Operating on the private (per-user) MiKTeX setup
+2025-06-18 23:49:31,686-0500 WARN  mpmcli.core - still open: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\fontconfig/config\fonts.conf.in"
+2025-06-18 23:49:31,687-0500 WARN  mpmcli.core - still open: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs/config\fontconfig\config\fonts.conf"
+2025-06-18 23:49:31,782-0500 INFO  mpmcli - this process (11920) finishes with exit code 0
