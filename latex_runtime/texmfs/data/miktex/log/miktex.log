@@ -372,3 +372,8 @@
 2025-06-18 22:32:41,038-0500 INFO  miktex - Building format 'pdflatex' with engine 'pdftex'...
 2025-06-18 22:32:41,039-0500 INFO  miktex.core - start process: miktex-makefmt.exe --engine=pdftex --dest-name=pdflatex --no-dump pdflatex.ini --engine-option=-tcx=cp227.tcx --miktex-disable-maintenance --miktex-disable-diagnose
 2025-06-18 22:33:00,026-0500 INFO  miktex - this process (23388) finishes with exit code 0
+2025-06-18 22:51:43,219-0500 INFO  miktex - this is One MiKTeX Utility 1.11 (MiKTeX 25.4 Portable)
+2025-06-18 22:51:43,219-0500 INFO  miktex - this process (5444) started by miktex-mf in directory C:\Users\abemc\AppData\Local\Temp\mik91418 with command line: miktex formats build mf
+2025-06-18 22:51:43,221-0500 INFO  miktex - Building format 'mf' with engine 'mf'...
+2025-06-18 22:51:43,223-0500 INFO  miktex.core - start process: miktex-makebase.exe --dest-name=mf --no-dump mf.ini --engine-option=-tcx=cp227.tcx --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-18 22:51:44,375-0500 INFO  miktex - this process (5444) finishes with exit code 0

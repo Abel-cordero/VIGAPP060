@@ -198,3 +198,16 @@
 2025-06-18 22:38:42,179-0500 INFO  pdflatex - allowing known shell commands
 2025-06-18 22:38:42,549-0500 INFO  pdflatex - this process (10280) finishes with exit code 0
 2025-06-18 22:38:42,551-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-18 22:51:41,237-0500 INFO  pdflatex - this process (10868) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmpcnnbe91s with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmpcnnbe91s\report.tex
+2025-06-18 22:51:41,238-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-18 22:51:41,241-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-18 22:51:41,245-0500 INFO  pdflatex - allowing known shell commands
+2025-06-18 22:51:41,648-0500 INFO  pdflatex.core - start process: miktex-makepk --verbose tcrm1200 600 600 1+0/600
+2025-06-18 22:51:45,767-0500 INFO  pdflatex - this process (10868) finishes with exit code 0
+2025-06-18 22:51:45,769-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-18 23:00:49,085-0500 INFO  pdflatex - this process (12736) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmpmyqi3tdo with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmpmyqi3tdo\report.tex
+2025-06-18 23:00:49,086-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-18 23:00:49,089-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-18 23:00:49,092-0500 INFO  pdflatex - allowing known shell commands
+2025-06-18 23:00:49,442-0500 INFO  pdflatex - this process (12736) finishes with exit code 0
+2025-06-18 23:00:49,444-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
