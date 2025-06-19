@@ -17,13 +17,13 @@
 \begin{minipage}[t]{0.48\textwidth}
 \begin{tabular}{|l|c|}
 \hline
-Base (b) & {{ base|default('')|escape }} cm \\
-Altura (h) & {{ altura|default('')|escape }} cm \\
-Recubrimiento (r) & {{ recubrimiento|default('')|escape }} cm \\
-Estribo (\ensuremath{\phi_e}) & {{ diam_estribo|default('')|escape }} cm \\
-Varilla principal (\ensuremath{\phi_s}) & {{ diam_varilla|default('')|escape }} cm \\
-f'c & {{ fc|default('')|escape }} kgf/cm$^2$ \\
-fy & {{ fy|default('')|escape }} kgf/cm$^2$ \\
+Base (b) & {{ base|default('')|escape }} \\ 
+Altura (h) & {{ altura|default('')|escape }} \\ 
+Recubrimiento (r) & {{ recubrimiento|default('')|escape }} \\ 
+Estribo (\ensuremath{\phi_e}) & {{ diam_estribo|default('')|escape }} \\ 
+Varilla principal (\ensuremath{\phi_s}) & {{ diam_varilla|default('')|escape }} \\ 
+f'c & {{ fc|default('')|escape }} \\ 
+fy & {{ fy|default('')|escape }} \\ 
 \hline
 \end{tabular}
 \end{minipage}
@@ -39,128 +39,32 @@ fy & {{ fy|default('')|escape }} kgf/cm$^2$ \\
 
 \vspace{0.5cm}
 
-{% if formula_peralte %}
-\section*{Peralte: d (ART.PERALTE)}
+{% for subtitle, steps in calc_sections %}
+\section*{{{ '{' }}}{{ subtitle }}{{ '}' }}}
+{% for step in steps %}
 \[
-{{ formula_peralte }}
+{{ step.strip('$') }}
 \]
-{% endif %}
-{% if d %}
-Valor calculado: \( d = {{ d }}\,\text{cm} \)
-{% endif %}
-{% if peralte_img %}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{ {{ peralte_img }} }
-\end{figure}
-{% endif %}
-
+{% endfor %}
 \vspace{0.5cm}
+{% endfor %}
 
-{% if formula_b1 %}
-\section*{Coeficiente B1 (ART.B1)}
-\[
-{{ formula_b1 }}
-\]
+{% if results %}
+\section*{Resultados}
+\begin{tabular}{|l|c|}
+\hline
+{% for label, value in results %}
+{{ label }} & {{ value|escape }} \\
+{% endfor %}
+\hline
+\end{tabular}
 {% endif %}
-{% if b1 %}
-Valor calculado: \( \beta_1 = {{ b1 }} \)
-{% endif %}
-{% if b1_img %}
+
+{% for img in images %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{ {{ b1_img }} }
+\includegraphics[width=0.9\textwidth]{ {{ img }} }
 \end{figure}
-{% endif %}
-
-\vspace{0.5cm}
-
-{% if formula_pbal %}
-\section*{Pbal (ART.PBAL)}
-\[
-{{ formula_pbal }}
-\]
-{% endif %}
-{% if pbal %}
-Valor calculado: \( P_{bal} = {{ pbal }} \)
-{% endif %}
-{% if pbal_img %}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{ {{ pbal_img }} }
-\end{figure}
-{% endif %}
-
-\vspace{0.5cm}
-
-{% if formula_rhobal %}
-\section*{\ensuremath{\rho_{bal}} (ART.RHOBAL)}
-\[
-{{ formula_rhobal }}
-\]
-{% endif %}
-{% if rhobal %}
-Valor calculado: \( \rho_{bal} = {{ rhobal }} \)
-{% endif %}
-{% if rhobal_img %}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{ {{ rhobal_img }} }
-\end{figure}
-{% endif %}
-
-\vspace{0.5cm}
-
-{% if formula_pmax %}
-\section*{Pmax (ART.PMAX)}
-\[
-{{ formula_pmax }}
-\]
-{% endif %}
-{% if pmax %}
-Valor calculado: \( P_{max} = {{ pmax }} \)
-{% endif %}
-{% if pmax_img %}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{ {{ pmax_img }} }
-\end{figure}
-{% endif %}
-
-\vspace{0.5cm}
-
-{% if formula_asmin %}
-\section*{As m\'in (ART.ASMIN)}
-\[
-{{ formula_asmin }}
-\]
-{% endif %}
-{% if as_min %}
-Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }}\,\text{cm}^2 \)
-{% endif %}
-{% if asmin_img %}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{ {{ asmin_img }} }
-\end{figure}
-{% endif %}
-
-\vspace{0.5cm}
-
-{% if formula_asmax %}
-\section*{As m\'ax (ART.ASMAX)}
-\[
-{{ formula_asmax }}
-\]
-{% endif %}
-{% if as_max %}
-Valor calculado: \( A_{s}^{\text{max}} = {{ as_max }}\,\text{cm}^2 \)
-{% endif %}
-{% if asmax_img %}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{ {{ asmax_img }} }
-\end{figure}
-{% endif %}
+{% endfor %}
 
 \end{document}
