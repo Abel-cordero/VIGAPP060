@@ -40,7 +40,7 @@ fy & {{ fy|default('')|escape }} \\
 \vspace{0.5cm}
 
 {% for subtitle, steps in calc_sections %}
-\section*{{{ '{' }}}{{ subtitle }}{{ '}' }}}
+\section*{ {{ subtitle }} }
 {% for step in steps %}
 \[
 {{ step.strip('$') }}
