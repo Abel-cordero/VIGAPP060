@@ -103,6 +103,15 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
         else:
             context[key] = None
 
+    if "images" in context and isinstance(context["images"], (list, tuple)):
+        normalized_list = []
+        for img in context["images"]:
+            if isinstance(img, str) and img.strip():
+                normalized_list.append(img.replace("\\", "/"))
+            else:
+                normalized_list.append(img)
+        context["images"] = normalized_list
+
     debug_tex = base_dir / "debug_report.tex"
 
     with tempfile.TemporaryDirectory() as tmpdir:

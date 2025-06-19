@@ -32,7 +32,7 @@ fy & {{ fy|default('')|escape }} \\
 {% if section_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[height=5cm]{ {{ section_img }} }
+\includegraphics[height=5cm]{ {{- section_img -}} }
 \end{figure}
 {% endif %}
 \end{minipage}
@@ -63,7 +63,7 @@ fy & {{ fy|default('')|escape }} \\
 {% for img in images %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{ {{ img }} }
+\includegraphics[width=0.9\textwidth]{ {{- img -}} }
 \end{figure}
 {% endfor %}
 
