@@ -32,3 +32,53 @@
 2025-06-17 19:52:52,156-0500 FATAL initexmf - Source: Libraries\MiKTeX\Core\File\win\winFile.cpp
 2025-06-17 19:52:52,156-0500 FATAL initexmf - Line: 320
 2025-06-17 19:52:52,166-0500 INFO  initexmf - this process (16256) finishes with exit code 1
+2025-06-18 22:20:16,122-0500 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4 Portable)
+2025-06-18 22:20:16,123-0500 INFO  initexmf - this process (21808) started by cmd in directory C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: initexmf.exe -u
+2025-06-18 22:20:16,123-0500 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2025-06-18 22:20:16,125-0500 INFO  initexmf - running: miktex fndb refresh
+2025-06-18 22:20:16,125-0500 INFO  initexmf.core - start process: miktex fndb refresh
+2025-06-18 22:20:16,677-0500 ERROR initexmf - sub-process error output has been saved to 'C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\data\miktex\log\miktex_2025-06-18-222016.out'
+2025-06-18 22:20:16,678-0500 FATAL initexmf - Windows API error 32: El proceso no tiene acceso al archivo porque está siendo utilizado por otro proceso.
+2025-06-18 22:20:16,678-0500 FATAL initexmf - Info: path="C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\config\miktex\data\le\texmf.fndb-5"
+2025-06-18 22:20:16,678-0500 FATAL initexmf - Source: Libraries\MiKTeX\Core\File\win\winFile.cpp
+2025-06-18 22:20:16,678-0500 FATAL initexmf - Line: 320
+2025-06-18 22:20:16,680-0500 INFO  initexmf - this process (21808) finishes with exit code 1
+2025-06-18 22:20:39,190-0500 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4 Portable)
+2025-06-18 22:20:39,191-0500 INFO  initexmf - this process (17312) started by cmd in directory C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: initexmf.exe -u
+2025-06-18 22:20:39,191-0500 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2025-06-18 22:20:39,192-0500 INFO  initexmf - running: miktex fndb refresh
+2025-06-18 22:20:39,193-0500 INFO  initexmf.core - start process: miktex fndb refresh
+2025-06-18 22:20:39,678-0500 ERROR initexmf - sub-process error output has been saved to 'C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\data\miktex\log\miktex_2025-06-18-222039.out'
+2025-06-18 22:20:39,678-0500 FATAL initexmf - Windows API error 32: El proceso no tiene acceso al archivo porque está siendo utilizado por otro proceso.
+2025-06-18 22:20:39,678-0500 FATAL initexmf - Info: path="C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\config\miktex\data\le\texmf.fndb-5"
+2025-06-18 22:20:39,679-0500 FATAL initexmf - Source: Libraries\MiKTeX\Core\File\win\winFile.cpp
+2025-06-18 22:20:39,679-0500 FATAL initexmf - Line: 320
+2025-06-18 22:20:39,681-0500 INFO  initexmf - this process (17312) finishes with exit code 1
+2025-06-18 22:20:42,408-0500 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4 Portable)
+2025-06-18 22:20:42,409-0500 INFO  initexmf - this process (8696) started by cmd in directory C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: initexmf.exe -u
+2025-06-18 22:20:42,409-0500 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2025-06-18 22:20:42,410-0500 INFO  initexmf - running: miktex fndb refresh
+2025-06-18 22:20:42,411-0500 INFO  initexmf.core - start process: miktex fndb refresh
+2025-06-18 22:20:42,887-0500 ERROR initexmf - sub-process error output has been saved to 'C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\data\miktex\log\miktex_2025-06-18-222042.out'
+2025-06-18 22:20:42,888-0500 FATAL initexmf - Windows API error 32: El proceso no tiene acceso al archivo porque está siendo utilizado por otro proceso.
+2025-06-18 22:20:42,888-0500 FATAL initexmf - Info: path="C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\config\miktex\data\le\texmf.fndb-5"
+2025-06-18 22:20:42,888-0500 FATAL initexmf - Source: Libraries\MiKTeX\Core\File\win\winFile.cpp
+2025-06-18 22:20:42,888-0500 FATAL initexmf - Line: 320
+2025-06-18 22:20:42,890-0500 INFO  initexmf - this process (8696) finishes with exit code 1
+2025-06-18 22:20:59,833-0500 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4 Portable)
+2025-06-18 22:20:59,833-0500 INFO  initexmf - this process (8996) started by cmd in directory C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: initexmf.exe -u
+2025-06-18 22:20:59,833-0500 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2025-06-18 22:20:59,835-0500 INFO  initexmf - running: miktex fndb refresh
+2025-06-18 22:20:59,835-0500 INFO  initexmf.core - start process: miktex fndb refresh
+2025-06-18 22:21:00,317-0500 ERROR initexmf - sub-process error output has been saved to 'C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\data\miktex\log\miktex_2025-06-18-222100.out'
+2025-06-18 22:21:00,318-0500 FATAL initexmf - Windows API error 32: El proceso no tiene acceso al archivo porque está siendo utilizado por otro proceso.
+2025-06-18 22:21:00,318-0500 FATAL initexmf - Info: path="C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\config\miktex\data\le\texmf.fndb-5"
+2025-06-18 22:21:00,318-0500 FATAL initexmf - Source: Libraries\MiKTeX\Core\File\win\winFile.cpp
+2025-06-18 22:21:00,318-0500 FATAL initexmf - Line: 320
+2025-06-18 22:21:00,320-0500 INFO  initexmf - this process (8996) finishes with exit code 1
+2025-06-18 22:22:00,631-0500 INFO  initexmf - this is MiKTeX Configuration Utility 5.5 (MiKTeX 25.4 Portable)
+2025-06-18 22:22:00,632-0500 INFO  initexmf - this process (20380) started by cmd in directory C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: initexmf.exe -u
+2025-06-18 22:22:00,632-0500 INFO  initexmf - Operating on the private (per-user) MiKTeX setup
+2025-06-18 22:22:00,633-0500 INFO  initexmf - running: miktex fndb refresh
+2025-06-18 22:22:00,633-0500 INFO  initexmf.core - start process: miktex fndb refresh
+2025-06-18 22:22:07,917-0500 INFO  initexmf - this process (20380) finishes with exit code 0

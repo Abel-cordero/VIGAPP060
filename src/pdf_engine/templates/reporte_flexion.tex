@@ -7,6 +7,7 @@
 \geometry{margin=2.5cm}
 \usepackage{titlesec}
 \usepackage{float}
+\usepackage{grffile} % importante para nombres de archivo con puntos o caracteres especiales
 \titleformat{\section}{\centering\bfseries\uppercase}{\thesection}{1em}{}
 
 \begin{document}
@@ -28,130 +29,137 @@ fy & {{ fy|default('')|escape }} MPa \\
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
-{% if section_img and section_img.strip() %}
+{% if section_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[height=5cm]{\detokenize{ {{- section_img|escape -}} }}
+\includegraphics[height=5cm]{ {{ section_img }} }
 \end{figure}
 {% endif %}
 \end{minipage}
 
 \vspace{0.5cm}
 
+{% if formula_peralte %}
 \section*{Peralte: d (ART.PERALTE)}
-
 \[
 {{ formula_peralte }}
 \]
-
+{% endif %}
+{% if d %}
 Valor calculado: \( d = {{ d }}\,\text{m} \)
-
-{% if peralte_img and peralte_img.strip() %}
+{% endif %}
+{% if peralte_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{\detokenize{ {{- peralte_img|escape -}} }}
+\includegraphics[width=0.5\textwidth]{ {{ peralte_img }} }
 \end{figure}
 {% endif %}
 
 \vspace{0.5cm}
 
+{% if formula_b1 %}
 \section*{Coeficiente B1 (ART.B1)}
-
 \[
 {{ formula_b1 }}
 \]
-
+{% endif %}
+{% if b1 %}
 Valor calculado: \( \beta_1 = {{ b1 }} \)
-
-{% if b1_img and b1_img.strip() %}
+{% endif %}
+{% if b1_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{\detokenize{ {{- b1_img|escape -}} }}
+\includegraphics[width=0.5\textwidth]{ {{ b1_img }} }
 \end{figure}
 {% endif %}
 
 \vspace{0.5cm}
 
+{% if formula_pbal %}
 \section*{Pbal (ART.PBAL)}
-
 \[
 {{ formula_pbal }}
 \]
-
+{% endif %}
+{% if pbal %}
 Valor calculado: \( P_{bal} = {{ pbal }} \)
-
-{% if pbal_img and pbal_img.strip() %}
+{% endif %}
+{% if pbal_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{\detokenize{ {{- pbal_img|escape -}} }}
+\includegraphics[width=0.5\textwidth]{ {{ pbal_img }} }
 \end{figure}
 {% endif %}
 
 \vspace{0.5cm}
 
+{% if formula_rhobal %}
 \section*{\ensuremath{\rho_{bal}} (ART.RHOBAL)}
-
 \[
 {{ formula_rhobal }}
 \]
-
+{% endif %}
+{% if rhobal %}
 Valor calculado: \( \rho_{bal} = {{ rhobal }} \)
-
-{% if rhobal_img and rhobal_img.strip() %}
+{% endif %}
+{% if rhobal_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{\detokenize{ {{- rhobal_img|escape -}} }}
+\includegraphics[width=0.5\textwidth]{ {{ rhobal_img }} }
 \end{figure}
 {% endif %}
 
 \vspace{0.5cm}
 
+{% if formula_pmax %}
 \section*{Pmax (ART.PMAX)}
-
 \[
 {{ formula_pmax }}
 \]
-
+{% endif %}
+{% if pmax %}
 Valor calculado: \( P_{max} = {{ pmax }} \)
-
-{% if pmax_img and pmax_img.strip() %}
+{% endif %}
+{% if pmax_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{\detokenize{ {{- pmax_img|escape -}} }}
+\includegraphics[width=0.5\textwidth]{ {{ pmax_img }} }
 \end{figure}
 {% endif %}
 
 \vspace{0.5cm}
 
+{% if formula_asmin %}
 \section*{As m\'in (ART.ASMIN)}
-
 \[
 {{ formula_asmin }}
 \]
-
+{% endif %}
+{% if as_min %}
 Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }} \)
-
-{% if asmin_img and asmin_img.strip() %}
+{% endif %}
+{% if asmin_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{\detokenize{ {{- asmin_img|escape -}} }}
+\includegraphics[width=0.5\textwidth]{ {{ asmin_img }} }
 \end{figure}
 {% endif %}
 
 \vspace{0.5cm}
 
+{% if formula_asmax %}
 \section*{As m\'ax (ART.ASMAX)}
-
 \[
 {{ formula_asmax }}
 \]
-
+{% endif %}
+{% if as_max %}
 Valor calculado: \( A_{s}^{\text{max}} = {{ as_max }} \)
-
-{% if asmax_img and asmax_img.strip() %}
+{% endif %}
+{% if asmax_img %}
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{\detokenize{ {{- asmax_img|escape -}} }}
+\includegraphics[width=0.5\textwidth]{ {{ asmax_img }} }
 \end{figure}
 {% endif %}
 

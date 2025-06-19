@@ -135,3 +135,66 @@
 2025-06-17 21:32:47,759-0500 INFO  pdflatex - allowing known shell commands
 2025-06-17 21:32:47,870-0500 INFO  pdflatex - this process (9848) finishes with exit code 1
 2025-06-17 21:32:47,871-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-18 21:14:59,599-0500 INFO  pdflatex - this process (11492) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmp63gb7h63 with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmp63gb7h63\report.tex
+2025-06-18 21:14:59,599-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-18 21:14:59,602-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-18 21:14:59,647-0500 INFO  pdflatex - allowing known shell commands
+2025-06-18 21:15:00,571-0500 INFO  pdflatex - this process (11492) finishes with exit code 1
+2025-06-18 21:15:00,583-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-18 21:46:32,634-0500 INFO  pdflatex - this process (16632) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmp8rggcat1 with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmp8rggcat1\report.tex
+2025-06-18 21:46:32,635-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-18 21:46:32,638-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-18 21:46:32,680-0500 INFO  pdflatex - allowing known shell commands
+2025-06-18 21:46:33,579-0500 INFO  pdflatex - this process (16632) finishes with exit code 1
+2025-06-18 21:46:33,595-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-18 21:52:28,859-0500 INFO  pdflatex - this process (15428) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmp6v03bijt with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmp6v03bijt\report.tex
+2025-06-18 21:52:28,859-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-18 21:52:28,862-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-18 21:52:28,865-0500 INFO  pdflatex - allowing known shell commands
+2025-06-18 21:52:29,184-0500 INFO  pdflatex - this process (15428) finishes with exit code 1
+2025-06-18 21:52:29,186-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-18 21:55:18,943-0500 INFO  pdflatex - this process (17156) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmpffumilyw with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmpffumilyw\report.tex
+2025-06-18 21:55:18,944-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-18 21:55:18,947-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-18 21:55:18,949-0500 INFO  pdflatex - allowing known shell commands
+2025-06-18 21:55:19,270-0500 INFO  pdflatex - this process (17156) finishes with exit code 1
+2025-06-18 21:55:19,272-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-18 22:06:09,483-0500 INFO  pdflatex - this process (15156) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmpj1qc1hnv with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmpj1qc1hnv\report.tex
+2025-06-18 22:06:09,484-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-18 22:06:09,486-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-18 22:06:09,489-0500 INFO  pdflatex - allowing known shell commands
+2025-06-18 22:06:09,864-0500 INFO  pdflatex - this process (15156) finishes with exit code 1
+2025-06-18 22:06:09,868-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-18 22:12:38,063-0500 INFO  pdflatex - this process (5688) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmpakgqj_7o with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmpakgqj_7o\report.tex
+2025-06-18 22:12:38,063-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-18 22:12:38,066-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-18 22:12:38,069-0500 INFO  pdflatex - allowing known shell commands
+2025-06-18 22:12:39,850-0500 WARN  pdflatex.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-18 22:12:39,850-0500 WARN  pdflatex.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-18 22:12:39,850-0500 WARN  pdflatex.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-18 22:12:39,852-0500 WARN  pdflatex.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-18 22:21:24,246-0500 FATAL pdflatex.core - The file name database is damaged.
+2025-06-18 22:21:24,247-0500 FATAL pdflatex.core - Data: path="C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex/data/le\texmf.fndb-5.log"
+2025-06-18 22:21:24,247-0500 FATAL pdflatex.core - Source: Libraries\MiKTeX\Core\Fndb\FileNameDatabase.cpp:513
+2025-06-18 22:21:24,248-0500 FATAL pdflatex - The file name database is damaged.
+2025-06-18 22:21:24,249-0500 FATAL pdflatex - Info: path="C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex/data/le\texmf.fndb-5.log"
+2025-06-18 22:21:24,249-0500 FATAL pdflatex - Source: Libraries\MiKTeX\Core\Fndb\FileNameDatabase.cpp
+2025-06-18 22:21:24,249-0500 FATAL pdflatex - Line: 513
+2025-06-18 22:21:24,250-0500 INFO  pdflatex - this process (5688) finishes with exit code 1
+2025-06-18 22:21:24,252-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-18 22:21:24,289-0500 WARN  pdflatex.core - still open: report.log
+2025-06-18 22:21:24,289-0500 WARN  pdflatex.core - still open: C:/Users/abemc/AppData/Local/Temp/tmpakgqj_7o/report.tex
+2025-06-18 22:32:40,590-0500 INFO  pdflatex - this process (11232) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmplxr0g0yx with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmplxr0g0yx\report.tex
+2025-06-18 22:32:40,590-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-18 22:32:40,593-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-18 22:32:40,596-0500 INFO  pdflatex - allowing known shell commands
+2025-06-18 22:32:40,624-0500 INFO  pdflatex - going to create file: pdflatex.fmt
+2025-06-18 22:32:40,625-0500 INFO  pdflatex.core - start process: miktex formats build pdflatex --engine pdftex
+2025-06-18 22:33:00,591-0500 INFO  pdflatex - this process (11232) finishes with exit code 1
+2025-06-18 22:33:00,593-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
+2025-06-18 22:38:42,173-0500 INFO  pdflatex - this process (10280) started by python in directory C:\Users\abemc\AppData\Local\Temp\tmpeenqp92n with command line: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64\pdflatex.exe" -interaction=nonstopmode C:\Users\abemc\AppData\Local\Temp\tmpeenqp92n\report.tex
+2025-06-18 22:38:42,174-0500 INFO  pdflatex - running on Windows 10.0.26100
+2025-06-18 22:38:42,176-0500 INFO  pdflatex - this is MiKTeX-PDFTEX 4.21.0 (1.40.27) (MiKTeX 25.4 Portable)
+2025-06-18 22:38:42,179-0500 INFO  pdflatex - allowing known shell commands
+2025-06-18 22:38:42,549-0500 INFO  pdflatex - this process (10280) finishes with exit code 0
+2025-06-18 22:38:42,551-0500 ERROR pdflatex - major issue: So far, you have not checked for MiKTeX updates.
