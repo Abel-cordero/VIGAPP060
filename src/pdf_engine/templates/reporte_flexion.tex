@@ -17,13 +17,13 @@
 \begin{minipage}[t]{0.48\textwidth}
 \begin{tabular}{|l|c|}
 \hline
-Base (b) & {{ base|default('')|escape }} m \\
-Altura (h) & {{ altura|default('')|escape }} m \\
-Recubrimiento (r) & {{ recubrimiento|default('')|escape }} m \\
-Estribo (\ensuremath{\phi_e}) & {{ diam_estribo|default('')|escape }} m \\
-Varilla principal (\ensuremath{\phi_s}) & {{ diam_varilla|default('')|escape }} m \\
-f'c & {{ fc|default('')|escape }} MPa \\
-fy & {{ fy|default('')|escape }} MPa \\
+Base (b) & {{ base|default('')|escape }} cm \\
+Altura (h) & {{ altura|default('')|escape }} cm \\
+Recubrimiento (r) & {{ recubrimiento|default('')|escape }} cm \\
+Estribo (\ensuremath{\phi_e}) & {{ diam_estribo|default('')|escape }} cm \\
+Varilla principal (\ensuremath{\phi_s}) & {{ diam_varilla|default('')|escape }} cm \\
+f'c & {{ fc|default('')|escape }} kgf/cm$^2$ \\
+fy & {{ fy|default('')|escape }} kgf/cm$^2$ \\
 \hline
 \end{tabular}
 \end{minipage}
@@ -46,7 +46,7 @@ fy & {{ fy|default('')|escape }} MPa \\
 \]
 {% endif %}
 {% if d %}
-Valor calculado: \( d = {{ d }}\,\text{m} \)
+Valor calculado: \( d = {{ d }}\,\text{cm} \)
 {% endif %}
 {% if peralte_img %}
 \begin{figure}[H]
@@ -136,7 +136,7 @@ Valor calculado: \( P_{max} = {{ pmax }} \)
 \]
 {% endif %}
 {% if as_min %}
-Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }} \)
+Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }}\,\text{cm}^2 \)
 {% endif %}
 {% if asmin_img %}
 \begin{figure}[H]
@@ -154,7 +154,7 @@ Valor calculado: \( A_{s}^{\text{min}} = {{ as_min }} \)
 \]
 {% endif %}
 {% if as_max %}
-Valor calculado: \( A_{s}^{\text{max}} = {{ as_max }} \)
+Valor calculado: \( A_{s}^{\text{max}} = {{ as_max }}\,\text{cm}^2 \)
 {% endif %}
 {% if asmax_img %}
 \begin{figure}[H]
