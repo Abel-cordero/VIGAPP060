@@ -237,7 +237,6 @@ El código se encuentra organizado en la carpeta `src/vigapp/` y se inicia desde
 - **`ui/moment_app.py`** — ventana de ingreso de momentos y corrección.
 - **`ui/design_window.py`** — etapa de diseño principal.
 - **`ui/view3d_window.py`** — vista tridimensional simplificada.
-- **`ui/memoria_window.py`** — ventana con memoria de cálculo detallada.
 Las clases principales son:
 
 - **`MomentApp`** (en `src/vigapp/ui/moment_app.py`)
@@ -259,8 +258,6 @@ Las clases principales son:
 - **`View3DWindow`** (en `src/vigapp/ui/view3d_window.py`)
   - `draw_views()` — genera la visualización 2D y 3D de la viga.
 
-- **`MemoriaWindow`** (en `src/vigapp/ui/memoria_window.py`)
-  - `_capture()` — guarda una captura de la memoria de cálculo.
 - **`FormulaWindow`** (en `src/vigapp/ui/formula_window.py`)
   - Permite escribir una fórmula en texto y visualizarla en formato LaTeX.
   - Botones para capturar la vista o exportarla a PNG/PDF/DOCX.
@@ -474,20 +471,6 @@ Agregar al reporte las vistas gráficas del diseño estructural.
 - Secciones de acero (M1, M2, M3).
 - Cada imagen debe estar centrada, con márgenes consistentes.
 - No repetir imágenes innecesarias (por ejemplo, no duplicar sección).
-
----
-
-## 📍 ETAPA 7 – VISTA PREVIA (ANTES DE EXPORTAR)
-
-### 🎯 Objetivo:
-Permitir al usuario visualizar el reporte completo antes de exportarlo como PDF.
-
-### 🛠️ Especificaciones:
-- Implementar ventana de vista previa.
-- Mostrar: título, datos, fórmulas, imágenes, resultados.
-- No exportar automáticamente: permitir confirmación manual.
-
----
 
 ## 🔒 RESTRICCIONES GENERALES
 
