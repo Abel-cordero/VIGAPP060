@@ -722,6 +722,20 @@ class DesignWindow(QMainWindow):
             "results": result_section,
             "images": images,
             "section_img": section_img,
+            # Valores clave para el reporte LaTeX
+            "d": d,
+            "b1": beta1,
+            "pbal": p_bal,
+            "pmax": p_max,
+            "as_min": as_min,
+            "as_max": as_max,
+            # Fórmulas principales en formato LaTeX
+            "formula_peralte": calc_sections[0][1][0].strip("$"),
+            "formula_b1": calc_sections[1][1][0].strip("$"),
+            "formula_pbal": calc_sections[2][1][0].strip("$"),
+            "formula_pmax": calc_sections[3][1][0].strip("$"),
+            "formula_asmin": calc_sections[4][1][0].strip("$"),
+            "formula_asmax": calc_sections[5][1][0].strip("$"),
         }
         return title, data
 

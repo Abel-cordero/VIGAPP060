@@ -10,3 +10,11 @@
 2025-06-17 19:52:47,700-0500 INFO  miktex-fc-cache - this process (31188) started by miktex in directory C:\Users\PC\Desktop\LOCAL REPOSITORIE\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: miktex-fc-cache --miktex-disable-maintenance --miktex-disable-diagnose
 2025-06-17 19:52:47,700-0500 INFO  miktex-fc-cache - running on Windows 10.0.26100
 2025-06-17 19:52:47,734-0500 INFO  miktex-fc-cache - this process (31188) finishes with exit code 0
+2025-06-18 23:49:25,984-0500 INFO  miktex-fc-cache - this process (16988) started by miktex in directory C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: miktex-fc-cache --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-18 23:49:25,985-0500 INFO  miktex-fc-cache - running on Windows 10.0.26100
+2025-06-18 23:49:25,998-0500 WARN  miktex-fc-cache - security risk: running with elevated privileges
+2025-06-18 23:49:30,850-0500 INFO  miktex-fc-cache - this process (16988) finishes with exit code 0
+2025-06-18 23:49:44,491-0500 INFO  miktex-fc-cache - this process (17324) started by miktex in directory C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex\bin\x64 with command line: miktex-fc-cache --verbose --miktex-disable-maintenance --miktex-disable-diagnose
+2025-06-18 23:49:44,491-0500 INFO  miktex-fc-cache - running on Windows 10.0.26100
+2025-06-18 23:49:44,504-0500 WARN  miktex-fc-cache - security risk: running with elevated privileges
+2025-06-18 23:49:44,637-0500 INFO  miktex-fc-cache - this process (17324) finishes with exit code 0

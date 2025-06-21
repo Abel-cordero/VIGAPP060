@@ -11,6 +11,14 @@ LaTeX que provea el ejecutable `pdflatex`. En Windows se recomienda instalar
 [MiKTeX](https://miktex.org/) y asegurarse de que `pdflatex` esté disponible en
 la variable de entorno `PATH`.
 
+Si la compilación falla y MiKTeX informa que la base de datos está dañada o que
+no se han verificado las actualizaciones, abre **MiKTeX Console** y ejecuta una
+actualización completa. Luego puedes reparar la base de datos con:
+
+```bash
+initexmf --update-fndb
+```
+
 # Alcance:
 
 INSTRUCCIÓN PARA GENERAR UNA APLICACIÓN EN PYTHON – DISEÑO DE VIGAS SEGÚN NTP E.060 (PERÚ)

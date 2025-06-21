@@ -1,0 +1,10 @@
+2025-06-18 22:51:42,732-0500 INFO  miktex-mf - this process (4824) started by miktex-makepk in directory C:\Users\abemc\AppData\Local\Temp\mik91418 with command line: miktex-mf.exe --miktex-disable-maintenance --miktex-disable-diagnose --undump=mf \mode:=ljfour; \mag:=1+0/600; nonstopmode; "input tcrm1200"
+2025-06-18 22:51:42,732-0500 INFO  miktex-mf - running on Windows 10.0.26100
+2025-06-18 22:51:42,733-0500 INFO  miktex-mf - this is MiKTeX-METAFONT 4.2.0 (2.71828182) (MiKTeX 25.4 Portable)
+2025-06-18 22:51:42,759-0500 INFO  miktex-mf - going to create file: mf.base
+2025-06-18 22:51:42,760-0500 INFO  miktex-mf.core - start process: miktex formats build mf
+2025-06-18 22:51:44,192-0500 INFO  miktex-mf - this process (8132) started by miktex-makebase in directory C:\Users\abemc\AppData\Local\Temp\mik79619 with command line: miktex-mf.exe --miktex-disable-maintenance --miktex-disable-diagnose --initialize --interaction=nonstopmode --halt-on-error -tcx=cp227.tcx mf.ini
+2025-06-18 22:51:44,193-0500 INFO  miktex-mf - running on Windows 10.0.26100
+2025-06-18 22:51:44,193-0500 INFO  miktex-mf - this is MiKTeX-METAFONT 4.2.0 (2.71828182) (MiKTeX 25.4 Portable)
+2025-06-18 22:51:44,268-0500 INFO  miktex-mf - this process (8132) finishes with exit code 0
+2025-06-18 22:51:44,979-0500 INFO  miktex-mf - this process (4824) finishes with exit code 0

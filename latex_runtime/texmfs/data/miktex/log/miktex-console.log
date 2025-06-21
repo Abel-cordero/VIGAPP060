@@ -1,0 +1,299 @@
+2025-06-18 22:18:30,402-0500 INFO  main - starting: MiKTeX Console 4.12 (MiKTeX 25.4 Portable)
+2025-06-18 22:18:30,417-0500 INFO  miktex-console.core - start process: pdftex --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose --version
+2025-06-18 22:18:31,121-0500 ERROR miktex-console.core - Something is wrong with the PATH:
+2025-06-18 22:18:31,121-0500 ERROR miktex-console.core - C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Users\abemc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Abel\AppData\Local\Programs\Python\Python311\;C:\Users\abemc\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+2025-06-18 22:18:32,869-0500 WARN  miktex-console.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-18 22:18:32,869-0500 WARN  miktex-console.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-18 22:18:32,870-0500 WARN  miktex-console.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-18 22:18:32,872-0500 WARN  miktex-console.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-18 22:18:46,763-0500 WARN  miktex-console.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-18 22:18:46,764-0500 WARN  miktex-console.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-18 22:18:46,764-0500 WARN  miktex-console.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-18 22:18:46,766-0500 WARN  miktex-console.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-18 22:19:24,371-0500 INFO  miktex-console.packagemanager - going to download https://api2.miktex.org/hello
+2025-06-18 22:19:25,428-0500 INFO  miktex-console.packagemanager - going to download https://api2.miktex.org/repositories?&releaseState=Stable&orderBy=ranking&take=1&onlySecure=true
+2025-06-18 22:19:27,085-0500 INFO  miktex-console.packagemanager - installing package grffile
+2025-06-18 22:19:27,323-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ucr.ac.cr/CTAN/systems/win32/miktex/tm/packages/grffile.tar.lzma
+2025-06-18 22:19:29,391-0500 FATAL miktex-console.core - The file name database is damaged.
+2025-06-18 22:19:29,391-0500 FATAL miktex-console.core - Data: path="C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex/data/le\texmf.fndb-5.log"
+2025-06-18 22:19:29,391-0500 FATAL miktex-console.core - Source: Libraries\MiKTeX\Core\Fndb\FileNameDatabase.cpp:513
+2025-06-18 22:19:32,074-0500 INFO  miktex-console.core - start process: pdftex --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose --version
+2025-06-18 22:19:32,559-0500 ERROR miktex-console.core - Something is wrong with the PATH:
+2025-06-18 22:19:32,560-0500 ERROR miktex-console.core - C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Users\abemc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Abel\AppData\Local\Programs\Python\Python311\;C:\Users\abemc\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+2025-06-18 22:19:32,619-0500 INFO  miktex-console.core - start process: pdftex --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose --version
+2025-06-18 22:19:33,200-0500 ERROR miktex-console.core - Something is wrong with the PATH:
+2025-06-18 22:19:33,200-0500 ERROR miktex-console.core - C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Users\abemc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Abel\AppData\Local\Programs\Python\Python311\;C:\Users\abemc\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+2025-06-18 22:20:33,931-0500 WARN  miktex-console.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-18 22:20:33,931-0500 WARN  miktex-console.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-18 22:20:33,931-0500 WARN  miktex-console.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-18 22:20:33,933-0500 WARN  miktex-console.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-18 22:20:34,575-0500 INFO  main - finishing with exit code 0
+2025-06-18 22:29:41,497-0500 INFO  main - starting: MiKTeX Console 4.12 (MiKTeX 25.4 Portable)
+2025-06-18 22:29:41,518-0500 INFO  miktex-console.core - start process: pdftex --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose --version
+2025-06-18 22:29:42,094-0500 ERROR miktex-console.core - Something is wrong with the PATH:
+2025-06-18 22:29:42,094-0500 ERROR miktex-console.core - C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Users\abemc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Abel\AppData\Local\Programs\Python\Python311\;C:\Users\abemc\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+2025-06-18 22:29:43,813-0500 WARN  miktex-console.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-18 22:29:43,813-0500 WARN  miktex-console.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-18 22:29:43,813-0500 WARN  miktex-console.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-18 22:29:43,815-0500 WARN  miktex-console.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-18 22:30:48,115-0500 WARN  miktex-console.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-18 22:30:48,115-0500 WARN  miktex-console.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-18 22:30:48,115-0500 WARN  miktex-console.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-18 22:30:48,117-0500 WARN  miktex-console.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-18 22:42:01,010-0500 INFO  main - finishing with exit code 0
+2025-06-18 23:42:52,555-0500 INFO  main - starting: MiKTeX Console 4.12 (MiKTeX 25.4 Portable)
+2025-06-18 23:42:52,568-0500 INFO  miktex-console.core - start process: pdftex --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose --version
+2025-06-18 23:42:53,174-0500 ERROR miktex-console.core - Something is wrong with the PATH:
+2025-06-18 23:42:53,175-0500 ERROR miktex-console.core - C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Users\abemc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Abel\AppData\Local\Programs\Python\Python311\;C:\Users\abemc\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+2025-06-18 23:42:54,962-0500 WARN  miktex-console.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-18 23:42:54,962-0500 WARN  miktex-console.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-18 23:42:54,962-0500 WARN  miktex-console.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-18 23:42:54,966-0500 WARN  miktex-console.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-18 23:43:01,771-0500 INFO  mainwindow - checking for updates...
+2025-06-18 23:43:01,784-0500 INFO  miktex-console.packagemanager - searching for updateable packages
+2025-06-18 23:43:01,788-0500 INFO  miktex-console.packagemanager - going to download https://api2.miktex.org/hello
+2025-06-18 23:43:02,749-0500 INFO  miktex-console.packagemanager - going to download https://api2.miktex.org/repositories?&releaseState=Stable&orderBy=ranking&take=1&onlySecure=true
+2025-06-18 23:43:02,962-0500 INFO  mainwindow - downloading https://ctan.dcc.uchile.cl/systems/win32/miktex/tm/packages/miktex-zzdb3-2.9.tar.lzma...
+2025-06-18 23:43:03,196-0500 INFO  miktex-console.packagemanager - going to download https://ctan.dcc.uchile.cl/systems/win32/miktex/tm/packages/miktex-zzdb3-2.9.tar.lzma
+2025-06-18 23:43:03,499-0500 ERROR mainwindow - :0: Requested resource not found.(url="https://ctan.dcc.uchile.cl/systems/win32/miktex/tm/packages/miktex-zzdb3-2.9.tar.lzma")
+2025-06-18 23:43:11,480-0500 INFO  miktex-console.core - start process: pdftex --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose --version
+2025-06-18 23:43:11,976-0500 ERROR miktex-console.core - Something is wrong with the PATH:
+2025-06-18 23:43:11,976-0500 ERROR miktex-console.core - C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Users\abemc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Abel\AppData\Local\Programs\Python\Python311\;C:\Users\abemc\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+2025-06-18 23:43:12,037-0500 INFO  miktex-console.core - start process: pdftex --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose --version
+2025-06-18 23:43:12,529-0500 ERROR miktex-console.core - Something is wrong with the PATH:
+2025-06-18 23:43:12,529-0500 ERROR miktex-console.core - C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Users\abemc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Abel\AppData\Local\Programs\Python\Python311\;C:\Users\abemc\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+2025-06-18 23:45:16,299-0500 WARN  miktex-console.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-18 23:45:16,300-0500 WARN  miktex-console.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-18 23:45:16,300-0500 WARN  miktex-console.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-18 23:45:16,302-0500 WARN  miktex-console.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-18 23:46:00,004-0500 INFO  mainwindow - MiKTeX Console needs to be restarted
+2025-06-18 23:46:00,004-0500 INFO  miktex-console.core - start process: miktex-console.exe
+2025-06-18 23:46:00,260-0500 WARN  main - session.use_count() == 7
+2025-06-18 23:46:00,261-0500 INFO  main - finishing with exit code 0
+2025-06-18 23:46:00,546-0500 INFO  main - starting: MiKTeX Console 4.12 (MiKTeX 25.4 Portable)
+2025-06-18 23:46:00,559-0500 INFO  miktex-console.core - start process: pdftex --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose --version
+2025-06-18 23:46:01,139-0500 ERROR miktex-console.core - Something is wrong with the PATH:
+2025-06-18 23:46:01,139-0500 ERROR miktex-console.core - C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Users\abemc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Abel\AppData\Local\Programs\Python\Python311\;C:\Users\abemc\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+2025-06-18 23:46:02,922-0500 WARN  miktex-console.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-18 23:46:02,922-0500 WARN  miktex-console.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-18 23:46:02,922-0500 WARN  miktex-console.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-18 23:46:02,925-0500 WARN  miktex-console.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-18 23:46:27,720-0500 INFO  mainwindow - setting AutoInstall: no
+2025-06-18 23:47:14,445-0500 INFO  miktex-console.packagemanager - going to download https://api2.miktex.org/repositories?&releaseState=Stable
+2025-06-18 23:48:07,189-0500 INFO  miktex-console.packagemanager - going to download https://api2.miktex.org/hello
+2025-06-18 23:48:07,846-0500 INFO  miktex-console.packagemanager - going to download https://api2.miktex.org/repositories?&releaseState=Stable
+2025-06-18 23:48:18,600-0500 INFO  mainwindow - checking for updates...
+2025-06-18 23:48:18,613-0500 INFO  miktex-console.packagemanager - searching for updateable packages
+2025-06-18 23:48:18,614-0500 INFO  miktex-console.packagemanager - going to download https://api2.miktex.org/repositories/5a49807749bd5efd1004d1396fa669d8
+2025-06-18 23:48:19,241-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-zzdb3-2.9.tar.lzma...
+2025-06-18 23:48:19,241-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-zzdb3-2.9.tar.lzma
+2025-06-18 23:48:20,623-0500 INFO  mainwindow - 1.87 MB, 10.84 Mbit/s
+2025-06-18 23:48:23,432-0500 INFO  mainwindow - updating package manifests ("C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\miktex/config\package-manifests.ini")...
+2025-06-18 23:48:25,428-0500 INFO  mainwindow - installed 7889 package manifests
+2025-06-18 23:48:25,428-0500 INFO  mainwindow - visiting repository https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/...
+2025-06-18 23:48:25,428-0500 INFO  mainwindow - repository type: remote package repository
+2025-06-18 23:48:25,430-0500 INFO  mainwindow - loading package repository manifest...
+2025-06-18 23:48:25,430-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-zzdb1-2.9.tar.lzma...
+2025-06-18 23:48:25,431-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-zzdb1-2.9.tar.lzma
+2025-06-18 23:48:27,417-0500 INFO  mainwindow - 0.39 MB, 1.56 Mbit/s
+2025-06-18 23:48:28,863-0500 WARN  miktex-console.packagemanager - dependency problem: ms is required by _miktex-latex-packages
+2025-06-18 23:48:28,864-0500 WARN  miktex-console.packagemanager - dependency problem: showframe is required by _miktex-latex-packages
+2025-06-18 23:48:28,864-0500 WARN  miktex-console.packagemanager - dependency problem: thailatex is required by _miktex-latex-packages
+2025-06-18 23:48:28,866-0500 WARN  miktex-console.packagemanager - dependency problem: luxi is required by _miktex-fonts-type1
+2025-06-18 23:48:33,265-0500 INFO  mainwindow - package repository digest: 4e45ccf8138cdb971b961c394e59a055
+2025-06-18 23:48:34,436-0500 WARN  miktex-console.packagemanager - package miktex-luatex verification failed: some files have been modified
+2025-06-18 23:48:34,436-0500 WARN  miktex-console.packagemanager - expected digest: 48f3245941de0405d6db5293571fe2e9
+2025-06-18 23:48:34,436-0500 WARN  miktex-console.packagemanager - computed digest: f5bddab719f289099cd22c6675248914
+2025-06-18 23:48:34,436-0500 WARN  miktex-console.packagemanager - miktex-luatex: package is broken
+2025-06-18 23:48:34,501-0500 WARN  miktex-console.packagemanager - package miktex-dict-french verification failed: some files have been modified
+2025-06-18 23:48:34,501-0500 WARN  miktex-console.packagemanager - expected digest: 5ccf1fce0578d7cbdb9ac5027063ff1c
+2025-06-18 23:48:34,501-0500 WARN  miktex-console.packagemanager - computed digest: a8aadf473190278fc64baee73ce71ed2
+2025-06-18 23:48:34,502-0500 WARN  miktex-console.packagemanager - miktex-dict-french: package is broken
+2025-06-18 23:48:34,668-0500 WARN  miktex-console.packagemanager - package miktex-dict-english verification failed: some files have been modified
+2025-06-18 23:48:34,668-0500 WARN  miktex-console.packagemanager - expected digest: 0194a22186cce493e7c65b3f10da85d1
+2025-06-18 23:48:34,668-0500 WARN  miktex-console.packagemanager - computed digest: cfeb8665cdebf03281c881e4112bce1a
+2025-06-18 23:48:34,668-0500 WARN  miktex-console.packagemanager - miktex-dict-english: package is broken
+2025-06-18 23:48:34,925-0500 WARN  miktex-console.packagemanager - package miktex-latex verification failed: some files have been modified
+2025-06-18 23:48:34,925-0500 WARN  miktex-console.packagemanager - expected digest: 0ced20107fb5e84d953df2bf37128888
+2025-06-18 23:48:34,925-0500 WARN  miktex-console.packagemanager - computed digest: 91d5c61d24d2b7564ad083fa5a49a8c1
+2025-06-18 23:48:34,925-0500 WARN  miktex-console.packagemanager - miktex-latex: package is broken
+2025-06-18 23:48:35,358-0500 WARN  miktex-console.packagemanager - package miktex-ghostscript-bin-x64 verification failed: some files have been modified
+2025-06-18 23:48:35,358-0500 WARN  miktex-console.packagemanager - expected digest: 7b5776964a4e76b8d07ff369a00377e2
+2025-06-18 23:48:35,358-0500 WARN  miktex-console.packagemanager - computed digest: 2dfa8f9d3d8f1b0424cd4bd566f5be99
+2025-06-18 23:48:35,358-0500 WARN  miktex-console.packagemanager - miktex-ghostscript-bin-x64: package is broken
+2025-06-18 23:48:37,479-0500 WARN  miktex-console.packagemanager - package miktex-doc verification failed: some files have been modified
+2025-06-18 23:48:37,479-0500 WARN  miktex-console.packagemanager - expected digest: 486441f0f01d09e50e376edafa1fe7ca
+2025-06-18 23:48:37,479-0500 WARN  miktex-console.packagemanager - computed digest: 9e6e42240189042413ff087a8bc0eca0
+2025-06-18 23:48:37,480-0500 WARN  miktex-console.packagemanager - miktex-doc: package is broken
+2025-06-18 23:48:37,822-0500 WARN  miktex-console.packagemanager - package miktex-misc verification failed: some files have been modified
+2025-06-18 23:48:37,822-0500 WARN  miktex-console.packagemanager - expected digest: 4500ad50748758b98c15715fda041adb
+2025-06-18 23:48:37,822-0500 WARN  miktex-console.packagemanager - computed digest: 965eac4d6437adf40676b25fd50fb9b3
+2025-06-18 23:48:37,822-0500 WARN  miktex-console.packagemanager - miktex-misc: package is broken
+2025-06-18 23:48:38,380-0500 WARN  miktex-console.packagemanager - package miktex-dvips verification failed: some files have been modified
+2025-06-18 23:48:38,381-0500 WARN  miktex-console.packagemanager - expected digest: ffbafc1e756beea98eeb72f7ad0da532
+2025-06-18 23:48:38,381-0500 WARN  miktex-console.packagemanager - computed digest: 240b854fa53f07c57a704fdb60feb84a
+2025-06-18 23:48:38,381-0500 WARN  miktex-console.packagemanager - miktex-dvips: package is broken
+2025-06-18 23:48:40,948-0500 WARN  miktex-console.packagemanager - package miktex-config-2.9 verification failed: some files have been modified
+2025-06-18 23:48:40,948-0500 WARN  miktex-console.packagemanager - expected digest: 2f65872f87312217296572f847b8b504
+2025-06-18 23:48:40,948-0500 WARN  miktex-console.packagemanager - computed digest: 05376c881e7de865d10327633e001a5e
+2025-06-18 23:48:40,948-0500 WARN  miktex-console.packagemanager - miktex-config-2.9: package is broken
+2025-06-18 23:48:41,038-0500 WARN  miktex-console.packagemanager - package miktex-dvipdfmx verification failed: some files have been modified
+2025-06-18 23:48:41,038-0500 WARN  miktex-console.packagemanager - expected digest: e3ec90a77af1577197de51c264088792
+2025-06-18 23:48:41,038-0500 WARN  miktex-console.packagemanager - computed digest: 196b1a2a8c617db48af06f4668886b7d
+2025-06-18 23:48:41,038-0500 WARN  miktex-console.packagemanager - miktex-dvipdfmx: package is broken
+2025-06-18 23:48:41,348-0500 WARN  miktex-console.packagemanager - package miktex-dict-british verification failed: some files have been modified
+2025-06-18 23:48:41,348-0500 WARN  miktex-console.packagemanager - expected digest: caea50358ff3dfba554e72dafee98a19
+2025-06-18 23:48:41,349-0500 WARN  miktex-console.packagemanager - computed digest: c34ff7a8d84c8764fe842354ab8774bf
+2025-06-18 23:48:41,349-0500 WARN  miktex-console.packagemanager - miktex-dict-british: package is broken
+2025-06-18 23:48:41,519-0500 WARN  miktex-console.packagemanager - package miktex-dict-german verification failed: some files have been modified
+2025-06-18 23:48:41,519-0500 WARN  miktex-console.packagemanager - expected digest: 5c0afdb24160b840455513c1a368643d
+2025-06-18 23:48:41,520-0500 WARN  miktex-console.packagemanager - computed digest: ed1b4046921d7e856de667964aee9916
+2025-06-18 23:48:41,520-0500 WARN  miktex-console.packagemanager - miktex-dict-german: package is broken
+2025-06-18 23:48:41,777-0500 WARN  miktex-console.packagemanager - package miktex-fontconfig verification failed: some files have been modified
+2025-06-18 23:48:41,777-0500 WARN  miktex-console.packagemanager - expected digest: 4e9a3cfd96717773e31595c400068fd1
+2025-06-18 23:48:41,777-0500 WARN  miktex-console.packagemanager - computed digest: 1dc2db27acada05b0e0cdd01214d5a26
+2025-06-18 23:48:41,777-0500 WARN  miktex-console.packagemanager - miktex-fontconfig: package is broken
+2025-06-18 23:48:43,639-0500 WARN  miktex-console.packagemanager - package miktex-mo-bin-x64-2.9 verification failed: some files have been modified
+2025-06-18 23:48:43,639-0500 WARN  miktex-console.packagemanager - expected digest: b8c97012400e2c18760a2e383854c391
+2025-06-18 23:48:43,639-0500 WARN  miktex-console.packagemanager - computed digest: b86b298832ff92072b3fb635ad7bb227
+2025-06-18 23:48:43,639-0500 WARN  miktex-console.packagemanager - miktex-mo-bin-x64-2.9: package is broken
+2025-06-18 23:48:44,263-0500 WARN  miktex-console.packagemanager - package miktex-pdftex verification failed: some files have been modified
+2025-06-18 23:48:44,263-0500 WARN  miktex-console.packagemanager - expected digest: 9bff6b07e87ad41fe8053841c84b9c22
+2025-06-18 23:48:44,263-0500 WARN  miktex-console.packagemanager - computed digest: 0e15cd4ad117fe61a234836dbbf59f56
+2025-06-18 23:48:44,263-0500 WARN  miktex-console.packagemanager - miktex-pdftex: package is broken
+2025-06-18 23:48:45,917-0500 WARN  miktex-console.packagemanager - package miktex-psutils-bin-x64-2.9 verification failed: some files have been modified
+2025-06-18 23:48:45,917-0500 WARN  miktex-console.packagemanager - expected digest: c892eccf5f3ce732c2ad3eb8c4c80bea
+2025-06-18 23:48:45,917-0500 WARN  miktex-console.packagemanager - computed digest: 16e75c5322d7e3e0af2547ccb117fe22
+2025-06-18 23:48:45,917-0500 WARN  miktex-console.packagemanager - miktex-psutils-bin-x64-2.9: package is broken
+2025-06-18 23:48:46,872-0500 WARN  miktex-console.packagemanager - package miktex-tex4ht verification failed: some files have been modified
+2025-06-18 23:48:46,873-0500 WARN  miktex-console.packagemanager - expected digest: 0e794a66c0344079e0aea64cf9293272
+2025-06-18 23:48:46,873-0500 WARN  miktex-console.packagemanager - computed digest: 1878caae0f5991fad30e85132c569c65
+2025-06-18 23:48:46,873-0500 WARN  miktex-console.packagemanager - miktex-tex4ht: package is broken
+2025-06-18 23:48:47,614-0500 WARN  miktex-console.packagemanager - package miktex-xetex verification failed: some files have been modified
+2025-06-18 23:48:47,614-0500 WARN  miktex-console.packagemanager - expected digest: 88d75613093821a5f3cac1d57831c945
+2025-06-18 23:48:47,614-0500 WARN  miktex-console.packagemanager - computed digest: 2d955dd2530eed152bcdb71ccbc402c2
+2025-06-18 23:48:47,614-0500 WARN  miktex-console.packagemanager - miktex-xetex: package is broken
+2025-06-18 23:48:48,050-0500 WARN  miktex-console.packagemanager - package miktex-zip-bin-x64 verification failed: some files have been modified
+2025-06-18 23:48:48,051-0500 WARN  miktex-console.packagemanager - expected digest: 74fafbab070fb85bc121c499436faad3
+2025-06-18 23:48:48,051-0500 WARN  miktex-console.packagemanager - computed digest: 794a6058a998151f0179338910567283
+2025-06-18 23:48:48,051-0500 WARN  miktex-console.packagemanager - miktex-zip-bin-x64: package is broken
+2025-06-18 23:48:48,225-0500 INFO  mainwindow - found 19 updates
+2025-06-18 23:48:48,266-0500 INFO  miktex-console.core - start process: pdftex --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose --version
+2025-06-18 23:48:49,104-0500 ERROR miktex-console.core - Something is wrong with the PATH:
+2025-06-18 23:48:49,104-0500 ERROR miktex-console.core - C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Users\abemc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Abel\AppData\Local\Programs\Python\Python311\;C:\Users\abemc\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+2025-06-18 23:49:12,727-0500 INFO  mainwindow - installing updates...
+2025-06-18 23:49:12,728-0500 INFO  mainwindow - starting package maintenance...
+2025-06-18 23:49:12,728-0500 INFO  mainwindow - installation directory: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install"
+2025-06-18 23:49:12,728-0500 INFO  mainwindow - package repository: https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/
+2025-06-18 23:49:13,240-0500 INFO  mainwindow - package repository digest: 4e45ccf8138cdb971b961c394e59a055
+2025-06-18 23:49:13,241-0500 INFO  mainwindow - going to download 14322886 bytes
+2025-06-18 23:49:13,241-0500 INFO  mainwindow - going to install 289 file(s) (19 package(s))
+2025-06-18 23:49:14,197-0500 INFO  miktex-console.packagemanager - installing package miktex-config-2.9
+2025-06-18 23:49:14,199-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-config-2.9.tar.lzma...
+2025-06-18 23:49:14,199-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-config-2.9.tar.lzma
+2025-06-18 23:49:14,558-0500 INFO  mainwindow - 0.01 MB, 0.12 Mbit/s
+2025-06-18 23:49:14,752-0500 INFO  mainwindow - extracting files from miktex-config-2.9.tar.lzma...
+2025-06-18 23:49:15,182-0500 INFO  miktex-console.packagemanager - installing package miktex-dict-british
+2025-06-18 23:49:15,183-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dict-british.tar.lzma...
+2025-06-18 23:49:15,183-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dict-british.tar.lzma
+2025-06-18 23:49:15,895-0500 INFO  mainwindow - 0.79 MB, 8.85 Mbit/s
+2025-06-18 23:49:15,942-0500 INFO  mainwindow - extracting files from miktex-dict-british.tar.lzma...
+2025-06-18 23:49:16,067-0500 INFO  miktex-console.packagemanager - installing package miktex-dict-english
+2025-06-18 23:49:16,068-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dict-english.tar.lzma...
+2025-06-18 23:49:16,068-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dict-english.tar.lzma
+2025-06-18 23:49:16,205-0500 INFO  mainwindow - 0.17 MB, 10.18 Mbit/s
+2025-06-18 23:49:16,249-0500 INFO  mainwindow - extracting files from miktex-dict-english.tar.lzma...
+2025-06-18 23:49:16,309-0500 INFO  miktex-console.packagemanager - installing package miktex-dict-french
+2025-06-18 23:49:16,310-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dict-french.tar.lzma...
+2025-06-18 23:49:16,310-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dict-french.tar.lzma
+2025-06-18 23:49:16,457-0500 INFO  mainwindow - 0.29 MB, 16.13 Mbit/s
+2025-06-18 23:49:16,498-0500 INFO  mainwindow - extracting files from miktex-dict-french.tar.lzma...
+2025-06-18 23:49:16,565-0500 INFO  miktex-console.packagemanager - installing package miktex-dict-german
+2025-06-18 23:49:16,566-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dict-german.tar.lzma...
+2025-06-18 23:49:16,566-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dict-german.tar.lzma
+2025-06-18 23:49:17,006-0500 INFO  mainwindow - 0.97 MB, 17.63 Mbit/s
+2025-06-18 23:49:17,060-0500 INFO  mainwindow - extracting files from miktex-dict-german.tar.lzma...
+2025-06-18 23:49:17,194-0500 INFO  miktex-console.packagemanager - installing package miktex-doc
+2025-06-18 23:49:17,195-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-doc.tar.lzma...
+2025-06-18 23:49:17,195-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-doc.tar.lzma
+2025-06-18 23:49:17,347-0500 INFO  mainwindow - 0.47 MB, 25.07 Mbit/s
+2025-06-18 23:49:17,634-0500 INFO  mainwindow - extracting files from miktex-doc.tar.lzma...
+2025-06-18 23:49:17,958-0500 INFO  miktex-console.packagemanager - installing package miktex-dvipdfmx
+2025-06-18 23:49:17,959-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dvipdfmx.tar.lzma...
+2025-06-18 23:49:17,959-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dvipdfmx.tar.lzma
+2025-06-18 23:49:18,079-0500 INFO  mainwindow - 0.01 MB, 0.34 Mbit/s
+2025-06-18 23:49:18,131-0500 INFO  mainwindow - extracting files from miktex-dvipdfmx.tar.lzma...
+2025-06-18 23:49:18,188-0500 INFO  miktex-console.packagemanager - installing package miktex-dvips
+2025-06-18 23:49:18,189-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dvips.tar.lzma...
+2025-06-18 23:49:18,189-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-dvips.tar.lzma
+2025-06-18 23:49:18,309-0500 INFO  mainwindow - 0.00 MB, 0.28 Mbit/s
+2025-06-18 23:49:18,349-0500 INFO  mainwindow - extracting files from miktex-dvips.tar.lzma...
+2025-06-18 23:49:18,389-0500 INFO  miktex-console.packagemanager - installing package miktex-fontconfig
+2025-06-18 23:49:18,390-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-fontconfig.tar.lzma...
+2025-06-18 23:49:18,390-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-fontconfig.tar.lzma
+2025-06-18 23:49:18,516-0500 INFO  mainwindow - 0.00 MB, 0.23 Mbit/s
+2025-06-18 23:49:18,552-0500 INFO  mainwindow - extracting files from miktex-fontconfig.tar.lzma...
+2025-06-18 23:49:18,590-0500 INFO  miktex-console.packagemanager - installing package miktex-ghostscript-bin-x64
+2025-06-18 23:49:18,591-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-ghostscript-bin-x64.tar.lzma...
+2025-06-18 23:49:18,591-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-ghostscript-bin-x64.tar.lzma
+2025-06-18 23:49:20,065-0500 INFO  mainwindow - 11.06 MB, 60.05 Mbit/s
+2025-06-18 23:49:20,158-0500 INFO  mainwindow - extracting files from miktex-ghostscript-bin-x64.tar.lzma...
+2025-06-18 23:49:21,234-0500 INFO  miktex-console.packagemanager - installing package miktex-latex
+2025-06-18 23:49:21,235-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-latex.tar.lzma...
+2025-06-18 23:49:21,235-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-latex.tar.lzma
+2025-06-18 23:49:21,360-0500 INFO  mainwindow - 0.00 MB, 0.06 Mbit/s
+2025-06-18 23:49:21,394-0500 INFO  mainwindow - extracting files from miktex-latex.tar.lzma...
+2025-06-18 23:49:21,430-0500 INFO  miktex-console.packagemanager - installing package miktex-luatex
+2025-06-18 23:49:21,431-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-luatex.tar.lzma...
+2025-06-18 23:49:21,431-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-luatex.tar.lzma
+2025-06-18 23:49:21,545-0500 INFO  mainwindow - 0.01 MB, 0.81 Mbit/s
+2025-06-18 23:49:21,589-0500 INFO  mainwindow - extracting files from miktex-luatex.tar.lzma...
+2025-06-18 23:49:21,634-0500 INFO  miktex-console.packagemanager - installing package miktex-misc
+2025-06-18 23:49:21,635-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-misc.tar.lzma...
+2025-06-18 23:49:21,635-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-misc.tar.lzma
+2025-06-18 23:49:21,756-0500 INFO  mainwindow - 0.02 MB, 1.56 Mbit/s
+2025-06-18 23:49:21,846-0500 INFO  mainwindow - extracting files from miktex-misc.tar.lzma...
+2025-06-18 23:49:21,935-0500 INFO  miktex-console.packagemanager - installing package miktex-mo-bin-x64-2.9
+2025-06-18 23:49:21,936-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-mo-bin-x64-2.9.tar.lzma...
+2025-06-18 23:49:21,936-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-mo-bin-x64-2.9.tar.lzma
+2025-06-18 23:49:22,285-0500 INFO  mainwindow - 0.29 MB, 6.77 Mbit/s
+2025-06-18 23:49:22,327-0500 INFO  mainwindow - extracting files from miktex-mo-bin-x64-2.9.tar.lzma...
+2025-06-18 23:49:22,384-0500 INFO  miktex-console.packagemanager - installing package miktex-pdftex
+2025-06-18 23:49:22,385-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-pdftex.tar.lzma...
+2025-06-18 23:49:22,386-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-pdftex.tar.lzma
+2025-06-18 23:49:22,506-0500 INFO  mainwindow - 0.00 MB, 0.11 Mbit/s
+2025-06-18 23:49:22,551-0500 INFO  mainwindow - extracting files from miktex-pdftex.tar.lzma...
+2025-06-18 23:49:22,598-0500 INFO  miktex-console.packagemanager - installing package miktex-psutils-bin-x64-2.9
+2025-06-18 23:49:22,599-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-psutils-bin-x64-2.9.tar.lzma...
+2025-06-18 23:49:22,600-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-psutils-bin-x64-2.9.tar.lzma
+2025-06-18 23:49:22,725-0500 INFO  mainwindow - 0.06 MB, 4.02 Mbit/s
+2025-06-18 23:49:22,790-0500 INFO  mainwindow - extracting files from miktex-psutils-bin-x64-2.9.tar.lzma...
+2025-06-18 23:49:22,852-0500 INFO  miktex-console.packagemanager - installing package miktex-tex4ht
+2025-06-18 23:49:22,854-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-tex4ht.tar.lzma...
+2025-06-18 23:49:22,854-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-tex4ht.tar.lzma
+2025-06-18 23:49:22,976-0500 INFO  mainwindow - 0.00 MB, 0.30 Mbit/s
+2025-06-18 23:49:23,020-0500 INFO  mainwindow - extracting files from miktex-tex4ht.tar.lzma...
+2025-06-18 23:49:23,061-0500 INFO  miktex-console.packagemanager - installing package miktex-xetex
+2025-06-18 23:49:23,062-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-xetex.tar.lzma...
+2025-06-18 23:49:23,062-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-xetex.tar.lzma
+2025-06-18 23:49:23,176-0500 INFO  mainwindow - 0.00 MB, 0.15 Mbit/s
+2025-06-18 23:49:23,214-0500 INFO  mainwindow - extracting files from miktex-xetex.tar.lzma...
+2025-06-18 23:49:23,254-0500 INFO  miktex-console.packagemanager - installing package miktex-zip-bin-x64
+2025-06-18 23:49:23,255-0500 INFO  mainwindow - downloading https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-zip-bin-x64.tar.lzma...
+2025-06-18 23:49:23,255-0500 INFO  miktex-console.packagemanager - going to download https://mirrors.ibiblio.org/pub/mirrors/CTAN/systems/win32/miktex/tm/packages/miktex-zip-bin-x64.tar.lzma
+2025-06-18 23:49:23,387-0500 INFO  mainwindow - 0.16 MB, 9.60 Mbit/s
+2025-06-18 23:49:23,430-0500 INFO  mainwindow - extracting files from miktex-zip-bin-x64.tar.lzma...
+2025-06-18 23:49:24,475-0500 INFO  mainwindow - configuring fontconfig\config\fonts.conf
+2025-06-18 23:49:24,484-0500 INFO  miktex-console.core - start process: miktex fontmaps configure
+2025-06-18 23:49:30,988-0500 INFO  miktex-console.core - start process: mpm --register-components --verbose
+2025-06-18 23:49:31,791-0500 INFO  miktex-console.core - start process: miktex --disable-installer --verbose fndb refresh
+2025-06-18 23:49:39,034-0500 INFO  miktex-console.core - start process: miktex --disable-installer --verbose links install --force
+2025-06-18 23:49:43,412-0500 INFO  miktex-console.core - start process: miktex --disable-installer --verbose fontmaps configure
+2025-06-18 23:49:44,729-0500 INFO  miktex-console.core - start process: miktex --disable-installer --verbose languages configure
+2025-06-18 23:49:45,222-0500 INFO  miktex-console.core - start process: pdftex --miktex-disable-installer --miktex-disable-maintenance --miktex-disable-diagnose --version
+2025-06-18 23:49:45,735-0500 ERROR miktex-console.core - Something is wrong with the PATH:
+2025-06-18 23:49:45,735-0500 ERROR miktex-console.core - C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Common Files\Autodesk Shared\;C:\Program Files\dotnet\;C:\Program Files (x86)\Microsoft SQL Server\90\Tools\binn\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\abemc\AppData\Local\Programs\Python\Python313\;C:\Program Files (x86)\HP\Common\HPDestPlgIn\;C:\WINDOWS\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Git\cmd;C:\Users\abemc\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Abel\AppData\Local\Programs\Python\Python311\;C:\Users\abemc\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
+2025-06-18 23:49:46,077-0500 INFO  mainwindow - MiKTeX Console needs to be closed
+2025-06-18 23:49:48,860-0500 WARN  miktex-console.core - still open: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs\install\fontconfig/config\fonts.conf.in"
+2025-06-18 23:49:48,860-0500 WARN  miktex-console.core - still open: "C:\Users\abemc\Desktop\GIT HUB LENNOVO\viga final\VIGA_FINAL\latex_runtime\texmfs/config\fontconfig\config\fonts.conf"
+2025-06-18 23:49:48,942-0500 INFO  main - finishing with exit code 0

@@ -1,7 +1,5 @@
 """Helper utilities for unit conversions and styling."""
 
-import base64
-import io
 from typing import Optional
 
 from matplotlib.figure import Figure
@@ -14,61 +12,14 @@ def color_for_diameter(diam):
 
 
 def latex_image(latex: str, fontsize: int = 6) -> str:
-    """Return an HTML ``<img>`` tag with a LaTeX expression rendered to PNG."""
-    fontsize = min(fontsize, 6)
-    fig = Figure(figsize=(0.01, 0.01))
-    ax = fig.add_subplot(111)
-    ax.axis("off")
-    ax.text(0.5, 0.5, f"${latex}$", ha="center", va="center", fontsize=fontsize)
-    buf = io.BytesIO()
-    fig.savefig(
-        buf,
-        format="png",
-        dpi=300,
-        bbox_inches="tight",
-        pad_inches=0.0,
-        transparent=True,
-    )
-    fig.clf()
-    data = base64.b64encode(buf.getvalue()).decode()
-    height = fontsize * 0.12
-    style = f"height:{height:.2f}em;vertical-align:middle;"
-    return f'<img src="data:image/png;base64,{data}" style="{style}"/>'
+    """Return HTML using MathJax for a LaTeX expression."""
+    style = f"font-size:{fontsize}px"
+    return f'<span style="{style}">\\({latex}\\)</span>'
 
 
 def latex_to_png(latex: str, path: str, *, fontsize: int = 12, dpi: int = 300) -> str:
-    """Render a LaTeX expression to a PNG image.
-
-    Parameters
-    ----------
-    latex:
-        Fórmula en notación LaTeX.
-    path:
-        Ruta de salida para la imagen PNG.
-    fontsize:
-        Tamaño de letra de la fórmula.
-    dpi:
-        Resolución deseada en puntos por pulgada.
-
-    Returns
-    -------
-    str
-        La misma ruta de salida recibida.
-    """
-    fig = Figure(figsize=(0.01, 0.01))
-    ax = fig.add_subplot(111)
-    ax.axis("off")
-    ax.text(0.5, 0.5, f"${latex}$", ha="center", va="center", fontsize=fontsize)
-    fig.savefig(
-        path,
-        format="png",
-        dpi=dpi,
-        bbox_inches="tight",
-        pad_inches=0.05,
-        transparent=True,
-    )
-    fig.clf()
-    return path
+    """Deprecated helper kept for backwards compatibility."""
+    raise NotImplementedError("LaTeX a PNG deshabilitado")
 
 
 def capture_widget(widget: QWidget, path: str) -> Optional[str]:
@@ -83,7 +34,6 @@ def capture_widget(widget: QWidget, path: str) -> Optional[str]:
 import tempfile
 import re
 import sympy as sp
-from matplotlib.figure import Figure
 
 
 def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, path: str) -> str:
@@ -168,12 +118,12 @@ def formula_html(text: str, *, fontsize: int = 8) -> str:
     """Return HTML for ``text`` rendered as a LaTeX equation when possible."""
     if text.startswith("$") and text.endswith("$"):
         latex = text.strip("$")
-        return latex_image(latex, fontsize=fontsize)
+        return f'<span style="font-size:{fontsize}px">\\({latex}\\)</span>'
     eq = parse_formula(text)
     if eq is None:
         return f"<pre>{text}</pre>"
     latex = sp.latex(eq)
-    return latex_image(latex, fontsize=fontsize)
+    return f'<span style="font-size:{fontsize}px">\\({latex}\\)</span>'
 
 
 def capture_widget_temp(widget: QWidget, prefix: str = "img") -> Optional[str]:

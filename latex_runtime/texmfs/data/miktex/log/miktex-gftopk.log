@@ -1,0 +1,6 @@
+2025-06-18 22:51:45,571-0500 INFO  miktex-gftopk - this process (2364) started by miktex-makepk in directory C:\Users\abemc\AppData\Local\Temp\mik91418 with command line: miktex-gftopk.exe --miktex-disable-maintenance --miktex-disable-diagnose tcrm1200.600gf tcrm1200.pk
+2025-06-18 22:51:45,571-0500 INFO  miktex-gftopk - running on Windows 10.0.26100
+2025-06-18 22:51:45,572-0500 INFO  miktex-gftopk - this is MiKTeX-GFTOPK  (MiKTeX 25.4 Portable)
+2025-06-18 22:51:45,577-0500 INFO  miktex-gftopk - this process (2364) finishes with exit code 0
+2025-06-18 22:51:45,578-0500 WARN  miktex-gftopk.core - still open: tcrm1200.600gf
+2025-06-18 22:51:45,578-0500 WARN  miktex-gftopk.core - still open: tcrm1200.pk
