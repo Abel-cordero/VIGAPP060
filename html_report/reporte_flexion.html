@@ -2,16 +2,18 @@
 <html>
 <head>
 <meta charset='utf-8'>
-<title>Diseño a Flexión de Viga</title>
+<title>Reporte</title>
 <script src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>
 <style>
-body{font-family:Arial,sans-serif;background:#fff;margin:20px auto;max-width:800px;}
+body{font-family:Arial,sans-serif;margin:20px auto;max-width:900px;}
 h1{text-align:center;}
 h2,h3{text-align:left;}
-table{border-collapse:collapse;margin:auto;width:100%;text-align:left;}
-td,th{border:1px solid #000;padding:2px 4px;}
+table{border-collapse:collapse;width:100%;margin-bottom:20px;}
+td,th{border:1px solid #999;padding:4px 8px;}
+.formula{margin-left:20px;margin-top:4px;}
+.reemplazo{margin-left:20px;color:#555;margin-top:2px;}
+.resultado{margin-left:20px;font-weight:bold;margin-top:2px;}
 button{display:block;margin:20px auto;}
-img{display:block;margin:auto;max-width:90%;}
 </style>
 </head>
 <body>
@@ -28,23 +30,26 @@ img{display:block;margin:auto;max-width:90%;}
 <tr><td><b>ϕ varilla (cm)</b></td><td>1.59</td></tr>
 </table>
 <h2>CÁLCULOS</h2>
-<h3>Peralte</h3>
-<div style='text-align:left'>$$ d = h - d_e - \frac{1}{2} d_b - r $$</div>
-<div><b>Resultado:</b> 44.254999999999995</div>
-<h3>B1</h3>
-<div style='text-align:left'>$$ \beta_1 = 0.85 $$</div>
-<div><b>Resultado:</b> 0.85</div>
-<h3>Pbal</h3>
-<div style='text-align:left'>$$ P_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y} $$</div>
-<div><b>Resultado:</b> 0.021249999999999998</div>
-<h3>Pmax</h3>
-<div style='text-align:left'>$$ P_{max}=0.75\,P_{bal} $$</div>
-<div><b>Resultado:</b> 0.0159375</div>
-<h3>As min</h3>
-<div style='text-align:left'>$$ A_s^{\text{min}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d $$</div>
-<div><b>Resultado:</b> 3.206579389513067</div>
-<h3>As max</h3>
-<div style='text-align:left'>$$ A_s^{\text{max}} = 0.75\,\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d $$</div>
-<div><b>Resultado:</b> 21.159421875</div>
+<h3>Cálculo de Peralte (ART.1.1 E060)</h3>
+<div class='formula'>$$ d = h - d_e - \frac{1}{2} d_b - r $$</div>
+<div class='reemplazo'>$$ d = 50.0 - 0.95 - \frac{1}{2} 1.59 - 4.0 $$</div>
+<div class='resultado'>$$ d = 44.25\,\text{cm} $$</div>
+<h3>Cálculo de B1 (ART.1.1 E060)</h3>
+<div class='formula'>$$ \beta_1 = 0.85 $$</div>
+<h3>Cálculo de Pbal (ART.1.1 E060)</h3>
+<div class='formula'>$$ P_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y} $$</div>
+<div class='reemplazo'>$$ P_{bal}=\left(\frac{0.85\,210.0\,0.850}{4200.0}\right)\,\frac{6000}{6000+4200.0} $$</div>
+<div class='resultado'>$$ P_{bal} = 0.0212 $$</div>
+<h3>Cálculo de Pmax (ART.1.1 E060)</h3>
+<div class='formula'>$$ P_{max}=0.75\,P_{bal} $$</div>
+<div class='reemplazo'>$$ P_{max}=0.75\times0.0212 $$</div>
+<div class='resultado'>$$ P_{max} = 0.0159 $$</div>
+<h3>Cálculo de As mín (ART.1.1 E060)</h3>
+<div class='formula'>$$ A_s^{\text{min}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d $$</div>
+<div class='reemplazo'>$$ A_s^{\text{min}} = 0.7\,\frac{\sqrt{210.0}}{4200.0}\,30.0\,44.25 $$</div>
+<div class='resultado'>$$ A_s^{\text{min}} = 3.21\,\text{cm}^2 $$</div>
+<h3>Cálculo de As máx (ART.1.1 E060)</h3>
+<div class='formula'>$$ A_s^{\text{max}} = 0.75\,\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d $$</div>
+<div class='reemplazo'>$$ A_s^{\text{max}} = 21.16\,\text{cm}^2 $$</div>
 <button onclick="window.print()">Exportar a PDF</button>
 </body></html>
