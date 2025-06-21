@@ -1,114 +1,88 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset='utf-8'>
-<title>Reporte</title>
-<script src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f0f0f0;
-  margin: 0;
-  padding: 0;
+<!DOCTYPE html >
+<html>​​
+< cabeza >
+< meta charset = 'utf-8' > 
+< título > Informe </ título >
+< script src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js' > </ script > 
+< estilo >
+cuerpo {
+  familia de fuentes : Arial, sans-serif;
+  fondo : #f0f0f0 ;
+  margen : 0 ;
+  relleno : 0 ;
 }
-.page {
-  width: 21cm;
-  min-height: 29.7cm;
-  padding: 2.5cm 3cm;
-  margin: 1cm auto;
-  background: white;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+.página {
+  ancho : 21cm ;
+  altura mínima : 29,7 cm ;
+  relleno : 2,5cm 3cm ;
+ 
+  margen : 1cm automático;
+  fondo : blanco;
+  caja-sombra : 0 0 5px rgba ( 0 , 0 , 0 , 0.1 );
+   
 }
-h1, h2, h3 { text-align: left; margin-top: 1.5em; }
-table { border-collapse: collapse; width: 100%; margin-bottom: 1em; }
-td, th { border: 1px solid #000; padding: 5px 8px; }
-.formula, .reemplazo, .resultado { margin-left: 20px; font-size: 15px; }
-.imagen-centro { display: block; margin: 20px auto; max-width: 100%; }
-@media print { button { display: none; } body { background: white; } }
-</style>
-<script>function toggleEdit(btn,id){var e=document.getElementById(id);if(!e)return;var ed=e.getAttribute('contenteditable')==='true';e.setAttribute('contenteditable', ed?'false':'true');btn.textContent=ed?'Editar':'Listo';}</script>
-</head>
-<body>
-<div style='position:fixed; top:20px; right:20px;'><button onclick="window.print()">Exportar a PDF</button></div>
-<div class='page'>
-<h1 contenteditable='true'>DISEÑO A FLEXIÓN DE VIGA 30x50</h1>
-<div style='display:flex; gap:20px;'>
-<div style='flex:1;'>
-<table>
-<tr><td><b>b (cm)</b></td><td>30</td></tr>
-<tr><td><b>h (cm)</b></td><td>50</td></tr>
-<tr><td><b>r (cm)</b></td><td>4</td></tr>
-<tr><td><b>f'c (kg/cm²)</b></td><td>210</td></tr>
-<tr><td><b>fy (kg/cm²)</b></td><td>4200</td></tr>
-<tr><td><b>φ</b></td><td>0.9</td></tr>
-<tr><td><b>ϕ estribo (cm)</b></td><td>0.95</td></tr>
-<tr><td><b>ϕ varilla (cm)</b></td><td>1.59</td></tr>
-</table>
-</div>
-<div style='flex:1; text-align:center;'>
-<img src='img_seccion_viga.png' class='imagen-centro' alt='Sección'>
-</div>
-</div>
-<h2>CALCULOS</h2>
-<h3 id='h1' contenteditable='false'>Cálculo de Peralte (ART.1.1 E060) <button onclick="toggleEdit(this,'h1')">Editar</button></h3>
-<div id='f1' class='formula' contenteditable='false'>$$ d = h - d_e - \frac{1}{2} d_b - r $$ <button onclick="toggleEdit(this,'f1')">Editar</button></div>
-<div id='r1' class='reemplazo' contenteditable='false'>$$ d = 50.0 - 0.95 - \frac{1}{2} 1.59 - 4.0 $$ <button onclick="toggleEdit(this,'r1')">Editar</button></div>
-<div id='s1' class='resultado' contenteditable='false'>$$ d = 44.25\,\text{cm} $$ <button onclick="toggleEdit(this,'s1')">Editar</button></div>
-<h3 id='h2' contenteditable='false'>Cálculo de B1 (ART.1.1 E060) <button onclick="toggleEdit(this,'h2')">Editar</button></h3>
-<div id='f2' class='formula' contenteditable='false'>$$ \beta_1 = 0.85 $$ <button onclick="toggleEdit(this,'f2')">Editar</button></div>
-<h3 id='h3' contenteditable='false'>Cálculo de Pbal (ART.1.1 E060) <button onclick="toggleEdit(this,'h3')">Editar</button></h3>
-<div id='f3' class='formula' contenteditable='false'>$$ P_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y} $$ <button onclick="toggleEdit(this,'f3')">Editar</button></div>
-<div id='r3' class='reemplazo' contenteditable='false'>$$ P_{bal}=\left(\frac{0.85\,210.0\,0.850}{4200.0}\right)\,\frac{6000}{6000+4200.0} $$ <button onclick="toggleEdit(this,'r3')">Editar</button></div>
-<div id='s3' class='resultado' contenteditable='false'>$$ P_{bal} = 0.0212 $$ <button onclick="toggleEdit(this,'s3')">Editar</button></div>
-<h3 id='h4' contenteditable='false'>Cálculo de Pmax (ART.1.1 E060) <button onclick="toggleEdit(this,'h4')">Editar</button></h3>
-<div id='f4' class='formula' contenteditable='false'>$$ P_{max}=0.75\,P_{bal} $$ <button onclick="toggleEdit(this,'f4')">Editar</button></div>
-<div id='r4' class='reemplazo' contenteditable='false'>$$ P_{max}=0.75\times0.0212 $$ <button onclick="toggleEdit(this,'r4')">Editar</button></div>
-<div id='s4' class='resultado' contenteditable='false'>$$ P_{max} = 0.0159 $$ <button onclick="toggleEdit(this,'s4')">Editar</button></div>
-<h3 id='h5' contenteditable='false'>Cálculo de As mín (ART.1.1 E060) <button onclick="toggleEdit(this,'h5')">Editar</button></h3>
-<div id='f5' class='formula' contenteditable='false'>$$ A_s^{\text{min}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d $$ <button onclick="toggleEdit(this,'f5')">Editar</button></div>
-<div id='r5' class='reemplazo' contenteditable='false'>$$ A_s^{\text{min}} = 0.7\,\frac{\sqrt{210.0}}{4200.0}\,30.0\,44.25 $$ <button onclick="toggleEdit(this,'r5')">Editar</button></div>
-<div id='s5' class='resultado' contenteditable='false'>$$ A_s^{\text{min}} = 3.21\,\text{cm}^2 $$ <button onclick="toggleEdit(this,'s5')">Editar</button></div>
-<h3 id='h6' contenteditable='false'>Cálculo de As máx (ART.1.1 E060) <button onclick="toggleEdit(this,'h6')">Editar</button></h3>
-<div id='f6' class='formula' contenteditable='false'>$$ A_s^{\text{max}} = 0.75\,\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d $$ <button onclick="toggleEdit(this,'f6')">Editar</button></div>
-<div id='r6' class='reemplazo' contenteditable='false'>$$ A_s^{\text{max}} = 21.16\,\text{cm}^2 $$ <button onclick="toggleEdit(this,'r6')">Editar</button></div>
-<h2>DESARROLLO AS REQUERIDO</h2>
-<h3 id='h7' contenteditable='false'>Fórmula general del As (ART.1.1 E060) <button onclick="toggleEdit(this,'h7')">Editar</button></h3>
-<div id='x7_0' class='formula' contenteditable='false'>$$ $A_s = \frac{1.7 f_c b d}{2 f_y} - \frac{1}{2} \sqrt{\frac{2.89(f_c b d)^2}{f_y^2} - \frac{6.8 f_c b M_u}{\phi f_y^2}}$ $$ <button onclick="toggleEdit(this,'x7_0')">Editar</button></div>
-<h3 id='h8' contenteditable='false'>As para M1- <button onclick="toggleEdit(this,'h8')">Editar</button></h3>
-<div id='x8_0' class='formula' contenteditable='false'>$$ $M_u = -0.00\,\text{TN·m} = 0\,\text{kg·cm}$ $$ <button onclick="toggleEdit(this,'x8_0')">Editar</button></div>
-<div id='x8_1' class='formula' contenteditable='false'>$$ $A_s^{\text{calc}} = -0.00\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x8_1')">Editar</button></div>
-<div id='x8_2' class='formula' contenteditable='false'>$$ $A_s^{\text{req}} = 3.21\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x8_2')">Editar</button></div>
-<h3 id='h9' contenteditable='false'>As para M2- <button onclick="toggleEdit(this,'h9')">Editar</button></h3>
-<div id='x9_0' class='formula' contenteditable='false'>$$ $M_u = -0.00\,\text{TN·m} = 0\,\text{kg·cm}$ $$ <button onclick="toggleEdit(this,'x9_0')">Editar</button></div>
-<div id='x9_1' class='formula' contenteditable='false'>$$ $A_s^{\text{calc}} = -0.00\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x9_1')">Editar</button></div>
-<div id='x9_2' class='formula' contenteditable='false'>$$ $A_s^{\text{req}} = 3.21\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x9_2')">Editar</button></div>
-<h3 id='h10' contenteditable='false'>As para M3- <button onclick="toggleEdit(this,'h10')">Editar</button></h3>
-<div id='x10_0' class='formula' contenteditable='false'>$$ $M_u = -0.00\,\text{TN·m} = 0\,\text{kg·cm}$ $$ <button onclick="toggleEdit(this,'x10_0')">Editar</button></div>
-<div id='x10_1' class='formula' contenteditable='false'>$$ $A_s^{\text{calc}} = -0.00\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x10_1')">Editar</button></div>
-<div id='x10_2' class='formula' contenteditable='false'>$$ $A_s^{\text{req}} = 3.21\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x10_2')">Editar</button></div>
-<h3 id='h11' contenteditable='false'>As para M1+ <button onclick="toggleEdit(this,'h11')">Editar</button></h3>
-<div id='x11_0' class='formula' contenteditable='false'>$$ $M_u = 0.00\,\text{TN·m} = 0\,\text{kg·cm}$ $$ <button onclick="toggleEdit(this,'x11_0')">Editar</button></div>
-<div id='x11_1' class='formula' contenteditable='false'>$$ $A_s^{\text{calc}} = -0.00\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x11_1')">Editar</button></div>
-<div id='x11_2' class='formula' contenteditable='false'>$$ $A_s^{\text{req}} = 3.21\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x11_2')">Editar</button></div>
-<h3 id='h12' contenteditable='false'>As para M2+ <button onclick="toggleEdit(this,'h12')">Editar</button></h3>
-<div id='x12_0' class='formula' contenteditable='false'>$$ $M_u = 0.00\,\text{TN·m} = 0\,\text{kg·cm}$ $$ <button onclick="toggleEdit(this,'x12_0')">Editar</button></div>
-<div id='x12_1' class='formula' contenteditable='false'>$$ $A_s^{\text{calc}} = -0.00\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x12_1')">Editar</button></div>
-<div id='x12_2' class='formula' contenteditable='false'>$$ $A_s^{\text{req}} = 3.21\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x12_2')">Editar</button></div>
-<h3 id='h13' contenteditable='false'>As para M3+ <button onclick="toggleEdit(this,'h13')">Editar</button></h3>
-<div id='x13_0' class='formula' contenteditable='false'>$$ $M_u = 0.00\,\text{TN·m} = 0\,\text{kg·cm}$ $$ <button onclick="toggleEdit(this,'x13_0')">Editar</button></div>
-<div id='x13_1' class='formula' contenteditable='false'>$$ $A_s^{\text{calc}} = -0.00\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x13_1')">Editar</button></div>
-<div id='x13_2' class='formula' contenteditable='false'>$$ $A_s^{\text{req}} = 3.21\,\text{cm}^2$ $$ <button onclick="toggleEdit(this,'x13_2')">Editar</button></div>
-</div><div class='page'>
-<h2>Resumen de Verificación</h2>
-<table>
-<tr><th>Sección</th><th>As requerido</th><th>As diseñado</th><th>Estado</th></tr>
-<tr><td>M1-</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-<tr><td>M2-</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-<tr><td>M3-</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-<tr><td>M1+</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-<tr><td>M2+</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-<tr><td>M3+</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-</table>
-<img src='img_view1.png' class='imagen-centro' alt='Corte'>
-</div>
-</body></html>
+h1 , h2 , h3 { alineación del texto : izquierda; margen superior : 1.5em ; }
+tabla { borde-collapse : colapsar; ancho : 100% ; margen-inferior : 1em ; }
+td , th { borde : 1px sólido #000 ; relleno : 5px 8px ; }
+ 
+.formula , .reemplazo , .resultado { margin-left : 20px ; tamaño de fuente : 15px ; }
+.imagen-centro { display : block; margin : 20px auto; max-width : 100% ; }
+@media print { botón { pantalla : ninguno; } cuerpo { fondo : blanco; } }
+</ estilo >
+</ cabeza >
+< cuerpo >
+< div style = 'position:fixed; top:20px; right:20px;' > < button onclick = "window.print()" > Exportar a PDF </ button > </ div >  
+< div class = 'página' > 
+< h1 contenteditable = 'true' > DISEÑO A FLEXIÓN DE VIGA 30x50 </ h1 > 
+< div estilo = 'display:flex; espacio:20px;' >
+< div style = 'flex:1;' > 
+<tabla>​​
+< tr > < td > < b > b (cm) < / b > < / td > < td > 30 </ td > </ tr >
+< tr > < td > < b > alto (cm) < / b > < / td > < td > 50 </ td > </ tr >
+<tr> <td> <b> r ( cm ) </b> </td> <td> 4 </td> </tr>​​​​​​​​​​​​​
+< tr > < td > < b > f'c (kg/cm²) </ b > < / td > < td > 210 </ td > </ tr >
+< tr > < td > < b > fy ​​(kg/cm²) </ b > </ td > < td > 4200 </ td > </ tr >
+< tr > < td > < b > φ < / b > < / td > < td > 0.9 </ td > </ tr >
+< tr > < td > < b > ϕ estribo (cm) </ b > < / td > < td > 0.95 </ td > </ tr >
+< tr > < td > < b > ϕ varilla (cm) </ b > < / td > < td > 1.59 </ td > </ tr >
+</tabla>​​
+</div>​​
+< div style = 'flex:1; text-align:center;' > 
+< img src = 'img_seccion_viga.png' class = 'imagen-centro' alt = 'Sección' >   
+</div>​​
+</div>​​
+< h2 > CÁLCULOS </ h2 >
+< h3 > Cálculo de Peralte (ART.1.1 E060)</ h3 >
+< div class = 'fórmula' > $$ d = h - d_e - \frac{1}{2} d_b - r $$ </ div > 
+< div class = 'reemplazo' > $$ d = 50.0 - 0.95 - \frac{1}{2} 1.59 - 4.0 $$ </ div > 
+< div class = 'resultado' > $$ d = 44.25\,\text{cm} $$ </ div > 
+< h3 > Cálculo de B1 (ART.1.1 E060)</ h3 >
+< div class = 'fórmula' > $$ \beta_1 = 0.85 $$ </ div > 
+< h3 > Cálculo de Pbal (ART.1.1 E060)</ h3 >
+< div class = 'fórmula' > $$ P _{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y} $$ </ div > 
+< div class = 'reemplazo' > $$ P _{bal}=\left(\frac{0.85\,210.0\,0.850}{4200.0}\right)\,\frac{6000}{6000+4200.0} $$ </ div > 
+< div class = 'resultado' > $$ P _{bal} = 0.0212 $$ </ div > 
+< h3 > Cálculo de Pmax (ART.1.1 E060)</ h3 >
+< div class = 'fórmula' > $$ P_{máx}=0,75\,P _{bal} $$ </ div > 
+< div class = 'reemplazo' > $$ P _{max}=0.75\times0.0212 $$ </ div > 
+< div class = 'resultado' > $$ P _{max} = 0.0159 $$ </ div > 
+< h3 > Cálculo de As mín (ART.1.1 E060)</ h3 >
+< div class = 'fórmula' > $$ A_s^{\text{mín}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d $$ </ div > 
+< div class = 'reemplazo' > $$ A_s^{\text{min}} = 0.7\,\frac{\sqrt{210.0}}{4200.0}\,30.0\,44.25 $$ </ div > 
+< div class = 'resultado' > $$ A_s^{\text{mín}} = 3.21\,\text{cm}^2 $$ </ div > 
+< h3 > Cálculo de As máx (ART.1.1 E060)</ h3 >
+< div class = 'fórmula' > $$ A_s^{\text{máx}} = 0,75\,\left(\frac{0,85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d $$ </ div > 
+< div class = 'reemplazo' > $$ A_s^{\text{máx}} = 21.16\,\text{cm}^2 $$ </ div > 
+< h2 > Resumen de Verificación </ h2 >
+<tabla>​​
+< tr > < th > Sección </ th > < th > Según requerido </ th > < th > Según diseñado </ th > < th > Estado </ th > </ tr >
+< tr > < td > M1- </ td > < td > 6.33 </ td > < td > 6.33 </ td > < td > ✔ Cumple </ td > </ tr >
+< tr > < td > M2- </ td > < td > 3.07 </ td > < td > 3.21 </ td > < td > ✔ Cumple </ td > </ tr >
+< tr > < td > M3- </ td > < td > 6.33 </ td > < td > 6.33 </ td > < td > ✔ Cumple </ td > </ tr >
+< tr > < td > M1+ </ td > < td > 3.07 </ td > < td > 3.21 </ td > < td > ✔ Cumple </ td > </ tr >
+< tr > < td > M2+ </ td > < td > 13.59 </ td > < td > 13.59 </ td > < td > ✔ Cumple </ td > </ tr >
+< tr > < td > M3+ </ td > < td > 3.07 </ td > < td > 3.21 </ td > < td > ✔ Cumple </ td > </ tr >
+</tabla>​​
+< img src = 'img_acero_m123.png' class = 'imagen-centro' alt = 'Acero' >   
+</div>​​
+</ cuerpo > </ html >
