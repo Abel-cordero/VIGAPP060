@@ -62,6 +62,22 @@ def render_report(title: str, data: Dict[str, Any], output_path: str = "reporte_
         with open(tex_file, "w", encoding="utf-8") as fh:
             fh.write(tex_source)
 
+        # Copiar imágenes necesarias a la carpeta temporal
+        for key in [
+            "section_img", "peralte_img", "b1_img", "pbal_img",
+            "rhobal_img", "pmax_img", "asmin_img", "asmax_img"
+        ]:
+            src_path = context.get(key)
+            if src_path and os.path.isfile(src_path):
+                dst_path = os.path.join(tmpdir, os.path.basename(src_path))
+                shutil.copy(src_path, dst_path)
+                context[key] = os.path.basename(src_path)  # actualizar a nombre base para LaTeX
+
+        # Volver a renderizar con las rutas corregidas
+        tex_source = template.render(context)
+        with open(tex_file, "w", encoding="utf-8") as fh:
+            fh.write(tex_source)
+
         try:
             subprocess.run(
                 [str(pdflatex_path), "-interaction=nonstopmode", tex_file],
