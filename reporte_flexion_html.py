@@ -52,19 +52,21 @@ def generar_reporte_html(
         "body {\n  font-family: Arial, sans-serif;\n  background: #f0f0f0;\n  margin: 0;\n  padding: 0;\n}",
         ".page {\n  width: 21cm;\n  min-height: 29.7cm;\n  padding: 2.5cm 3cm;\n  margin: 1cm auto;\n  background: white;\n  box-shadow: 0 0 5px rgba(0,0,0,0.1);\n}",
         "h1, h2, h3 { text-align: left; margin-top: 1.5em; }",
+        ".norma { font-size: 0.8em; color: #555; }",
         "table { border-collapse: collapse; width: 100%; margin-bottom: 1em; }",
         "td, th { border: 1px solid #000; padding: 5px 8px; }",
         ".formula, .reemplazo, .resultado { margin-left: 20px; font-size: 15px; }",
         ".imagen-centro { display: block; margin: 20px auto; max-width: 100%; }",
         "@media print { button { display: none; } body { background: white; } }",
         "</style>",
-        "<script>function toggleEdit(btn,id){var e=document.getElementById(id);if(!e)return;var ed=e.getAttribute('contenteditable')==='true';e.setAttribute('contenteditable', ed?'false':'true');btn.textContent=ed?'Editar':'Listo';}</script>",
+        "<script>function toggleEdit(btn,id){var e=document.getElementById(id);if(!e)return;var ed=e.getAttribute('contenteditable')==='true';e.setAttribute('contenteditable', ed?'false':'true');btn.textContent=ed?'Editar':'Listo';}",
+        "function exportWord(){var html=document.documentElement.outerHTML;var blob=new Blob(['\ufeff',html],{type:'application/msword'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='reporte.doc';a.click();URL.revokeObjectURL(url);}</script>",
         "</head>",
         "<body>",
-        "<div style='position:fixed; top:20px; right:20px;'><button onclick=\"window.print()\">Exportar a PDF</button></div>",
+        "<div style='position:fixed; top:20px; right:20px;'><button onclick=\"window.print()\">Exportar a PDF</button> <button onclick=\"exportWord()\">Exportar a Word</button></div>",
         "<div class='page'>",
         f"<h1 contenteditable='true'>{titulo}</h1>",
-        "<div style='display:flex; gap:20px;'>",
+        "<div style='display:flex; align-items:flex-start; gap:20px;'>",
         "<div style='flex:1;'>",
         "<table>",
     ]
@@ -83,12 +85,12 @@ def generar_reporte_html(
     )
 
     orden = [
-        ("C\u00e1lculo de Peralte (ART.1.1 E060)", "peralte"),
-        ("C\u00e1lculo de B1 (ART.1.1 E060)", "b1"),
-        ("C\u00e1lculo de Pbal (ART.1.1 E060)", "pbal"),
-        ("C\u00e1lculo de Pmax (ART.1.1 E060)", "pmax"),
-        ("C\u00e1lculo de As m\u00edn (ART.1.1 E060)", "as_min"),
-        ("C\u00e1lculo de As m\u00e1x (ART.1.1 E060)", "as_max"),
+        ("C\u00e1lculo de Peralte <span class='norma'>(E060 Art. 17.5.2)</span>", "peralte"),
+        ("C\u00e1lculo de B1 <span class='norma'>(E060 Art. 10.2.7.3)</span>", "b1"),
+        ("C\u03c1<sub>bal</sub> <span class='norma'>(E060 Art. 10.3.32)</span>", "pbal"),
+        ("C\u03c1<sub>max</sub> <span class='norma'>(E060 Art. 10.3.4)</span>", "pmax"),
+        ("C\u00e1lculo de As m\u00edn <span class='norma'>(E060 Art. 10.5.2)</span>", "as_min"),
+        ("C\u00e1lculo de As m\u00e1x <span class='norma'>(E060 Art. 10.3.4)</span>", "as_max"),
     ]
 
     html.append("<h2>CALCULOS</h2>")
