@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset='utf-8'>
 <title>Reporte</title>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -24,56 +24,62 @@ table { border-collapse: collapse; width: 100%; margin-bottom: 1em; }
 td, th { border: 1px solid #000; padding: 5px 8px; }
 .formula, .reemplazo, .resultado { margin-left: 20px; font-size: 15px; }
 .imagen-centro { display: block; margin: 20px auto; max-width: 100%; }
-@media print {
-  button { display: none; }
-  body { background: white; }
-}
+@media print { button { display: none; } body { background: white; } }
 </style>
 </head>
 <body>
-<div style="position:fixed; top:20px; right:20px;">
-  <button onclick="window.print()">Exportar a PDF</button>
+<div style='position:fixed; top:20px; right:20px;'><button onclick="window.print()">Exportar a PDF</button></div>
+<div class='page'>
+<h1 contenteditable='true'>DISEÑO A FLEXIÓN DE VIGA 30x50</h1>
+<div style='display:flex; gap:20px;'>
+<div style='flex:1;'>
+<table>
+<tr><td><b>b (cm)</b></td><td>30</td></tr>
+<tr><td><b>h (cm)</b></td><td>50</td></tr>
+<tr><td><b>r (cm)</b></td><td>4</td></tr>
+<tr><td><b>f'c (kg/cm²)</b></td><td>210</td></tr>
+<tr><td><b>fy (kg/cm²)</b></td><td>4200</td></tr>
+<tr><td><b>φ</b></td><td>0.9</td></tr>
+<tr><td><b>ϕ estribo (cm)</b></td><td>0.95</td></tr>
+<tr><td><b>ϕ varilla (cm)</b></td><td>1.59</td></tr>
+</table>
 </div>
-<div class="page">
-<h1 contenteditable="true">DISEÑO A FLEXIÓN DE VIGA 30x50</h1>
-<div style="display:flex; gap:20px;">
-  <div style="flex:1;">
-    <table>
-      <tr><td><b>b (cm)</b></td><td>30</td></tr>
-      <tr><td><b>h (cm)</b></td><td>50</td></tr>
-      <tr><td><b>r (cm)</b></td><td>4</td></tr>
-      <tr><td><b>f'c (kg/cm²)</b></td><td>210</td></tr>
-      <tr><td><b>fy (kg/cm²)</b></td><td>4200</td></tr>
-      <tr><td><b>φ</b></td><td>0.9</td></tr>
-      <tr><td><b>ϕ estribo (cm)</b></td><td>0.95</td></tr>
-      <tr><td><b>ϕ varilla (cm)</b></td><td>1.59</td></tr>
-    </table>
-  </div>
-  <div style="flex:1; text-align:center;">
-    <img src="img_seccion_viga.png" class="imagen-centro" alt="Sección">
-  </div>
+<div style='flex:1; text-align:center;'>
+<img src='img_seccion_viga.png' class='imagen-centro' alt='Sección'>
 </div>
-<h2>Cálculos</h2>
+</div>
+<h2>CÁLCULOS</h2>
 <h3>Cálculo de Peralte (ART.1.1 E060)</h3>
-<p class="formula">$$ d = h - d_e - \frac{1}{2} d_b - r $$</p>
-<p class="reemplazo" contenteditable>$$ d = 50 - 0.95 - \frac{1}{2} 1.59 - 4 $$</p>
-<p class="resultado">Resultado = 44.25 cm</p>
+<div class='formula'>$$ d = h - d_e - \frac{1}{2} d_b - r $$</div>
+<div class='reemplazo'>$$ d = 50.0 - 0.95 - \frac{1}{2} 1.59 - 4.0 $$</div>
+<div class='resultado'>$$ d = 44.25\,\text{cm} $$</div>
 <h3>Cálculo de B1 (ART.1.1 E060)</h3>
-<p class="formula">$$ \beta_1 = 0.85 $$</p>
+<div class='formula'>$$ \beta_1 = 0.85 $$</div>
 <h3>Cálculo de Pbal (ART.1.1 E060)</h3>
-<p class="formula">$$ P_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y} $$</p>
-<p class="reemplazo" contenteditable>$$ P_{bal}=\left(\frac{0.85\times210\times0.85}{4200}\right)\,\frac{6000}{10200} $$</p>
-<p class="resultado">Resultado = 0.0212</p>
+<div class='formula'>$$ P_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y} $$</div>
+<div class='reemplazo'>$$ P_{bal}=\left(\frac{0.85\,210.0\,0.850}{4200.0}\right)\,\frac{6000}{6000+4200.0} $$</div>
+<div class='resultado'>$$ P_{bal} = 0.0212 $$</div>
 <h3>Cálculo de Pmax (ART.1.1 E060)</h3>
-<p class="formula">$$ P_{max}=0.75\,P_{bal} $$</p>
-<p class="reemplazo" contenteditable>$$ P_{max}=0.75\times0.0212 $$</p>
-<p class="resultado">Resultado = 0.0159</p>
+<div class='formula'>$$ P_{max}=0.75\,P_{bal} $$</div>
+<div class='reemplazo'>$$ P_{max}=0.75\times0.0212 $$</div>
+<div class='resultado'>$$ P_{max} = 0.0159 $$</div>
+<h3>Cálculo de As mín (ART.1.1 E060)</h3>
+<div class='formula'>$$ A_s^{\text{min}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d $$</div>
+<div class='reemplazo'>$$ A_s^{\text{min}} = 0.7\,\frac{\sqrt{210.0}}{4200.0}\,30.0\,44.25 $$</div>
+<div class='resultado'>$$ A_s^{\text{min}} = 3.21\,\text{cm}^2 $$</div>
+<h3>Cálculo de As máx (ART.1.1 E060)</h3>
+<div class='formula'>$$ A_s^{\text{max}} = 0.75\,\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d $$</div>
+<div class='reemplazo'>$$ A_s^{\text{max}} = 21.16\,\text{cm}^2 $$</div>
 <h2>Resumen de Verificación</h2>
 <table>
-  <tr><th>Sección</th><th>As requerido</th><th>As diseñado</th><th>Estado</th></tr>
-  <tr><td>M1-</td><td>4.20</td><td>4.52</td><td>✔ Cumple</td></tr>
+<tr><th>Sección</th><th>As requerido</th><th>As diseñado</th><th>Estado</th></tr>
+<tr><td>M1-</td><td>6.33</td><td>6.33</td><td>✔ Cumple</td></tr>
+<tr><td>M2-</td><td>3.07</td><td>3.21</td><td>✔ Cumple</td></tr>
+<tr><td>M3-</td><td>6.33</td><td>6.33</td><td>✔ Cumple</td></tr>
+<tr><td>M1+</td><td>3.07</td><td>3.21</td><td>✔ Cumple</td></tr>
+<tr><td>M2+</td><td>13.59</td><td>13.59</td><td>✔ Cumple</td></tr>
+<tr><td>M3+</td><td>3.07</td><td>3.21</td><td>✔ Cumple</td></tr>
 </table>
-<img src="img_acero_m123.png" class="imagen-centro" alt="Acero">
+<img src='img_acero_m123.png' class='imagen-centro' alt='Acero'>
 </div>
-</body>
-</html>
+</body></html>
