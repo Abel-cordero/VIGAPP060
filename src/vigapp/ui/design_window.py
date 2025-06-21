@@ -658,7 +658,10 @@ class DesignWindow(QMainWindow):
                 "resultado": forms[2] if len(forms) > 2 else "",
             }
         tabla = data.get("verif_table", [])
-        generar_reporte_html(datos, resultados, tabla)
+        imagenes = data.get("images", [])
+        seccion = data.get("section_img")
+        dev_as = calc_sections[6:]
+        generar_reporte_html(datos, resultados, tabla, imagenes, seccion, dev_as)
 
     def _build_memoria(self):
         """Return title and structured data for the calculation memory."""

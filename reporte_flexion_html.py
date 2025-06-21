@@ -8,9 +8,27 @@ def generar_reporte_html(
     datos: Dict[str, Any],
     resultados: Dict[str, Dict[str, Any]],
     tabla: List[List[str]] | None = None,
+    imagenes: List[str] | None = None,
+    seccion: str | None = None,
+    calc_sections: List[Any] | None = None,
 ) -> None:
     """Genera un reporte HTML profesional usando MathJax y lo abre en el navegador."""
     os.makedirs("html_report", exist_ok=True)
+    import shutil
+
+    img_views: List[str] = []
+    if imagenes:
+        for i, path in enumerate(imagenes, 1):
+            if os.path.isfile(path):
+                dst = os.path.join("html_report", f"img_view{i}.png")
+                shutil.copy(path, dst)
+                img_views.append(os.path.basename(dst))
+
+    section_rel = None
+    if seccion and os.path.isfile(seccion):
+        dst = os.path.join("html_report", "img_seccion_viga.png")
+        shutil.copy(seccion, dst)
+        section_rel = os.path.basename(dst)
 
     def _fmt(v: Any) -> str:
         try:
@@ -40,6 +58,7 @@ def generar_reporte_html(
         ".imagen-centro { display: block; margin: 20px auto; max-width: 100%; }",
         "@media print { button { display: none; } body { background: white; } }",
         "</style>",
+        "<script>function toggleEdit(btn,id){var e=document.getElementById(id);if(!e)return;var ed=e.getAttribute('contenteditable')==='true';e.setAttribute('contenteditable', ed?'false':'true');btn.textContent=ed?'Editar':'Listo';}</script>",
         "</head>",
         "<body>",
         "<div style='position:fixed; top:20px; right:20px;'><button onclick=\"window.print()\">Exportar a PDF</button></div>",
@@ -57,7 +76,7 @@ def generar_reporte_html(
             "</table>",
             "</div>",
             "<div style='flex:1; text-align:center;'>",
-            "<img src='img_seccion_viga.png' class='imagen-centro' alt='Secci\u00f3n'>",
+            f"<img src='{section_rel or 'img_seccion_viga.png'}' class='imagen-centro' alt='Secci\u00f3n'>",
             "</div>",
             "</div>",
         ]
@@ -72,7 +91,8 @@ def generar_reporte_html(
         ("C\u00e1lculo de As m\u00e1x (ART.1.1 E060)", "as_max"),
     ]
 
-    html.append("<h2>C\u00c1LCULOS</h2>")
+    html.append("<h2>CALCULOS</h2>")
+    sec_id = 0
     for subt, key in orden:
         info = resultados.get(key, {})
         gen = info.get("general") or info.get("formula") or ""
@@ -80,13 +100,43 @@ def generar_reporte_html(
         res = info.get("resultado") or info.get("valor", "")
         if not (gen or rep or res):
             continue
-        html.append(f"<h3>{subt}</h3>")
+        sec_id += 1
+        hid = f"h{sec_id}"
+        html.append(
+            f"<h3 id='{hid}' contenteditable='false'>{subt} <button onclick=\"toggleEdit(this,'{hid}')\">Editar</button></h3>"
+        )
         if gen:
-            html.append(f"<div class='formula'>$$ {gen} $$</div>")
+            fid = f"f{sec_id}"
+            html.append(
+                f"<div id='{fid}' class='formula' contenteditable='false'>$$ {gen} $$ <button onclick=\"toggleEdit(this,'{fid}')\">Editar</button></div>"
+            )
         if rep:
-            html.append(f"<div class='reemplazo'>$$ {rep} $$</div>")
+            rid = f"r{sec_id}"
+            html.append(
+                f"<div id='{rid}' class='reemplazo' contenteditable='false'>$$ {rep} $$ <button onclick=\"toggleEdit(this,'{rid}')\">Editar</button></div>"
+            )
         if res:
-            html.append(f"<div class='resultado'>$$ {res} $$</div>")
+            sid = f"s{sec_id}"
+            html.append(
+                f"<div id='{sid}' class='resultado' contenteditable='false'>$$ {res} $$ <button onclick=\"toggleEdit(this,'{sid}')\">Editar</button></div>"
+            )
+
+    if calc_sections:
+        html.append("<h2>DESARROLLO AS REQUERIDO</h2>")
+        for tit, formulas in calc_sections:
+            sec_id += 1
+            hid = f"h{sec_id}"
+            html.append(
+                f"<h3 id='{hid}' contenteditable='false'>{tit} <button onclick=\"toggleEdit(this,'{hid}')\">Editar</button></h3>"
+            )
+            for frm in formulas:
+                sid = f"x{sec_id}_{formulas.index(frm)}"
+                html.append(
+                    f"<div id='{sid}' class='formula' contenteditable='false'>$$ {frm} $$ <button onclick=\"toggleEdit(this,'{sid}')\">Editar</button></div>"
+                )
+
+    if tabla or img_views:
+        html.append("</div><div class='page'>")
 
     if tabla:
         html.append("<h2>Resumen de Verificaci\u00f3n</h2>")
@@ -100,7 +150,9 @@ def generar_reporte_html(
             )
         html.append("</table>")
 
-    html.append("<img src='img_acero_m123.png' class='imagen-centro' alt='Acero'>")
+    for img in img_views:
+        html.append(f"<img src='{img}' class='imagen-centro' alt='Corte'>")
+
     html.append("</div>")
     html.append("</body></html>")
 
