@@ -99,6 +99,7 @@ class BackgroundWidget(QWidget):
             )
         )
 
+
 from .moment_app import MomentApp
 from .design_window import DesignWindow
 from .view3d_window import View3DWindow
@@ -235,7 +236,9 @@ class MenuWindow(QMainWindow):
         add_row(btn_cort, "DISE\u00d1O POR CORTANTE")
         add_row(btn_mem, "MEMORIA DE C\u00c1LCULO")
         add_row(btn_contact, "CONTACTO")
-        btn_layout.addItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        btn_layout.addItem(
+            QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        )
         add_row(btn_exit, "SALIR")
 
         layout.addWidget(button_box)
@@ -321,7 +324,8 @@ class MenuWindow(QMainWindow):
                 "reemplazo": forms[1] if len(forms) > 1 else "",
                 "resultado": forms[2] if len(forms) > 2 else "",
             }
-        generar_reporte_html(datos, resultados)
+        tabla = data.get("verif_table", [])
+        generar_reporte_html(datos, resultados, tabla)
 
     def show_design(self):
         if hasattr(self, "design_page"):
@@ -349,4 +353,3 @@ class MenuWindow(QMainWindow):
 
     def show_menu(self):
         self.stacked.setCurrentWidget(self.menu_page)
-

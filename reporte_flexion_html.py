@@ -1,9 +1,14 @@
 import os
 import subprocess
 import webbrowser
-from typing import Any, Dict
+from typing import Any, Dict, List
 
-def generar_reporte_html(datos: Dict[str, Any], resultados: Dict[str, Dict[str, Any]]) -> None:
+
+def generar_reporte_html(
+    datos: Dict[str, Any],
+    resultados: Dict[str, Dict[str, Any]],
+    tabla: List[List[str]] | None = None,
+) -> None:
     """Genera un reporte HTML profesional usando MathJax y lo abre en el navegador."""
     os.makedirs("html_report", exist_ok=True)
 
@@ -26,26 +31,37 @@ def generar_reporte_html(datos: Dict[str, Any], resultados: Dict[str, Dict[str, 
         "<title>Reporte</title>",
         "<script src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>",
         "<style>",
-        "body{font-family:Arial,sans-serif;margin:20px auto;max-width:900px;}",
-        "h1{text-align:center;}",
-        "h2,h3{text-align:left;}",
-        "table{border-collapse:collapse;width:100%;margin-bottom:20px;}",
-        "td,th{border:1px solid #999;padding:4px 8px;}",
-        ".formula{margin-left:20px;margin-top:4px;}",
-        ".reemplazo{margin-left:20px;color:#555;margin-top:2px;}",
-        ".resultado{margin-left:20px;font-weight:bold;margin-top:2px;}",
-        "button{display:block;margin:20px auto;}",
+        "body {\n  font-family: Arial, sans-serif;\n  background: #f0f0f0;\n  margin: 0;\n  padding: 0;\n}",
+        ".page {\n  width: 21cm;\n  min-height: 29.7cm;\n  padding: 2.5cm 3cm;\n  margin: 1cm auto;\n  background: white;\n  box-shadow: 0 0 5px rgba(0,0,0,0.1);\n}",
+        "h1, h2, h3 { text-align: left; margin-top: 1.5em; }",
+        "table { border-collapse: collapse; width: 100%; margin-bottom: 1em; }",
+        "td, th { border: 1px solid #000; padding: 5px 8px; }",
+        ".formula, .reemplazo, .resultado { margin-left: 20px; font-size: 15px; }",
+        ".imagen-centro { display: block; margin: 20px auto; max-width: 100%; }",
+        "@media print { button { display: none; } body { background: white; } }",
         "</style>",
         "</head>",
         "<body>",
-        f"<h1>{titulo}</h1>",
-        "<h2>DATOS</h2>",
+        "<div style='position:fixed; top:20px; right:20px;'><button onclick=\"window.print()\">Exportar a PDF</button></div>",
+        "<div class='page'>",
+        f"<h1 contenteditable='true'>{titulo}</h1>",
+        "<div style='display:flex; gap:20px;'>",
+        "<div style='flex:1;'>",
         "<table>",
     ]
 
     for k, v in datos.items():
         html.append(f"<tr><td><b>{k}</b></td><td>{_fmt(v)}</td></tr>")
-    html.append("</table>")
+    html.extend(
+        [
+            "</table>",
+            "</div>",
+            "<div style='flex:1; text-align:center;'>",
+            "<img src='img_seccion_viga.png' class='imagen-centro' alt='Secci\u00f3n'>",
+            "</div>",
+            "</div>",
+        ]
+    )
 
     orden = [
         ("C\u00e1lculo de Peralte (ART.1.1 E060)", "peralte"),
@@ -72,7 +88,20 @@ def generar_reporte_html(datos: Dict[str, Any], resultados: Dict[str, Dict[str, 
         if res:
             html.append(f"<div class='resultado'>$$ {res} $$</div>")
 
-    html.append("<button onclick=\"window.print()\">Exportar a PDF</button>")
+    if tabla:
+        html.append("<h2>Resumen de Verificaci\u00f3n</h2>")
+        html.append("<table>")
+        html.append(
+            "<tr><th>Secci\u00f3n</th><th>As requerido</th><th>As dise\u00f1ado</th><th>Estado</th></tr>"
+        )
+        for sec, req, dis, est in tabla:
+            html.append(
+                f"<tr><td>{sec}</td><td>{req}</td><td>{dis}</td><td>{est}</td></tr>"
+            )
+        html.append("</table>")
+
+    html.append("<img src='img_acero_m123.png' class='imagen-centro' alt='Acero'>")
+    html.append("</div>")
     html.append("</body></html>")
 
     path = os.path.join("html_report", "reporte_flexion.html")
