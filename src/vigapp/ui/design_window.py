@@ -705,7 +705,7 @@ class DesignWindow(QMainWindow):
 
         calc_sections = [
             (
-                "Peralte: d (ART.1.1 E060)",
+                "Peralte efectivo: d <span class='norma'>(E060 Art. 17.5.2)</span>",
                 [
                     r"$d = h - d_e - \frac{1}{2} d_b - r$",
                     rf"$d = {h} - {de} - \frac{{1}}{{2}} {db} - {r}$",
@@ -713,7 +713,7 @@ class DesignWindow(QMainWindow):
                 ],
             ),
             (
-                "Coeficiente B1 (ART.1.1 E060)",
+                "Coeficiente B1 <span class='norma'>(E060 Art. 10.2.7.3)</span>",
                 [
                     (
                         r"$\beta_1 = 0.85$"
@@ -723,23 +723,23 @@ class DesignWindow(QMainWindow):
                 ],
             ),
             (
-                "Pbal (ART.1.1 E060)",
+                "\u03c1<sub>bal</sub> <span class='norma'>(E060 Art. 10.3.32)</span>",
                 [
-                    r"$P_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y}$",
-                    rf"$P_{{bal}}=\left(\frac{{0.85\,{fc}\,{beta1:.3f}}}{{{fy}}}\right)\,\frac{{6000}}{{6000+{fy}}}$",
-                    rf"$P_{{bal}} = {p_bal:.4f}$",
+                    r"$\rho_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y}$",
+                    rf"$\rho_{{bal}}=\left(\frac{{0.85\,{fc}\,{beta1:.3f}}}{{{fy}}}\right)\,\frac{{6000}}{{6000+{fy}}}$",
+                    rf"$\rho_{{bal}} = {p_bal:.4f}$",
                 ],
             ),
             (
-                "Pmax (ART.1.1 E060)",
+                "\u03c1<sub>max</sub> <span class='norma'>(E060 Art. 10.3.4)</span>",
                 [
-                    r"$P_{max}=0.75\,P_{bal}$",
-                    rf"$P_{{max}}=0.75\times{p_bal:.4f}$",
-                    rf"$P_{{max}} = {p_max:.4f}$",
+                    r"$\rho_{max}=0.75\,\rho_{bal}$",
+                    rf"$\rho_{{max}}=0.75\times{p_bal:.4f}$",
+                    rf"$\rho_{{max}} = {p_max:.4f}$",
                 ],
             ),
             (
-                "As mín (ART.1.1 E060)",
+                'As mín <span class="norma">(E060 Art. 10.5.2)</span>',
                 [
                     r"$A_s^{\text{min}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d$",
                     rf"$A_s^{{\text{{min}}}} = 0.7\,\frac{{\sqrt{{{fc}}}}}{{{fy}}}\,{b}\,{d:.2f}$",
@@ -747,14 +747,14 @@ class DesignWindow(QMainWindow):
                 ],
             ),
             (
-                "As máx (ART.1.1 E060)",
+                'As máx <span class="norma">(E060 Art. 10.3.4)</span>',
                 [
                     r"$A_s^{\text{max}} = 0.75\,\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d$",
                     rf"$A_s^{{\text{{max}}}} = {as_max:.2f}\,\text{{cm}}^2$",
                 ],
             ),
             (
-                "Fórmula general del As (ART.1.1 E060)",
+                "Fórmula general del A_s",
                 [
                     r"$A_s = \frac{1.7 f_c b d}{2 f_y} - \frac{1}{2} \sqrt{\frac{2.89(f_c b d)^2}{f_y^2} - \frac{6.8 f_c b M_u}{\phi f_y^2}}$",
                 ],
