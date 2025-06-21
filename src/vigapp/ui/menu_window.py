@@ -102,7 +102,7 @@ class BackgroundWidget(QWidget):
 from .moment_app import MomentApp
 from .design_window import DesignWindow
 from .view3d_window import View3DWindow
-from .memoria_window import MemoriaWindow
+from reporte_flexion_html import generar_reporte_html
 
 
 class MenuWindow(QMainWindow):
@@ -307,31 +307,21 @@ class MenuWindow(QMainWindow):
         if not self.design_ready:
             QMessageBox.warning(self, "Advertencia", "Debe completar el diseño")
             return
-        title, data = self.design_page._build_memoria()
-        if title is None:
+        _, data = self.design_page._build_memoria()
+        if data is None:
             return
-        images = data.get("images", [])
-        if hasattr(self, "diagram_page") and hasattr(self.diagram_page, "canvas"):
-            from ..models.utils import capture_widget_temp
-            img = capture_widget_temp(self.diagram_page.canvas, "diagram_")
-            if img:
-                images.append(img)
-        data["images"] = images
-        if not hasattr(self, "mem_page"):
-            self.mem_page = MemoriaWindow(
-                title,
-                data,
-                show_window=False,
-                menu_callback=self.show_menu,
-            )
-            # Attach section widget for automatic capture on export
-            self.mem_page.widget_seccion = self.design_page.canvas_sec
-            self.stacked.addWidget(self.mem_page)
-        else:
-            self.mem_page.setWindowTitle(title)
-            self.mem_page.set_data(data)
-            self.mem_page.widget_seccion = self.design_page.canvas_sec
-        self.stacked.setCurrentWidget(self.mem_page)
+        datos = {k: v for k, v in data.get("data_section", [])}
+        calc_sections = data.get("calc_sections", [])
+        keys = ["peralte", "b1", "pbal", "pmax", "as_min", "as_max"]
+        resultados = {}
+        for key, sec in zip(keys, calc_sections[:6]):
+            forms = [f.strip("$") for f in sec[1]]
+            resultados[key] = {
+                "general": forms[0] if len(forms) > 0 else "",
+                "reemplazo": forms[1] if len(forms) > 1 else "",
+                "resultado": forms[2] if len(forms) > 2 else "",
+            }
+        generar_reporte_html(datos, resultados)
 
     def show_design(self):
         if hasattr(self, "design_page"):
