@@ -17,7 +17,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGuiApplication, QFont
 
 from .view3d_window import View3DWindow
-from .memoria_window import MemoriaWindow
+from reporte_flexion_html import generar_reporte_html
 from ..models.constants import DIAM_CM, BAR_DATA
 from ..models.utils import capture_widget_temp
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -584,14 +584,22 @@ class DesignWindow(QMainWindow):
         self.view3d.show()
 
     def show_memoria(self):
-        """Show a detailed calculation window."""
-        title, data = self._build_memoria()
-        if title is None or data is None:
+        """Generate the HTML report directly."""
+        _, data = self._build_memoria()
+        if data is None:
             return
-        self.mem_win = MemoriaWindow(title, data)
-        # Provide section widget so the PDF can embed its snapshot
-        self.mem_win.widget_seccion = self.canvas_sec
-        self.mem_win.show()
+        datos = {k: v for k, v in data.get("data_section", [])}
+        calc_sections = data.get("calc_sections", [])
+        keys = ["peralte", "b1", "pbal", "pmax", "as_min", "as_max"]
+        resultados = {}
+        for key, sec in zip(keys, calc_sections[:6]):
+            forms = [f.strip("$") for f in sec[1]]
+            resultados[key] = {
+                "general": forms[0] if len(forms) > 0 else "",
+                "reemplazo": forms[1] if len(forms) > 1 else "",
+                "resultado": forms[2] if len(forms) > 2 else "",
+            }
+        generar_reporte_html(datos, resultados)
 
     def _build_memoria(self):
         """Return title and structured data for the calculation memory."""
