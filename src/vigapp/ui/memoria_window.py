@@ -15,12 +15,12 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QPixmap
 import re
 
-from pdf_engine.latex_renderer import render_report
 from ..models.utils import formula_html
+from reporte_flexion_html import generar_reporte_html
 
 
 class MemoriaWindow(QMainWindow):
-    """Window used to export the calculation memory as a PDF."""
+    """Window used to export the calculation memory as HTML."""
 
     def __init__(self, title: str, data: dict, parent=None, *, show_window=True,
                  menu_callback=None):
@@ -118,57 +118,22 @@ class MemoriaWindow(QMainWindow):
         self._refresh_html()
 
     def _capture(self):
-        path, _ = QFileDialog.getSaveFileName(
-            self,
-            "Guardar PDF",
-            "memoria.pdf",
-            "PDF (*.pdf)",
-        )
-        if path:
-            self._generate(path)
+        self._generate()
 
     def export(self):
-        path, _ = QFileDialog.getSaveFileName(
-            self,
-            "Guardar PDF",
-            "memoria.pdf",
-            "PDF (*.pdf)",
-        )
-        if path:
-            self._generate(path)
+        self._generate()
 
-    def _generate(self, path: str):
-        data = {
-            "data_section": self.data.get("data_section", []),
-            "calc_sections": self.data.get("calc_sections", []),
-            "results": self.data.get("results", []),
-            "images": self.data.get("images", []),
-            "section_img": self.data.get("section_img"),
-            "formula_images": [
-                os.path.join(
-                    os.path.dirname(__file__),
-                    "..", "..", "resources", "flexion", "figures", "peralte.png"
-                ),
-                os.path.join(
-                    os.path.dirname(__file__),
-                    "..", "..", "resources", "flexion", "figures", "pb.png"
-                ),
-            ],
+    def _generate(self):
+        datos = {k: v for k, v in self.data.get("data_section", [])}
+        resultados = {
+            "peralte": {"formula": self.data.get("formula_peralte"), "valor": self.data.get("d")},
+            "b1": {"formula": self.data.get("formula_b1"), "valor": self.data.get("b1")},
+            "pbal": {"formula": self.data.get("formula_pbal"), "valor": self.data.get("pbal")},
+            "pmax": {"formula": self.data.get("formula_pmax"), "valor": self.data.get("pmax")},
+            "as_min": {"formula": self.data.get("formula_asmin"), "valor": self.data.get("as_min")},
+            "as_max": {"formula": self.data.get("formula_asmax"), "valor": self.data.get("as_max")},
         }
-
-        # Captura del widget 'widget_seccion' como imagen fija
-        ruta_figures = os.path.join(
-            os.path.dirname(__file__), "..", "..", "pdf_engine", "figures"
-        )
-        os.makedirs(ruta_figures, exist_ok=True)
-        ruta_captura = os.path.join(ruta_figures, "section.png")
-
-        if hasattr(self, "widget_seccion") and isinstance(self.widget_seccion, QWidget):
-            pixmap = self.widget_seccion.grab()
-            pixmap.save(ruta_captura, "PNG")
-            data["section_img"] = ruta_captura.replace("\\", "/")
-
-        render_report(self.windowTitle(), data, path)
+        generar_reporte_html(datos, resultados)
 
     def edit_title(self):
         title, ok = QInputDialog.getText(self, "Editar título", "Título:", text=self.windowTitle())
