@@ -28,8 +28,17 @@ import numpy as np
 class DesignWindow(QMainWindow):
     """Ventana para la etapa de diseño de acero (solo interfaz gráfica)."""
 
-    def __init__(self, mn_corr, mp_corr, parent=None, *, show_window=True,
-                 next_callback=None, save_callback=None, menu_callback=None):
+    def __init__(
+        self,
+        mn_corr,
+        mp_corr,
+        parent=None,
+        *,
+        show_window=True,
+        next_callback=None,
+        save_callback=None,
+        menu_callback=None,
+    ):
         """Create the design window using corrected moments."""
         super().__init__(parent)
         self.mn_corr = mn_corr
@@ -48,9 +57,9 @@ class DesignWindow(QMainWindow):
         """Calculate required steel area for a single moment."""
         Mu_kgcm = abs(Mu) * 100000  # convert TN·m to kg·cm
         term = 1.7 * fc * b * d / (2 * fy)
-        root = (2.89 * (fc * b * d) ** 2) / (fy ** 2) - (
-            6.8 * fc * b * Mu_kgcm
-        ) / (phi * (fy ** 2))
+        root = (2.89 * (fc * b * d) ** 2) / (fy**2) - (6.8 * fc * b * Mu_kgcm) / (
+            phi * (fy**2)
+        )
         root = max(root, 0)
         return term - 0.5 * np.sqrt(root)
 
@@ -99,12 +108,14 @@ class DesignWindow(QMainWindow):
         for rows in self.rebar_rows:
             for row in rows:
                 try:
-                    n = int(row['qty'].currentText()) if row['qty'].currentText() else 0
+                    n = int(row["qty"].currentText()) if row["qty"].currentText() else 0
                 except ValueError:
                     n = 0
-                dia_key = row['dia'].currentText()
+                dia_key = row["dia"].currentText()
                 area = n * BAR_DATA.get(dia_key, 0)
-                layer = int(row['capa'].currentText()) if row['capa'].currentText() else 1
+                layer = (
+                    int(row["capa"].currentText()) if row["capa"].currentText() else 1
+                )
                 if area > layer_areas[layer]:
                     layer_areas[layer] = area
                     layer_diams[layer] = DIAM_CM.get(dia_key, 0)
@@ -134,7 +145,7 @@ class DesignWindow(QMainWindow):
                     As2 = layer_areas[2]
                     As3 = layer_areas[3]
                     s = As1 + As2 + As3
-                    d = (d1*As1 + d2*As2 + d3*As3) / s if s else d1
+                    d = (d1 * As1 + d2 * As2 + d3 * As3) / s if s else d1
                 else:
                     d4 = d3 - 3
                     As1 = layer_areas[1]
@@ -142,7 +153,7 @@ class DesignWindow(QMainWindow):
                     As3 = layer_areas[3]
                     As4 = layer_areas[4]
                     s = As1 + As2 + As3 + As4
-                    d = (d1*As1 + d2*As2 + d3*As3 + d4*As4) / s if s else d1
+                    d = (d1 * As1 + d2 * As2 + d3 * As3 + d4 * As4) / s if s else d1
 
         self.edits["d (cm)"].setText(f"{d:.2f}")
         return d
@@ -191,7 +202,7 @@ class DesignWindow(QMainWindow):
             self.edits[text] = ed
 
         # Combos para diámetro de estribo y de varilla
-        estribo_opts = ["8mm", "3/8\"", "1/2\""]
+        estribo_opts = ["8mm", '3/8"', '1/2"']
         lbl_estribo = QLabel("ϕ estribo")
         lbl_estribo.setFont(small_font)
         layout.addWidget(lbl_estribo, len(labels), 0)
@@ -201,23 +212,23 @@ class DesignWindow(QMainWindow):
         self.cb_estribo.setCurrentText('3/8"')
         layout.addWidget(self.cb_estribo, len(labels), 1)
 
-        varilla_opts = ["1/2\"", "5/8\"", "3/4\"", "1\""]
+        varilla_opts = ['1/2"', '5/8"', '3/4"', '1"']
         lbl_varilla = QLabel("ϕ varilla")
         lbl_varilla.setFont(small_font)
-        layout.addWidget(lbl_varilla, len(labels)+1, 0)
+        layout.addWidget(lbl_varilla, len(labels) + 1, 0)
         self.cb_varilla = QComboBox()
         self.cb_varilla.setFont(small_font)
         self.cb_varilla.addItems(varilla_opts)
         self.cb_varilla.setCurrentText('5/8"')
-        layout.addWidget(self.cb_varilla, len(labels)+1, 1)
+        layout.addWidget(self.cb_varilla, len(labels) + 1, 1)
 
         lbl_capas = QLabel("N\u00b0 capas")
         lbl_capas.setFont(small_font)
-        layout.addWidget(lbl_capas, len(labels)+2, 0)
+        layout.addWidget(lbl_capas, len(labels) + 2, 0)
         self.layer_combo = QComboBox()
         self.layer_combo.setFont(small_font)
         self.layer_combo.addItems(["1", "2", "3", "4"])
-        layout.addWidget(self.layer_combo, len(labels)+2, 1)
+        layout.addWidget(self.layer_combo, len(labels) + 2, 1)
 
         pos_labels = ["M1-", "M2-", "M3-", "M1+", "M2+", "M3+"]
         self.rebar_rows = [[] for _ in range(6)]
@@ -296,7 +307,9 @@ class DesignWindow(QMainWindow):
 
         layout.addLayout(info_layout, row_start, 2, 1, 6)
 
-        self.fig_sec, self.ax_sec = plt.subplots(figsize=(3, 3), constrained_layout=True)
+        self.fig_sec, self.ax_sec = plt.subplots(
+            figsize=(3, 3), constrained_layout=True
+        )
         self.canvas_sec = FigureCanvas(self.fig_sec)
         layout.addWidget(self.canvas_sec, 0, 2, len(labels) + 3, 4)
 
@@ -320,8 +333,8 @@ class DesignWindow(QMainWindow):
 
         layout.addWidget(self.btn_capture, row_start + 3, 0, 1, 2)
         layout.addWidget(self.btn_memoria, row_start + 3, 2, 1, 2)
-        layout.addWidget(self.btn_view3d,  row_start + 3, 4, 1, 2)
-        layout.addWidget(self.btn_menu,    row_start + 3, 6, 1, 2)
+        layout.addWidget(self.btn_view3d, row_start + 3, 4, 1, 2)
+        layout.addWidget(self.btn_menu, row_start + 3, 6, 1, 2)
 
         for ed in self.edits.values():
             ed.editingFinished.connect(self._redraw)
@@ -330,7 +343,7 @@ class DesignWindow(QMainWindow):
 
         for rows in self.rebar_rows:
             for row in rows:
-                for box in (row['qty'], row['dia'], row['capa']):
+                for box in (row["qty"], row["dia"], row["capa"]):
                     box.currentIndexChanged.connect(self.update_design_as)
 
         self.as_min = 0.0
@@ -345,7 +358,7 @@ class DesignWindow(QMainWindow):
         if len(self.rebar_rows[idx]) >= 4:
             return
         qty_opts = [""] + [str(i) for i in range(1, 11)]
-        dia_opts = ["", "1/2\"", "5/8\"", "3/4\"", "1\""]
+        dia_opts = ["", '1/2"', '5/8"', '3/4"', '1"']
         row_layout = QHBoxLayout()
         row_layout.setSpacing(2)
         row_layout.setContentsMargins(0, 0, 0, 0)
@@ -389,7 +402,9 @@ class DesignWindow(QMainWindow):
         if len(self.rebar_rows[idx]) <= 1:
             return
         widget.setParent(None)
-        self.rebar_rows[idx] = [r for r in self.rebar_rows[idx] if r["widget"] != widget]
+        self.rebar_rows[idx] = [
+            r for r in self.rebar_rows[idx] if r["widget"] != widget
+        ]
         self.update_design_as()
 
     def draw_section(self):
@@ -405,50 +420,53 @@ class DesignWindow(QMainWindow):
         y_d = h - d
 
         self.ax_sec.clear()
-        self.ax_sec.set_aspect('equal')
-        self.ax_sec.plot([0, b, b, 0, 0], [0, 0, h, h, 0], 'k-')
-        self.ax_sec.plot([r, b - r, b - r, r, r], [r, r, h - r, h - r, r], 'r--')
+        self.ax_sec.set_aspect("equal")
+        self.ax_sec.plot([0, b, b, 0, 0], [0, 0, h, h, 0], "k-")
+        self.ax_sec.plot([r, b - r, b - r, r, r], [r, r, h - r, h - r, r], "r--")
 
-        self.ax_sec.annotate('', xy=(0, -5), xytext=(b, -5),
-                             arrowprops=dict(arrowstyle='<->'))
+        self.ax_sec.annotate(
+            "", xy=(0, -5), xytext=(b, -5), arrowprops=dict(arrowstyle="<->")
+        )
         self.ax_sec.text(
             b / 2,
             -6,
             f"b = {b:.0f} cm",
-            ha='center',
-            va='top',
+            ha="center",
+            va="top",
             fontsize=8,
         )
 
         # Cota de peralte pegada a la viga
-        self.ax_sec.annotate('', xy=(-5, h), xytext=(-5, y_d),
-                             arrowprops=dict(arrowstyle='<->'))
+        self.ax_sec.annotate(
+            "", xy=(-5, h), xytext=(-5, y_d), arrowprops=dict(arrowstyle="<->")
+        )
         self.ax_sec.text(
             -6,
             (h + y_d) / 2,
             f"d = {d:.1f} cm",
-            ha='right',
-            va='center',
+            ha="right",
+            va="center",
             rotation=90,
             fontsize=8,
         )
 
         # Cota de altura total hacia la izquierda
-        self.ax_sec.annotate('', xy=(-12, 0), xytext=(-12, h),
-                             arrowprops=dict(arrowstyle='<->'))
+        self.ax_sec.annotate(
+            "", xy=(-12, 0), xytext=(-12, h), arrowprops=dict(arrowstyle="<->")
+        )
         self.ax_sec.text(
             -13,
             h / 2,
             f"h = {h:.0f} cm",
-            ha='right',
-            va='center',
+            ha="right",
+            va="center",
             rotation=90,
             fontsize=8,
         )
 
         self.ax_sec.set_xlim(-15, b + 10)
         self.ax_sec.set_ylim(-10, h + 10)
-        self.ax_sec.axis('off')
+        self.ax_sec.axis("off")
         self.canvas_sec.draw()
 
     def _redraw(self):
@@ -462,24 +480,40 @@ class DesignWindow(QMainWindow):
         areas_n, areas_p = self._required_areas()
 
         self.ax_req.clear()
-        self.ax_req.plot([0, 1], [0, 0], 'k-', lw=6)
+        self.ax_req.plot([0, 1], [0, 0], "k-", lw=6)
 
         y_off = 0.1 * max(np.max(areas_n), np.max(areas_p), 1)
         label_off = 0.2 * y_off
         for idx, (x, a_n) in enumerate(zip(x_ctrl, areas_n), 1):
-            self.ax_req.text(x, y_off, f"As- {a_n:.2f}", ha='center',
-                             va='bottom', color='b', fontsize=9)
-            self.ax_req.text(x, label_off, f"M{idx}-", ha='center',
-                             va='bottom', fontsize=7)
+            self.ax_req.text(
+                x,
+                y_off,
+                f"As- {a_n:.2f}",
+                ha="center",
+                va="bottom",
+                color="b",
+                fontsize=9,
+            )
+            self.ax_req.text(
+                x, label_off, f"M{idx}-", ha="center", va="bottom", fontsize=7
+            )
         for idx, (x, a_p) in enumerate(zip(x_ctrl, areas_p), 1):
-            self.ax_req.text(x, -y_off, f"As+ {a_p:.2f}", ha='center',
-                             va='top', color='r', fontsize=9)
-            self.ax_req.text(x, -label_off, f"M{idx}+", ha='center',
-                             va='top', fontsize=7)
+            self.ax_req.text(
+                x,
+                -y_off,
+                f"As+ {a_p:.2f}",
+                ha="center",
+                va="top",
+                color="r",
+                fontsize=9,
+            )
+            self.ax_req.text(
+                x, -label_off, f"M{idx}+", ha="center", va="top", fontsize=7
+            )
 
         self.ax_req.set_xlim(-0.05, 1.05)
-        self.ax_req.set_ylim(-2*y_off, 2*y_off)
-        self.ax_req.axis('off')
+        self.ax_req.set_ylim(-2 * y_off, 2 * y_off)
+        self.ax_req.axis("off")
         self.canvas_dist.draw()
 
     def update_design_as(self):
@@ -504,7 +538,9 @@ class DesignWindow(QMainWindow):
                 dia_key = row["dia"].currentText()
                 dia = DIAM_CM.get(dia_key, 0)
                 area = BAR_DATA.get(dia_key, 0)
-                layer = int(row["capa"].currentText()) if row["capa"].currentText() else 1
+                layer = (
+                    int(row["capa"].currentText()) if row["capa"].currentText() else 1
+                )
                 total += n * area
                 if layer in layers:
                     layers[layer]["n"] += n
@@ -535,7 +571,9 @@ class DesignWindow(QMainWindow):
             except ValueError:
                 self.base_msg_label.setText("")
             else:
-                self.base_msg_label.setText("OK" if max_base <= b_val else "Aumentar base o capa")
+                self.base_msg_label.setText(
+                    "OK" if max_base <= b_val else "Aumentar base o capa"
+                )
 
         statuses = ["OK" if t >= req else "NO OK" for t, req in zip(totals, as_reqs)]
 
@@ -547,22 +585,38 @@ class DesignWindow(QMainWindow):
         areas_n = areas[:3]
         areas_p = areas[3:]
         self.ax_des.clear()
-        self.ax_des.plot([0, 1], [0, 0], 'k-', lw=6)
+        self.ax_des.plot([0, 1], [0, 0], "k-", lw=6)
         y_off = 0.1 * max(max(areas_n, default=0), max(areas_p, default=0), 1)
         label_off = 0.2 * y_off
         for idx, (x, a, st) in enumerate(zip(x_ctrl, areas_n, statuses[:3]), 1):
-            self.ax_des.text(x, y_off, f"Asd- {a:.2f} {st}", ha='center',
-                             va='bottom', color='g', fontsize=9)
-            self.ax_des.text(x, label_off, f"M{idx}-", ha='center',
-                             va='bottom', fontsize=7)
+            self.ax_des.text(
+                x,
+                y_off,
+                f"Asd- {a:.2f} {st}",
+                ha="center",
+                va="bottom",
+                color="g",
+                fontsize=9,
+            )
+            self.ax_des.text(
+                x, label_off, f"M{idx}-", ha="center", va="bottom", fontsize=7
+            )
         for idx, (x, a, st) in enumerate(zip(x_ctrl, areas_p, statuses[3:]), 1):
-            self.ax_des.text(x, -y_off, f"Asd+ {a:.2f} {st}", ha='center',
-                             va='top', color='g', fontsize=9)
-            self.ax_des.text(x, -label_off, f"M{idx}+", ha='center',
-                             va='top', fontsize=7)
+            self.ax_des.text(
+                x,
+                -y_off,
+                f"Asd+ {a:.2f} {st}",
+                ha="center",
+                va="top",
+                color="g",
+                fontsize=9,
+            )
+            self.ax_des.text(
+                x, -label_off, f"M{idx}+", ha="center", va="top", fontsize=7
+            )
         self.ax_des.set_xlim(-0.05, 1.05)
         self.ax_des.set_ylim(-2 * y_off, 2 * y_off)
-        self.ax_des.axis('off')
+        self.ax_des.axis("off")
         self.canvas_dist.draw()
 
     def _capture_design(self):
@@ -571,7 +625,11 @@ class DesignWindow(QMainWindow):
             w.hide()
         self.repaint()
         QApplication.processEvents()
-        target = self.scroll_area.widget() if hasattr(self, "scroll_area") else self.centralWidget()
+        target = (
+            self.scroll_area.widget()
+            if hasattr(self, "scroll_area")
+            else self.centralWidget()
+        )
         pix = target.grab()
         QGuiApplication.clipboard().setPixmap(pix)
         for w in widgets:
@@ -599,7 +657,8 @@ class DesignWindow(QMainWindow):
                 "reemplazo": forms[1] if len(forms) > 1 else "",
                 "resultado": forms[2] if len(forms) > 2 else "",
             }
-        generar_reporte_html(datos, resultados)
+        tabla = data.get("verif_table", [])
+        generar_reporte_html(datos, resultados, tabla)
 
     def _build_memoria(self):
         """Return title and structured data for the calculation memory."""
@@ -642,39 +701,65 @@ class DesignWindow(QMainWindow):
         ]
 
         calc_sections = [
-            ("Peralte: d (ART.1.1 E060)", [
-                r"$d = h - d_e - \frac{1}{2} d_b - r$",
-                fr"$d = {h} - {de} - \frac{{1}}{{2}} {db} - {r}$",
-                fr"$d = {d:.2f}\,\text{{cm}}$",
-            ]),
-            ("Coeficiente B1 (ART.1.1 E060)", [
-                (r"$\beta_1 = 0.85$" if fc <= 280 else fr"$\beta_1 = 0.85 - 0.05\times\frac{{{fc}-280}}{{70}} = {beta1:.3f}$"),
-            ]),
-            ("Pbal (ART.1.1 E060)", [
-                r"$P_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y}$",
-                fr"$P_{{bal}}=\left(\frac{{0.85\,{fc}\,{beta1:.3f}}}{{{fy}}}\right)\,\frac{{6000}}{{6000+{fy}}}$",
-                fr"$P_{{bal}} = {p_bal:.4f}$",
-            ]),
-            ("Pmax (ART.1.1 E060)", [
-                r"$P_{max}=0.75\,P_{bal}$",
-                fr"$P_{{max}}=0.75\times{p_bal:.4f}$",
-                fr"$P_{{max}} = {p_max:.4f}$",
-            ]),
-            ("As mín (ART.1.1 E060)", [
-                r"$A_s^{\text{min}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d$",
-                fr"$A_s^{{\text{{min}}}} = 0.7\,\frac{{\sqrt{{{fc}}}}}{{{fy}}}\,{b}\,{d:.2f}$",
-                fr"$A_s^{{\text{{min}}}} = {as_min:.2f}\,\text{{cm}}^2$",
-            ]),
-            ("As máx (ART.1.1 E060)", [
-                r"$A_s^{\text{max}} = 0.75\,\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d$",
-                fr"$A_s^{{\text{{max}}}} = {as_max:.2f}\,\text{{cm}}^2$",
-            ]),
-            ("Fórmula general del As (ART.1.1 E060)", [
-                r"$A_s = \frac{1.7 f_c b d}{2 f_y} - \frac{1}{2} \sqrt{\frac{2.89(f_c b d)^2}{f_y^2} - \frac{6.8 f_c b M_u}{\phi f_y^2}}$",
-            ]),
+            (
+                "Peralte: d (ART.1.1 E060)",
+                [
+                    r"$d = h - d_e - \frac{1}{2} d_b - r$",
+                    rf"$d = {h} - {de} - \frac{{1}}{{2}} {db} - {r}$",
+                    rf"$d = {d:.2f}\,\text{{cm}}$",
+                ],
+            ),
+            (
+                "Coeficiente B1 (ART.1.1 E060)",
+                [
+                    (
+                        r"$\beta_1 = 0.85$"
+                        if fc <= 280
+                        else rf"$\beta_1 = 0.85 - 0.05\times\frac{{{fc}-280}}{{70}} = {beta1:.3f}$"
+                    ),
+                ],
+            ),
+            (
+                "Pbal (ART.1.1 E060)",
+                [
+                    r"$P_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y}$",
+                    rf"$P_{{bal}}=\left(\frac{{0.85\,{fc}\,{beta1:.3f}}}{{{fy}}}\right)\,\frac{{6000}}{{6000+{fy}}}$",
+                    rf"$P_{{bal}} = {p_bal:.4f}$",
+                ],
+            ),
+            (
+                "Pmax (ART.1.1 E060)",
+                [
+                    r"$P_{max}=0.75\,P_{bal}$",
+                    rf"$P_{{max}}=0.75\times{p_bal:.4f}$",
+                    rf"$P_{{max}} = {p_max:.4f}$",
+                ],
+            ),
+            (
+                "As mín (ART.1.1 E060)",
+                [
+                    r"$A_s^{\text{min}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d$",
+                    rf"$A_s^{{\text{{min}}}} = 0.7\,\frac{{\sqrt{{{fc}}}}}{{{fy}}}\,{b}\,{d:.2f}$",
+                    rf"$A_s^{{\text{{min}}}} = {as_min:.2f}\,\text{{cm}}^2$",
+                ],
+            ),
+            (
+                "As máx (ART.1.1 E060)",
+                [
+                    r"$A_s^{\text{max}} = 0.75\,\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d$",
+                    rf"$A_s^{{\text{{max}}}} = {as_max:.2f}\,\text{{cm}}^2$",
+                ],
+            ),
+            (
+                "Fórmula general del As (ART.1.1 E060)",
+                [
+                    r"$A_s = \frac{1.7 f_c b d}{2 f_y} - \frac{1}{2} \sqrt{\frac{2.89(f_c b d)^2}{f_y^2} - \frac{6.8 f_c b M_u}{\phi f_y^2}}$",
+                ],
+            ),
         ]
 
         labels = ["M1-", "M2-", "M3-", "M1+", "M2+", "M3+"]
+        verif_table = []
         for lab, m, a_raw, a in zip(
             labels,
             list(self.mn_corr) + list(self.mp_corr),
@@ -683,9 +768,8 @@ class DesignWindow(QMainWindow):
         ):
             Mu_kgcm = abs(m) * 100000
             term = 1.7 * fc * b * d / (2 * fy)
-            root = (
-                (2.89 * (fc * b * d) ** 2) / (fy ** 2)
-                - (6.8 * fc * b * Mu_kgcm) / (phi * (fy ** 2))
+            root = (2.89 * (fc * b * d) ** 2) / (fy**2) - (6.8 * fc * b * Mu_kgcm) / (
+                phi * (fy**2)
             )
             root = max(root, 0)
             calc = term - 0.5 * np.sqrt(root)
@@ -693,12 +777,14 @@ class DesignWindow(QMainWindow):
                 (
                     f"As para {lab}",
                     [
-                        fr"$M_u = {m:.2f}\,\text{{TN·m}} = {Mu_kgcm:.0f}\,\text{{kg·cm}}$",
-                        fr"$A_s^{{\text{{calc}}}} = {calc:.2f}\,\text{{cm}}^2$",
-                        fr"$A_s^{{\text{{req}}}} = {a:.2f}\,\text{{cm}}^2$",
+                        rf"$M_u = {m:.2f}\,\text{{TN·m}} = {Mu_kgcm:.0f}\,\text{{kg·cm}}$",
+                        rf"$A_s^{{\text{{calc}}}} = {calc:.2f}\,\text{{cm}}^2$",
+                        rf"$A_s^{{\text{{req}}}} = {a:.2f}\,\text{{cm}}^2$",
                     ],
                 )
             )
+            estado = "\u2714 Cumple" if a >= calc else "\u2716 No cumple"
+            verif_table.append([lab, f"{calc:.2f}", f"{a:.2f}", estado])
 
         result_section = [
             ("As_min", f"{as_min:.2f} cm²"),
@@ -719,7 +805,10 @@ class DesignWindow(QMainWindow):
 
         from ..models.utils import draw_beam_section_png
         import tempfile
-        tmp = tempfile.NamedTemporaryFile(prefix="section_pdf_", suffix=".png", delete=False)
+
+        tmp = tempfile.NamedTemporaryFile(
+            prefix="section_pdf_", suffix=".png", delete=False
+        )
         tmp.close()
         section_img = draw_beam_section_png(b, h, r, de, db, tmp.name)
 
@@ -730,6 +819,7 @@ class DesignWindow(QMainWindow):
             "results": result_section,
             "images": images,
             "section_img": section_img,
+            "verif_table": verif_table,
             # Valores clave para el reporte LaTeX
             "d": d,
             "b1": beta1,
@@ -747,7 +837,6 @@ class DesignWindow(QMainWindow):
         }
         return title, data
 
-
     def on_next(self):
         if self.next_callback:
             self.next_callback()
@@ -761,4 +850,3 @@ class DesignWindow(QMainWindow):
     def on_menu(self):
         if self.menu_callback:
             self.menu_callback()
-
