@@ -22,6 +22,7 @@ cuerpo {
    
 }
 h1 , h2 , h3 { alineación del texto : izquierda; margen superior : 1.5em ; }
+.norma { tamaño de fuente : 0.8em ; color : #555 ; }
 tabla { borde-collapse : colapsar; ancho : 100% ; margen-inferior : 1em ; }
 td , th { borde : 1px sólido #000 ; relleno : 5px 8px ; }
  
@@ -34,7 +35,7 @@ td , th { borde : 1px sólido #000 ; relleno : 5px 8px ; }
 < div style = 'position:fixed; top:20px; right:20px;' > < button onclick = "window.print()" > Exportar a PDF </ button > </ div >  
 < div class = 'página' > 
 < h1 contenteditable = 'true' > DISEÑO A FLEXIÓN DE VIGA 30x50 </ h1 > 
-< div estilo = 'display:flex; espacio:20px;' >
+< div style = 'display:flex; align-items:flex-start; gap:20px;' > 
 < div style = 'flex:1;' > 
 <tabla>​​
 < tr > < td > < b > b (cm) < / b > < / td > < td > 30 </ td > </ tr >
@@ -52,25 +53,25 @@ td , th { borde : 1px sólido #000 ; relleno : 5px 8px ; }
 </div>​​
 </div>​​
 < h2 > CÁLCULOS </ h2 >
-< h3 > Cálculo de Peralte (ART.1.1 E060)</ h3 >
+< h3 > Cálculo de Peralte < abarcan clase = 'norma' > (E060 Art. 17.5.2) </ abarcan > </ h3 >
 < div class = 'fórmula' > $$ d = h - d_e - \frac{1}{2} d_b - r $$ </ div > 
 < div class = 'reemplazo' > $$ d = 50.0 - 0.95 - \frac{1}{2} 1.59 - 4.0 $$ </ div > 
 < div class = 'resultado' > $$ d = 44.25\,\text{cm} $$ </ div > 
-< h3 > Cálculo de B1 (ART.1.1 E060)</ h3 >
+< h3 > Cálculo de B1 < abarcan clase = 'norma' > (E060 Art. 10.2.7.3) </ abarcan > </ h3 >
 < div class = 'fórmula' > $$ \beta_1 = 0.85 $$ </ div > 
-< h3 > Cálculo de Pbal (ART.1.1 E060)</ h3 >
-< div class = 'fórmula' > $$ P _{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y} $$ </ div > 
-< div class = 'reemplazo' > $$ P _{bal}=\left(\frac{0.85\,210.0\,0.850}{4200.0}\right)\,\frac{6000}{6000+4200.0} $$ </ div > 
-< div class = 'resultado' > $$ P _{bal} = 0.0212 $$ </ div > 
-< h3 > Cálculo de Pmax (ART.1.1 E060)</ h3 >
-< div class = 'fórmula' > $$ P_{máx}=0,75\,P _{bal} $$ </ div > 
-< div class = 'reemplazo' > $$ P _{max}=0.75\times0.0212 $$ </ div > 
-< div class = 'resultado' > $$ P _{max} = 0.0159 $$ </ div > 
-< h3 > Cálculo de As mín (ART.1.1 E060)</ h3 >
+< h3 > ρ < sub > bal </ sub > < span class = 'norma' > (E060 Art. 10.3.32) </ span >  </ h3 >
+< div class = 'fórmula' > $$ \rho _{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y} $$ </ div > 
+< div class = 'reemplazo' > $$ \rho _{bal}=\left(\frac{0.85\,210.0\,0.850}{4200.0}\right)\,\frac{6000}{6000+4200.0} $$ </ div > 
+< div class = 'resultado' > $$ \rho _{bal} = 0.0212 $$ </ div > 
+< h3 > ρ < sub > máx </ sub > < span class = 'norma' > (E060 Art. 10.3.4) </ span >  </ h3 >
+< div class = 'fórmula' > $$ \rho_{max}=0.75\,\rho _{bal} $$ </ div > 
+< div class = 'reemplazo' > $$ \rho _{max}=0.75\times0.0212 $$ </ div > 
+< div class = 'resultado' > $$ \rho _{max} = 0.0159 $$ </ div > 
+< h3 > Cálculo de As mín < abarcan clase = 'norma' > (E060 Art. 10.5.2) </ abarcan > </ h3 >
 < div class = 'fórmula' > $$ A_s^{\text{mín}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d $$ </ div > 
 < div class = 'reemplazo' > $$ A_s^{\text{min}} = 0.7\,\frac{\sqrt{210.0}}{4200.0}\,30.0\,44.25 $$ </ div > 
 < div class = 'resultado' > $$ A_s^{\text{mín}} = 3.21\,\text{cm}^2 $$ </ div > 
-< h3 > Cálculo de As máx (ART.1.1 E060)</ h3 >
+< h3 > Cálculo de As máx < abarcan clase = 'norma' > (E060 Art. 10.3.4) </ abarcan > </ h3 >
 < div class = 'fórmula' > $$ A_s^{\text{máx}} = 0,75\,\left(\frac{0,85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d $$ </ div > 
 < div class = 'reemplazo' > $$ A_s^{\text{máx}} = 21.16\,\text{cm}^2 $$ </ div > 
 < h2 > Resumen de Verificación </ h2 >
