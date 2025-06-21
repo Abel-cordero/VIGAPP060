@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Diseño a Flexión de Viga</title>
+<script src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>
+<style>
+body{font-family:Arial,sans-serif;background:#fff;margin:20px auto;max-width:800px;}
+h1{text-align:center;}
+h2,h3{text-align:left;}
+table{border-collapse:collapse;margin:auto;width:100%;text-align:left;}
+td,th{border:1px solid #000;padding:2px 4px;}
+button{display:block;margin:20px auto;}
+img{display:block;margin:auto;max-width:90%;}
+</style>
+</head>
+<body>
+<h1>DISEÑO A FLEXIÓN DE VIGA 30x50</h1>
+<h2>DATOS</h2>
+<table>
+<tr><td><b>b (cm)</b></td><td>30</td></tr>
+<tr><td><b>h (cm)</b></td><td>50</td></tr>
+<tr><td><b>r (cm)</b></td><td>4</td></tr>
+<tr><td><b>f'c (kg/cm²)</b></td><td>210</td></tr>
+<tr><td><b>fy (kg/cm²)</b></td><td>4200</td></tr>
+<tr><td><b>φ</b></td><td>0.9</td></tr>
+<tr><td><b>ϕ estribo (cm)</b></td><td>0.95</td></tr>
+<tr><td><b>ϕ varilla (cm)</b></td><td>1.59</td></tr>
+</table>
+<h2>CÁLCULOS</h2>
+<h3>Peralte</h3>
+<div style='text-align:left'>$$ d = h - d_e - \frac{1}{2} d_b - r $$</div>
+<div><b>Resultado:</b> 44.254999999999995</div>
+<h3>B1</h3>
+<div style='text-align:left'>$$ \beta_1 = 0.85 $$</div>
+<div><b>Resultado:</b> 0.85</div>
+<h3>Pbal</h3>
+<div style='text-align:left'>$$ P_{bal}=\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\frac{6000}{6000+f_y} $$</div>
+<div><b>Resultado:</b> 0.021249999999999998</div>
+<h3>Pmax</h3>
+<div style='text-align:left'>$$ P_{max}=0.75\,P_{bal} $$</div>
+<div><b>Resultado:</b> 0.0159375</div>
+<h3>As min</h3>
+<div style='text-align:left'>$$ A_s^{\text{min}} = 0.7\,\frac{\sqrt{f_c}}{f_y}\, b\, d $$</div>
+<div><b>Resultado:</b> 3.206579389513067</div>
+<h3>As max</h3>
+<div style='text-align:left'>$$ A_s^{\text{max}} = 0.75\,\left(\frac{0.85 f_c \beta_1}{f_y}\right)\,\left(\frac{6000}{6000+f_y}\right)\,b\,d $$</div>
+<div><b>Resultado:</b> 21.159421875</div>
+<button onclick="window.print()">Exportar a PDF</button>
+</body></html>
