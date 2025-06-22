@@ -74,7 +74,8 @@ class View3DWindow(QMainWindow):
 
         layout.addStretch()
 
-        self.fig = plt.figure(figsize=(8, 3), constrained_layout=True)
+        # Slightly taller figure so the diameter legend fits comfortably
+        self.fig = plt.figure(figsize=(8, 4), constrained_layout=True)
         self.ax_sections = [self.fig.add_subplot(1, 3, i + 1) for i in range(3)]
         self.canvas = FigureCanvas(self.fig)
         layout.addWidget(self.canvas, alignment=Qt.AlignCenter)
