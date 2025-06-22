@@ -72,12 +72,14 @@ class View3DWindow(QMainWindow):
         self.title_edit.textChanged.connect(self._on_title_change)
         layout.addWidget(self.title_edit)
 
-
+        layout.addStretch()
 
         self.fig = plt.figure(figsize=(8, 3), constrained_layout=True)
         self.ax_sections = [self.fig.add_subplot(1, 3, i + 1) for i in range(3)]
         self.canvas = FigureCanvas(self.fig)
-        layout.addWidget(self.canvas)
+        layout.addWidget(self.canvas, alignment=Qt.AlignCenter)
+
+        layout.addStretch()
 
         btn_layout = QHBoxLayout()
         self.btn_capture = QPushButton("CAPTURA")
@@ -143,9 +145,16 @@ class View3DWindow(QMainWindow):
                        linestyle='', label=f"\u00f8{d}")
             for d in sorted(used_diams)
         ]
+        for leg in list(self.fig.legends):
+            leg.remove()
         if handles:
-            self.fig.legend(handles=handles, title="Di\u00e1metros",
-                            loc='lower center', ncol=len(handles))
+            self.fig.legend(
+                handles=handles,
+                title="Di\u00e1metros",
+                loc="lower center",
+                bbox_to_anchor=(0.5, -0.1),
+                ncol=len(handles),
+            )
 
         self.canvas.draw()
 
