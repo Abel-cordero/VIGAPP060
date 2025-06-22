@@ -75,9 +75,11 @@ class View3DWindow(QMainWindow):
         layout.addStretch()
 
         # Slightly taller figure so the diameter legend fits comfortably
-        self.fig = plt.figure(figsize=(8, 4), constrained_layout=True)
+        self.fig = plt.figure(figsize=(8, 5))   
+        self.fig.subplots_adjust(bottom=0.3)  # Reserva espacio inferior visible
         self.ax_sections = [self.fig.add_subplot(1, 3, i + 1) for i in range(3)]
         self.canvas = FigureCanvas(self.fig)
+        self.canvas.setMinimumHeight(750)  # Aumenta altura visual del canvas
         layout.addWidget(self.canvas, alignment=Qt.AlignCenter)
 
         layout.addStretch()
@@ -153,8 +155,9 @@ class View3DWindow(QMainWindow):
                 handles=handles,
                 title="Di\u00e1metros",
                 loc="lower center",
-                bbox_to_anchor=(0.5, -0.1),
+                bbox_to_anchor=(0.5, -0.08),
                 ncol=len(handles),
+                
             )
 
         self.canvas.draw()
