@@ -86,6 +86,22 @@ class DesignWindow(QMainWindow):
 
         return np.array(as_n), np.array(as_p)
 
+    def _design_areas(self):
+        """Return current design steel areas for each section."""
+        totals = []
+        for rows in self.rebar_rows:
+            total = 0.0
+            for row in rows:
+                try:
+                    n = int(row["qty"].currentText()) if row["qty"].currentText() else 0
+                except ValueError:
+                    n = 0
+                dia_key = row["dia"].currentText()
+                area = BAR_DATA.get(dia_key, 0)
+                total += n * area
+            totals.append(total)
+        return totals
+
     def _calc_as_limits(self, fc, fy, b, d):
         beta1 = 0.85 if fc <= 280 else 0.85 - ((fc - 280) / 70) * 0.05
         as_min = 0.7 * (np.sqrt(fc) / fy) * b * d
@@ -762,12 +778,14 @@ class DesignWindow(QMainWindow):
         ]
 
         labels = ["M1-", "M2-", "M3-", "M1+", "M2+", "M3+"]
+        design_totals = self._design_areas()
         verif_table = []
-        for lab, m, a_raw, a in zip(
+        for lab, m, a_raw, a, des in zip(
             labels,
             list(self.mn_corr) + list(self.mp_corr),
             as_n_raw + as_p_raw,
             as_n.tolist() + as_p.tolist(),
+            design_totals,
         ):
             Mu_kgcm = abs(m) * 100000
             term = 1.7 * fc * b * d / (2 * fy)
@@ -786,8 +804,8 @@ class DesignWindow(QMainWindow):
                     ],
                 )
             )
-            estado = "\u2714 Cumple" if a >= calc else "\u2716 No cumple"
-            verif_table.append([lab, f"{calc:.2f}", f"{a:.2f}", estado])
+            estado = "\u2714 Cumple" if des >= a else "\u2716 No cumple"
+            verif_table.append([lab, f"{a:.2f}", f"{des:.2f}", estado])
 
         result_section = [
             ("As_min", f"{as_min:.2f} cm²"),
