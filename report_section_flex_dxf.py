@@ -51,7 +51,7 @@ def _bars_summary(bars: Iterable[Dict]) -> str:
         if not key:
             continue
         counts[key] = counts.get(key, 0) + 1
-    parts = [f"{n}\u2300{key}" for key, n in counts.items()]
+    parts = [f"{n} de {key}" for key, n in counts.items()]
     return " + ".join(parts)
 
 
@@ -73,9 +73,9 @@ def dibujar_varillas(msp: ezdxf.layouts.Modelspace, bars: Iterable[Dict], offx: 
 
 
 def agregar_cotas(msp: ezdxf.layouts.Modelspace, offx: float, b: float, h: float) -> None:
-    """Add basic horizontal and vertical dimensions with arrows."""
-    _draw_dimension(msp, (offx, 0), (offx + b, 0), -4, f"b = {b} cm")
-    _draw_dimension(msp, (offx, 0), (offx, h), -4, f"h = {h} cm", vertical=True)
+    """Add basic horizontal and vertical dimensions."""
+    _draw_dimension(msp, (offx, 0), (offx + b, 0), -4, f"b = {b:.1f} cm")
+    _draw_dimension(msp, (offx, 0), (offx, h), -4, f"h = {h:.1f} cm", vertical=True)
 
 
 def _draw_dimension(
@@ -87,7 +87,7 @@ def _draw_dimension(
     *,
     vertical: bool = False,
 ) -> None:
-    """Draw a very small dimension line with arrows and centred text."""
+    """Draw a very small dimension line without arrowheads and centred text."""
     if vertical:
         dx, dy = 0, offset
         text_pos = ((p1[0] + p2[0]) / 2 + offset, (p1[1] + p2[1]) / 2)
@@ -100,18 +100,7 @@ def _draw_dimension(
     a1 = (p1[0] + dx, p1[1] + dy)
     a2 = (p2[0] + dx, p2[1] + dy)
     msp.add_line(a1, a2, dxfattribs={"color": 7})
-    size = 1.5
-    if vertical:
-        for y in [a1[1], a2[1]]:
-            x = a1[0]
-            msp.add_line((x, y), (x - size, y + size), dxfattribs={"color": 7})
-            msp.add_line((x, y), (x + size, y + size), dxfattribs={"color": 7})
-    else:
-        for x in [a1[0], a2[0]]:
-            y = a1[1]
-            msp.add_line((x, y), (x - size, y - size), dxfattribs={"color": 7})
-            msp.add_line((x, y), (x - size, y + size), dxfattribs={"color": 7})
-    txt = msp.add_text(text, dxfattribs={"height": 2.5, "style": "Arial"})
+    txt = msp.add_text(text, dxfattribs={"height": 1.5, "style": "Arial"})
     txt.set_placement(text_pos, align=TextEntityAlignment.MIDDLE_CENTER)
 
 
@@ -176,10 +165,10 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
         desc = _bars_summary(bars)
         txt = msp.add_text(
             f"{nombre} - ({desc})",
-            dxfattribs={"height": 4, "style": "Arial"},
+            dxfattribs={"height": 2.5, "style": "Arial"},
         )
         txt.set_placement(
-            (offset_x + b / 2, h + 8), align=TextEntityAlignment.MIDDLE_CENTER
+            (offset_x + b / 2, h + 4), align=TextEntityAlignment.MIDDLE_CENTER
         )
 
         offset_x += b + sep
@@ -196,7 +185,8 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
             path = hatch.paths.add_edge_path()
             path.add_arc((x, y), d / 2, 0, 360)
             t = msp.add_text(
-                f"\u2300{key}", dxfattribs={"height": 2.5, "style": "Arial"}
+                key,
+                dxfattribs={"height": 1.5, "style": "Arial"},
             )
             t.set_placement((x + d, y), align=TextEntityAlignment.MIDDLE_LEFT)
 
@@ -205,8 +195,8 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
     b0 = secciones[0].get("b", 0)
     h0 = secciones[0].get("h", 0)
     title = f"SECCION DE VIGA {int(b0)}x{int(h0)}"
-    t = msp.add_text(title, dxfattribs={"height": 5, "style": "Arial"})
-    t.set_placement((total_width / 2, max_h + 20), align=TextEntityAlignment.TOP_CENTER)
+    t = msp.add_text(title, dxfattribs={"height": 3, "style": "Arial"})
+    t.set_placement((total_width / 2, max_h + 15), align=TextEntityAlignment.TOP_CENTER)
 
     doc.saveas(filename)
 
