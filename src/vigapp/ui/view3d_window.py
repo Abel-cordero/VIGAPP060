@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import (
     QApplication,
     QLineEdit,
     QLabel,
+    QMessageBox,
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGuiApplication
@@ -87,11 +88,17 @@ class View3DWindow(QMainWindow):
         btn_layout = QHBoxLayout()
         self.btn_capture = QPushButton("CAPTURA")
         self.btn_capture.clicked.connect(self._capture_view)
+        self.btn_update = QPushButton("ACTUALIZAR")
+        self.btn_update.clicked.connect(self.draw_views)
+        self.btn_export = QPushButton("EXPORTAR CAD")
+        self.btn_export.clicked.connect(self.export_cad)
         self.btn_back = QPushButton("RETROCEDER")
         self.btn_back.clicked.connect(self.on_back)
         self.btn_menu = QPushButton("MENÚ")
         self.btn_menu.clicked.connect(self.on_menu)
         btn_layout.addWidget(self.btn_capture)
+        btn_layout.addWidget(self.btn_update)
+        btn_layout.addWidget(self.btn_export)
         btn_layout.addWidget(self.btn_back)
         btn_layout.addWidget(self.btn_menu)
         layout.addLayout(btn_layout)
@@ -453,4 +460,85 @@ class View3DWindow(QMainWindow):
     def on_menu(self):
         if self.menu_callback:
             self.menu_callback()
+
+    def export_cad(self):
+        """Export current sections to a simple DXF file."""
+        try:
+            import ezdxf
+        except Exception:
+            return
+
+        try:
+            b = float(self.design.edits["b (cm)"].text())
+            h = float(self.design.edits["h (cm)"].text())
+            r = float(self.design.edits["r (cm)"].text())
+        except ValueError:
+            return
+
+        de = DIAM_CM.get(self.design.cb_estribo.currentText(), 0)
+
+        doc = ezdxf.new()
+        msp = doc.modelspace()
+
+        for i in range(3):
+            off = i * (b + 20)
+            msp.add_lwpolyline([
+                (off, 0),
+                (off + b, 0),
+                (off + b, h),
+                (off, h),
+                (off, 0),
+            ])
+            msp.add_lwpolyline([
+                (off + r, r),
+                (off + b - r, r),
+                (off + b - r, h - r),
+                (off + r, h - r),
+                (off + r, r),
+            ])
+            msp.add_lwpolyline([
+                (off + r + de, r + de),
+                (off + b - r - de, r + de),
+                (off + b - r - de, h - r - de),
+                (off + r + de, h - r - de),
+                (off + r + de, r + de),
+            ])
+
+            neg_layers = self._collect_bars(i)
+            pos_layers = self._collect_bars(i + 3)
+            pos_y = self._layer_positions_bottom(pos_layers, r, de)
+            neg_y = self._layer_positions_top(neg_layers, r, de, h)
+            pos_counts = [len(pos_layers.get(l, [])) for l in sorted(pos_layers)]
+            neg_counts = [len(neg_layers.get(l, [])) for l in sorted(neg_layers)]
+
+            orders_pos = self.pos_orders[i] if i < len(self.pos_orders) else []
+            orders_neg = self.neg_orders[i] if i < len(self.neg_orders) else []
+
+            start = 0
+            for layer in sorted(pos_layers):
+                bars = orders_pos[start:start + pos_counts.pop(0)] or [key for _, key in pos_layers[layer]]
+                diams = [DIAM_CM.get(k, 0) for k in bars]
+                xs = self._distribute_x(diams, b, r, de)
+                y = pos_y.get(layer, r + de)
+                for x, key in zip(xs, bars):
+                    d = DIAM_CM.get(key, 0) / 2
+                    msp.add_circle((off + x, y), d)
+                start += len(bars)
+
+            start = 0
+            for layer in sorted(neg_layers):
+                bars = orders_neg[start:start + neg_counts.pop(0)] or [key for _, key in neg_layers[layer]]
+                diams = [DIAM_CM.get(k, 0) for k in bars]
+                xs = self._distribute_x(diams, b, r, de)
+                y = neg_y.get(layer, h - (r + de))
+                for x, key in zip(xs, bars):
+                    d = DIAM_CM.get(key, 0) / 2
+                    msp.add_circle((off + x, y), d)
+                start += len(bars)
+
+        try:
+            doc.saveas("secciones.dxf")
+            QMessageBox.information(self, "Exportar CAD", "Archivo secciones.dxf guardado")
+        except Exception:
+            QMessageBox.warning(self, "Exportar CAD", "No se pudo guardar el DXF")
 
