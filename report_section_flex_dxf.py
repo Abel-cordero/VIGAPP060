@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from vigapp.models.constants import DIAM_CM
 
 import ezdxf
+from ezdxf.enums import TextEntityAlignment
 
 
 _COLOR_MAP = {
@@ -111,7 +112,7 @@ def _draw_dimension(
             msp.add_line((x, y), (x - size, y - size), dxfattribs={"color": 7})
             msp.add_line((x, y), (x - size, y + size), dxfattribs={"color": 7})
     txt = msp.add_text(text, dxfattribs={"height": 2.5, "style": "Arial"})
-    txt.set_pos(text_pos, align="MIDDLE_CENTER")
+    txt.set_placement(text_pos, align=TextEntityAlignment.MIDDLE_CENTER)
 
 
 def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
@@ -177,7 +178,9 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
             f"{nombre} - ({desc})",
             dxfattribs={"height": 4, "style": "Arial"},
         )
-        txt.set_pos((offset_x + b / 2, h + 8), align="MIDDLE_CENTER")
+        txt.set_placement(
+            (offset_x + b / 2, h + 8), align=TextEntityAlignment.MIDDLE_CENTER
+        )
 
         offset_x += b + sep
 
@@ -195,7 +198,7 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
             t = msp.add_text(
                 f"\u2300{key}", dxfattribs={"height": 2.5, "style": "Arial"}
             )
-            t.set_pos((x + d, y), align="MIDDLE_LEFT")
+            t.set_placement((x + d, y), align=TextEntityAlignment.MIDDLE_LEFT)
 
     total_width = offset_x - sep
     max_h = max(float(sec.get("h", 0)) for sec in secciones)
@@ -203,7 +206,7 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
     h0 = secciones[0].get("h", 0)
     title = f"SECCION DE VIGA {int(b0)}x{int(h0)}"
     t = msp.add_text(title, dxfattribs={"height": 5, "style": "Arial"})
-    t.set_pos((total_width / 2, max_h + 20), align="TOP_CENTER")
+    t.set_placement((total_width / 2, max_h + 20), align=TextEntityAlignment.TOP_CENTER)
 
     doc.saveas(filename)
 
