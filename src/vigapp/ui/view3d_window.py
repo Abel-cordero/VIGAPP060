@@ -492,30 +492,74 @@ class View3DWindow(QMainWindow):
         if not path.lower().endswith(".dxf"):
             path += ".dxf"
 
-        diam = 1.59
+        de = DIAM_CM.get(self.design.cb_estribo.currentText(), 0)
+        as_n, as_p = self.design._required_areas()
+        as_min = getattr(self.design, "as_min", 0)
+
+        neg_layers = [self._collect_bars(i) for i in range(3)]
+        pos_layers = [self._collect_bars(i + 3) for i in range(3)]
+
+        if not self.neg_orders:
+            self.neg_orders = [self._collect_order(i) for i in range(3)]
+        if not self.pos_orders:
+            self.pos_orders = [self._collect_order(i + 3) for i in range(3)]
+
+        titles = ["M1", "M2", "M3"]
         lista = []
-        for i in range(3):
+
+        for idx in range(3):
+            bars = []
+            pos = pos_layers[idx]
+            neg = neg_layers[idx]
+
+            pos_counts = [len(pos.get(l, [])) for l in sorted(pos)]
+            neg_counts = [len(neg.get(l, [])) for l in sorted(neg)]
+
+            pos_y = self._layer_positions_bottom(pos, r, de)
+            neg_y = self._layer_positions_top(neg, r, de, h)
+
+            start = 0
+            orders = self.pos_orders[idx]
+            for layer in sorted(pos):
+                keys = orders[start:start + pos_counts.pop(0)] or [k for _, k in pos[layer]]
+                diams = [DIAM_CM.get(k, 0) for k in keys]
+                xs = self._distribute_x(diams, b, r, de)
+                y = pos_y.get(layer, r + de)
+                for x, k in zip(xs, keys):
+                    d = DIAM_CM.get(k, 0)
+                    bars.append({"x": x, "y": y, "diam": d, "label": k})
+                start += len(keys)
+
+            start = 0
+            orders = self.neg_orders[idx]
+            for layer in sorted(neg):
+                keys = orders[start:start + neg_counts.pop(0)] or [k for _, k in neg[layer]]
+                diams = [DIAM_CM.get(k, 0) for k in keys]
+                xs = self._distribute_x(diams, b, r, de)
+                y = neg_y.get(layer, h - (r + de))
+                for x, k in zip(xs, keys):
+                    d = DIAM_CM.get(k, 0)
+                    bars.append({"x": x, "y": y, "diam": d, "label": k})
+                start += len(keys)
+
             sec = {
-                "nombre": f"M{i + 1}",
+                "nombre": titles[idx],
                 "b": b,
                 "h": h,
-                "diam": diam,
-                "varillas_sup": [
-                    (r + diam / 2, h - r - diam / 2),
-                    (b - r - diam / 2, h - r - diam / 2),
-                ],
-                "varillas_inf": [
-                    (r + diam / 2, r + diam / 2),
-                    (b - r - diam / 2, r + diam / 2),
-                ],
-                "color": "blue",
+                "r": r,
+                "estribo_diam": de,
+                "bars": bars,
+                "as_min": as_min,
+                "as_req_neg": as_n[idx],
+                "as_req_pos": as_p[idx],
+                "viga": self.title_edit.text().upper(),
             }
             lista.append(sec)
 
         try:
-            from report_section_flex_dxf import exportar_a_dxf
+            from report_section_flex_dxf import exportar_cortes_a_dxf
 
-            exportar_a_dxf(lista, path)
+            exportar_cortes_a_dxf(lista, path)
             QMessageBox.information(self, "Exportar CAD", f"Archivo guardado: {path}")
         except Exception as exc:
             QMessageBox.warning(self, "Exportar CAD", f"No se pudo guardar el DXF: {exc}")
