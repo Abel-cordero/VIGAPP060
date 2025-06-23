@@ -1,18 +1,17 @@
-"""DXF export of beam sections for the flexure report.
+"""Simple DXF generator for beam section cuts.
 
-This module is independent from any GUI framework and only depends on
-``ezdxf``. It provides a single function ``exportar_a_dxf`` used to
-generate a DXF file containing one or more beam sections aligned
-horizontally.
+This module contains ``exportar_cortes_a_dxf`` which receives a list of
+sections with bar coordinates and writes a DXF drawing similar to a
+basic AutoCAD output.
 """
 
 from __future__ import annotations
 
-from typing import Iterable, Tuple, Dict
+from typing import Iterable, Dict, List, Tuple
 
 import ezdxf
 
-# Basic mapping of color names to AutoCAD color indexes
+
 _COLOR_MAP = {
     "red": 1,
     "yellow": 2,
@@ -25,44 +24,82 @@ _COLOR_MAP = {
 
 
 def _color_index(color: str | int) -> int:
-    """Return a DXF color index for ``color``."""
     if isinstance(color, int):
         return int(color)
     return _COLOR_MAP.get(str(color).lower(), 7)
 
 
-def exportar_a_dxf(lista_de_secciones: Iterable[Dict], filename: str) -> None:
-    """Exporta las secciones de viga en ``lista_de_secciones`` a ``filename``.
+def _draw_dimension(
+    msp: ezdxf.layouts.Modelspace,
+    p1: Tuple[float, float],
+    p2: Tuple[float, float],
+    offset: float,
+    text: str,
+    *,
+    vertical: bool = False,
+) -> None:
+    """Draw a very small dimension line with arrows and centred text."""
+    if vertical:
+        dx, dy = 0, offset
+        text_pos = ((p1[0] + p2[0]) / 2 + offset, (p1[1] + p2[1]) / 2)
+    else:
+        dx, dy = offset, 0
+        text_pos = ((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2 + offset)
 
-    Cada sección debe ser un diccionario con al menos los campos
-    ``nombre``, ``b``, ``h`` y ``diam``. Las listas ``varillas_sup`` y
-    ``varillas_inf`` contienen pares ``(x, y)`` con las posiciones de las
-    varillas en centímetros.
+    msp.add_line((p1[0], p1[1]), (p1[0] + dx, p1[1] + dy), dxfattribs={"color": 7})
+    msp.add_line((p2[0], p2[1]), (p2[0] + dx, p2[1] + dy), dxfattribs={"color": 7})
+    a1 = (p1[0] + dx, p1[1] + dy)
+    a2 = (p2[0] + dx, p2[1] + dy)
+    msp.add_line(a1, a2, dxfattribs={"color": 7})
+    size = 1.5
+    if vertical:
+        for y in [a1[1], a2[1]]:
+            x = a1[0]
+            msp.add_line((x, y), (x - size, y + size), dxfattribs={"color": 7})
+            msp.add_line((x, y), (x + size, y + size), dxfattribs={"color": 7})
+    else:
+        for x in [a1[0], a2[0]]:
+            y = a1[1]
+            msp.add_line((x, y), (x - size, y - size), dxfattribs={"color": 7})
+            msp.add_line((x, y), (x - size, y + size), dxfattribs={"color": 7})
+    txt = msp.add_text(text, dxfattribs={"height": 2.5})
+    txt.dxf.insert = text_pos
+    txt.dxf.halign = 1
+    txt.dxf.valign = 1
+
+
+def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
+    """Create a DXF file with the given sections.
+
+    Each element of ``secciones`` should contain:
+        - ``nombre``: etiqueta del corte
+        - ``b`` y ``h``: dimensiones de la viga en cm
+        - ``r``: recubrimiento
+        - ``estribo_diam``: diámetro del estribo en cm
+        - ``bars``: lista de dicts ``{"x", "y", "diam", "label"}``
+        - ``as_min``: As mínimo de diseño
+        - ``as_req_neg`` y ``as_req_pos``: As requerido en cm²
     """
     doc = ezdxf.new()
     msp = doc.modelspace()
 
-    if not lista_de_secciones:
+    secciones = list(secciones)
+    if not secciones:
         doc.saveas(filename)
         return
 
-    max_b = max(sec.get("b", 0) for sec in lista_de_secciones)
-    spacing = 20.0  # espacio entre secciones en cm
+    sep = 10.0
+    legend: List[float] = []
 
-    legend_entries: set[Tuple[float, str | int]] = set()
-
-    for idx, sec in enumerate(lista_de_secciones):
+    for idx, sec in enumerate(secciones):
         b = float(sec.get("b", 0))
         h = float(sec.get("h", 0))
-        nombre = sec.get("nombre", f"S{idx + 1}")
-        diam = float(sec.get("diam", 0))
-        color = sec.get("color", 7)
-        var_sup = sec.get("varillas_sup", [])
-        var_inf = sec.get("varillas_inf", [])
+        r = float(sec.get("r", 0))
+        de = float(sec.get("estribo_diam", 0))
+        bars = sec.get("bars", [])
+        offx = idx * (b + sep)
 
-        offx = idx * (max_b + spacing)
-
-        # Contorno externo de la viga
+        # Contorno
         msp.add_lwpolyline(
             [
                 (offx, 0),
@@ -71,48 +108,61 @@ def exportar_a_dxf(lista_de_secciones: Iterable[Dict], filename: str) -> None:
                 (offx, h),
                 (offx, 0),
             ],
-            dxfattribs={"color": 7},
+            dxfattribs={"color": 5},
         )
 
-        # Estribo interno con un offset sencillo relacionado al diámetro
-        off = diam + 2
+        # Estribo
+        inner = r + de
         msp.add_lwpolyline(
             [
-                (offx + off, off),
-                (offx + b - off, off),
-                (offx + b - off, h - off),
-                (offx + off, h - off),
-                (offx + off, off),
+                (offx + inner, inner),
+                (offx + b - inner, inner),
+                (offx + b - inner, h - inner),
+                (offx + inner, h - inner),
+                (offx + inner, inner),
             ],
-            dxfattribs={"color": 1},
+            dxfattribs={"color": 6},
         )
 
-        # Dibujo de varillas superiores e inferiores
-        for x, y in list(var_sup) + list(var_inf):
-            msp.add_circle(
-                (offx + float(x), float(y)),
-                diam / 2,
-                dxfattribs={"color": _color_index(color)},
-            )
-            legend_entries.add((diam, color))
+        for bar in bars:
+            x = offx + float(bar.get("x", 0))
+            y = float(bar.get("y", 0))
+            d = float(bar.get("diam", 0))
+            msp.add_circle((x, y), d / 2, dxfattribs={"color": 5})
+            txt = msp.add_text(f"\u2300{bar.get('label', d)}", dxfattribs={"height": 2.5})
+            txt.dxf.insert = (x + d, y)
+            txt.dxf.halign = 0
+            txt.dxf.valign = 1
+            if d not in legend:
+                legend.append(d)
 
-        # Nombre de la sección centrado sobre la viga
-        txt = msp.add_text(nombre, dxfattribs={"height": 5})
-        txt.dxf.insert = (offx + b / 2, h + 10)
-        txt.dxf.halign = 1  # CENTER
-        txt.dxf.valign = 2  # TOP
+        # Nombre del corte
+        txt = msp.add_text(sec.get("nombre", ""), dxfattribs={"height": 4})
+        txt.dxf.insert = (offx + b / 2, h + 8)
+        txt.dxf.halign = 1
+        txt.dxf.valign = 2
 
-    # Leyenda de colores y diámetros
-    if legend_entries:
-        y_leg = -10.0
-        x_start = 0.0
-        sep = 25.0
-        for i, (d, col) in enumerate(sorted(legend_entries)):
-            x = x_start + i * sep
-            msp.add_circle((x, y_leg), d / 2, dxfattribs={"color": _color_index(col)})
-            t = msp.add_text(f"\u2300{d:g} {col}", dxfattribs={"height": 3})
-            t.dxf.insert = (x + d, y_leg)
-            t.dxf.halign = 0  # LEFT
-            t.dxf.valign = 1  # MIDDLE
+        # Dimensiones
+        _draw_dimension(msp, (offx, 0), (offx + b, 0), -4, f"{b} cm")
+        _draw_dimension(msp, (offx, 0), (offx, h), -4, f"{h} cm", vertical=True)
+
+    # Leyenda de diámetros
+    if legend:
+        base_x = 0.0
+        y = -12.0
+        for i, d in enumerate(sorted(legend)):
+            x = base_x + i * 20.0
+            msp.add_circle((x, y), d / 2, dxfattribs={"color": 5})
+            t = msp.add_text(f"\u2300{d}", dxfattribs={"height": 2.5})
+            t.dxf.insert = (x + d, y)
+            t.dxf.halign = 0
+            t.dxf.valign = 1
+
+    title = secciones[0].get("viga", "SECCION DE VIGA")
+    t = msp.add_text(title, dxfattribs={"height": 5})
+    t.dxf.insert = (0, -20)
+    t.dxf.halign = 0
+    t.dxf.valign = 1
 
     doc.saveas(filename)
+
