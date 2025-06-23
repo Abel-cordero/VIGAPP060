@@ -172,7 +172,8 @@ Muestra un resumen detallado de cada operación realizada en el diseño. Las fó
 ## Instalación de dependencias
 
 1. Se recomienda crear un entorno virtual con `venv` o herramienta similar.
-2. Instalar las bibliotecas necesarias a partir del archivo `requirements.txt`:
+2. Instalar las bibliotecas necesarias a partir del archivo `requirements.txt`.
+   Esto incluye `ezdxf`, usada para exportar las secciones a CAD:
 
    ```bash
    pip install -r requirements.txt
@@ -354,6 +355,9 @@ Las varillas ahora se dibujan por capas (hasta 4) usando colores primarios
 para distinguirlas, siguiendo el mismo criterio de la primera capa.
 Es una funcionalidad experimental que sirve como paso previo a la integración
 más completa descrita en [DESARROLLO_3D.md](DESARROLLO_3D.md).
+
+Adicionalmente se añadió el botón **Exportar CAD** que permite guardar las
+secciones M1, M2 y M3 en un archivo DXF utilizando la biblioteca `ezdxf`.
 
 ## Licencia
 
