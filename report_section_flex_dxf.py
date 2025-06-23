@@ -25,6 +25,14 @@ _COLOR_MAP = {
     "white": 7,
 }
 
+
+def _color_index(color: str | int) -> int:
+    """Return a valid DXF color index for ``color``."""
+    if isinstance(color, int):
+        return int(color)
+    return _COLOR_MAP.get(str(color).lower(), 7)
+
+
 # Mapping of bar diameter keys to primary colors (red, blue, yellow)
 _COLOR_ORDER = ["red", "blue", "yellow"]
 DIAM_COLOR = {
@@ -32,13 +40,6 @@ DIAM_COLOR = {
     for i, key in enumerate(DIAM_CM.keys())
 }
 DIAM_COLOR_IDX = {k: _color_index(c) for k, c in DIAM_COLOR.items()}
-
-
-def _color_index(color: str | int) -> int:
-    """Return a valid DXF color index for ``color``."""
-    if isinstance(color, int):
-        return int(color)
-    return _COLOR_MAP.get(str(color).lower(), 7)
 
 
 def _bars_summary(bars: Iterable[Dict]) -> str:
