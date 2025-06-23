@@ -59,10 +59,22 @@ _COLOR_NAME_ES = {
 }
 
 
-def _bars_summary(bars: Iterable[Dict]) -> str:
-    """Return a short description of bars grouped by diameter."""
+def _bars_summary(bars: Iterable[Dict], face: str | None = None) -> str:
+    """Return a short description of bars grouped by diameter.
+
+    Parameters
+    ----------
+    bars : Iterable[Dict]
+        Collection of bar dictionaries. Each dictionary may include a
+        ``"face"`` key which identifies the side of the section (``"pos"`` or
+        ``"neg"``).
+    face : str, optional
+        If provided, only bars matching this face are considered.
+    """
     counts: Dict[str, int] = {}
     for bar in bars:
+        if face is not None and bar.get("face") != face:
+            continue
         key = bar.get("label")
         if not key:
             continue
@@ -108,7 +120,7 @@ def _draw_legend_table(msp: ezdxf.layouts.Modelspace, labels: List[str], base_y:
         color = DIAM_COLOR_IDX.get(key, 7)
         name = _COLOR_NAME_ES.get(DIAM_COLOR.get(key, ""), DIAM_COLOR.get(key, "").capitalize())
         msp.add_text(
-            "■",
+            "\u25CF",
             dxfattribs={"height": SMALL_HT, "style": "Arial", "color": color},
         ).set_placement((1, y), align=TextEntityAlignment.MIDDLE_LEFT)
         msp.add_text(
@@ -127,18 +139,15 @@ def _draw_dimension(
     *,
     vertical: bool = False,
 ) -> None:
-    """Draw a simple dimension line with centred text."""
+    """Place dimension text without guide or arrow lines."""
     if vertical:
-        dx, dy = offset, 0
         text_pos = ((p1[0] + p2[0]) / 2 + offset, (p1[1] + p2[1]) / 2)
+        attribs = {"height": SMALL_HT, "style": "Arial", "rotation": 90}
     else:
-        dx, dy = 0, offset
         text_pos = ((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2 + offset)
+        attribs = {"height": SMALL_HT, "style": "Arial"}
 
-    a1 = (p1[0] + dx, p1[1] + dy)
-    a2 = (p2[0] + dx, p2[1] + dy)
-    msp.add_line(a1, a2, dxfattribs={"color": 7})
-    txt = msp.add_text(text, dxfattribs={"height": SMALL_HT, "style": "Arial"})
+    txt = msp.add_text(text, dxfattribs=attribs)
     txt.set_placement(text_pos, align=TextEntityAlignment.MIDDLE_CENTER)
 
 
@@ -200,13 +209,23 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
         dibujar_varillas(msp, bars, offset_x, legend)
         agregar_cotas(msp, offset_x, b, h)
 
-        desc = _bars_summary(bars)
-        txt = msp.add_text(
-            f"{nombre} - ({desc})",
+        desc_neg = _bars_summary(bars, "neg")
+        desc_pos = _bars_summary(bars, "pos")
+
+        txt_neg = msp.add_text(
+            f"{nombre}- ({desc_neg})",
             dxfattribs={"height": SUBTITLE_HT, "style": "Arial"},
         )
-        txt.set_placement(
+        txt_neg.set_placement(
             (offset_x + b / 2, h + 2), align=TextEntityAlignment.MIDDLE_CENTER
+        )
+
+        txt_pos = msp.add_text(
+            f"{nombre}+ ({desc_pos})",
+            dxfattribs={"height": SUBTITLE_HT, "style": "Arial"},
+        )
+        txt_pos.set_placement(
+            (offset_x + b / 2, -2), align=TextEntityAlignment.MIDDLE_CENTER
         )
 
         offset_x += b + sep
@@ -281,7 +300,7 @@ def exportar_cad(view) -> None:
             y = pos_y.get(layer, r + de)
             for x, k in zip(xs, keys):
                 d = DIAM_CM.get(k, 0)
-                bars.append({"x": x, "y": y, "diam": d, "label": k})
+                bars.append({"x": x, "y": y, "diam": d, "label": k, "face": "pos"})
             start += len(keys)
 
         start = 0
@@ -293,7 +312,7 @@ def exportar_cad(view) -> None:
             y = neg_y.get(layer, h - (r + de))
             for x, k in zip(xs, keys):
                 d = DIAM_CM.get(k, 0)
-                bars.append({"x": x, "y": y, "diam": d, "label": k})
+                bars.append({"x": x, "y": y, "diam": d, "label": k, "face": "neg"})
             start += len(keys)
 
         sec = {
