@@ -472,7 +472,7 @@ class View3DWindow(QMainWindow):
             self.menu_callback()
 
     def exportar_cad(self):
-        """Generate a DXF with the three displayed sections."""
+        """Generate a DXF file with the current sections."""
         try:
             b = float(self.design.edits["b (cm)"].text())
             h = float(self.design.edits["h (cm)"].text())
@@ -481,76 +481,44 @@ class View3DWindow(QMainWindow):
             QMessageBox.warning(self, "Exportar CAD", "Datos de secci\u00f3n inv\u00e1lidos")
             return
 
-        lista = [{"b": b, "h": h, "r": r, "diam": 1.59} for _ in range(3)]
-        exportar_a_cad(lista, parent=self)
-
-
-def exportar_a_cad(lista_de_secciones, *, parent=None):
-    """Create a DXF file with the given beam sections."""
-    try:
-        import ezdxf
-    except Exception:
-        QMessageBox.warning(parent, "Exportar CAD", "La librer\u00eda ezdxf no est\u00e1 disponible")
-        return
-
-    path, _ = QFileDialog.getSaveFileName(
-        parent,
-        "Guardar DXF",
-        "",
-        "Archivos DXF (*.dxf)",
-    )
-    if not path:
-        return
-    if not path.lower().endswith(".dxf"):
-        path += ".dxf"
-
-    doc = ezdxf.new()
-    msp = doc.modelspace()
-
-    for idx, sec in enumerate(lista_de_secciones):
-        b = sec.get("b", 0)
-        h = sec.get("h", 0)
-        r = sec.get("r", 0)
-        d = sec.get("diam", 0)
-        off = idx * (b + 100)
-
-        msp.add_lwpolyline(
-            [
-                (off, 0),
-                (off + b, 0),
-                (off + b, h),
-                (off, h),
-                (off, 0),
-            ],
-            dxfattribs={"color": 7},
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Guardar DXF",
+            "",
+            "Archivos DXF (*.dxf)",
         )
+        if not path:
+            return
+        if not path.lower().endswith(".dxf"):
+            path += ".dxf"
 
-        msp.add_lwpolyline(
-            [
-                (off + r, r),
-                (off + b - r, r),
-                (off + b - r, h - r),
-                (off + r, h - r),
-                (off + r, r),
-            ],
-            dxfattribs={"color": 1},
-        )
+        diam = 1.59
+        lista = []
+        for i in range(3):
+            sec = {
+                "nombre": f"M{i + 1}",
+                "b": b,
+                "h": h,
+                "diam": diam,
+                "varillas_sup": [
+                    (r + diam / 2, h - r - diam / 2),
+                    (b - r - diam / 2, h - r - diam / 2),
+                ],
+                "varillas_inf": [
+                    (r + diam / 2, r + diam / 2),
+                    (b - r - diam / 2, r + diam / 2),
+                ],
+                "color": "blue",
+            }
+            lista.append(sec)
 
-        x1 = off + r + d / 2
-        x2 = off + b - r - d / 2
-        yb = r + d / 2
-        yt = h - r - d / 2
-        for x, y in [(x1, yb), (x2, yb), (x1, yt), (x2, yt)]:
-            msp.add_circle((x, y), d / 2, dxfattribs={"color": 5})
+        try:
+            from report_section_flex_dxf import exportar_a_dxf
 
-        txt = msp.add_text(f"M{idx+1}", dxfattribs={"height": 5})
-        txt.set_pos((off + b / 2, h + 10), align="CENTER")
-
-    try:
-        doc.saveas(path)
-        QMessageBox.information(parent, "Exportar CAD", f"Archivo guardado: {path}")
-    except Exception as exc:
-        QMessageBox.warning(parent, "Exportar CAD", f"No se pudo guardar el DXF: {exc}")
+            exportar_a_dxf(lista, path)
+            QMessageBox.information(self, "Exportar CAD", f"Archivo guardado: {path}")
+        except Exception as exc:
+            QMessageBox.warning(self, "Exportar CAD", f"No se pudo guardar el DXF: {exc}")
 
 
 
