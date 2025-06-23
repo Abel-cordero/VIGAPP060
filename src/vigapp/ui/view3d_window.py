@@ -89,7 +89,7 @@ class View3DWindow(QMainWindow):
         self.btn_capture = QPushButton("CAPTURA")
         self.btn_capture.clicked.connect(self._capture_view)
         self.btn_update = QPushButton("ACTUALIZAR")
-        self.btn_update.clicked.connect(self.draw_views)
+        self.btn_update.clicked.connect(lambda: self.draw_views(reset_orders=True))
         self.btn_export = QPushButton("EXPORTAR CAD")
         self.btn_export.clicked.connect(self.export_cad)
         self.btn_back = QPushButton("RETROCEDER")
@@ -120,8 +120,16 @@ class View3DWindow(QMainWindow):
         self.fig.suptitle(text.upper(), fontweight="bold")
         self.canvas.draw_idle()
 
-    def draw_views(self):
-        """Redraw the three section cuts."""
+    def draw_views(self, *, reset_orders: bool = False):
+        """Redraw the three section cuts.
+
+        Parameters
+        ----------
+        reset_orders : bool, optional
+            If ``True`` the stored bar orders are regenerated from the current
+            design inputs. This ensures that changes made in the design window
+            are reflected when returning to this view.
+        """
         try:
             b = float(self.design.edits["b (cm)"].text())
             h = float(self.design.edits["h (cm)"].text())
@@ -136,9 +144,10 @@ class View3DWindow(QMainWindow):
 
         neg_layers = [self._collect_bars(i) for i in range(3)]
         pos_layers = [self._collect_bars(i + 3) for i in range(3)]
-        if not self.neg_orders:
+
+        if reset_orders or not self.neg_orders:
             self.neg_orders = [self._collect_order(i) for i in range(3)]
-        if not self.pos_orders:
+        if reset_orders or not self.pos_orders:
             self.pos_orders = [self._collect_order(i + 3) for i in range(3)]
         titles = ["M1", "M2", "M3"]
 

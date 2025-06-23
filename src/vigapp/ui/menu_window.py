@@ -303,6 +303,9 @@ class MenuWindow(QMainWindow):
                 back_callback=self.show_design,
             )
             self.stacked.addWidget(self.desarrollo_page)
+        else:
+            # Refresh drawings when returning to the sections page
+            self.desarrollo_page.draw_views(reset_orders=True)
         self.stacked.setCurrentWidget(self.desarrollo_page)
 
     # ------------------------------------------------------------------
