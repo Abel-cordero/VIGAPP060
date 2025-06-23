@@ -79,7 +79,7 @@ class View3DWindow(QMainWindow):
         self.fig.subplots_adjust(bottom=0.3)  # Reserva espacio inferior visible
         self.ax_sections = [self.fig.add_subplot(1, 3, i + 1) for i in range(3)]
         self.canvas = FigureCanvas(self.fig)
-        self.canvas.setMinimumHeight(750)  # Aumenta altura visual del canvas
+        self.canvas.setMinimumHeight(500)  # Aumenta altura visual del canvas
         layout.addWidget(self.canvas, alignment=Qt.AlignCenter)
 
         layout.addStretch()
@@ -150,16 +150,17 @@ class View3DWindow(QMainWindow):
         ]
         for leg in list(self.fig.legends):
             leg.remove()
+
         if handles:
-            self.fig.legend(
+            self.fig.subplots_adjust(bottom=0.22)  # Aumenta espacio interior
+            legend = self.fig.legend(
                 handles=handles,
                 title="Di\u00e1metros",
                 loc="lower center",
-                bbox_to_anchor=(0.5, -0.05),
-                ncol=len(handles),
+                bbox_to_anchor=(0.5, 0.1),
+                ncol=min(len(handles), 6),
                 frameon=True,
             )
-            self.fig.subplots_adjust(bottom=0.25)
 
         self.canvas.draw()
 

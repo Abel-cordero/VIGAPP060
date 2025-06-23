@@ -53,7 +53,7 @@ def generar_reporte_html(
         ".page {\n  width: 21cm;\n  min-height: 29.7cm;\n  padding: 2.5cm 3cm;\n  margin: 1cm auto;\n  background: white;\n  box-shadow: 0 0 5px rgba(0,0,0,0.1);\n}",
         "h1, h2, h3 { text-align: left; margin-top: 1.5em; }",
         ".norma { font-size: 0.8em; color: #555; }",
-        "table { border-collapse: collapse; width: 100%; margin-bottom: 1em; }",
+        "table { border-collapse: collapse; width: 280px; margin-bottom: 1em; }",
         "td, th { border: 1px solid #000; padding: 5px 8px; }",
         ".formula, .reemplazo, .resultado { margin-left: 20px; font-size: 15px; }",
         ".imagen-centro { display: block; margin: 20px auto; max-width: 100%; }",
@@ -66,9 +66,9 @@ def generar_reporte_html(
         "<div style='position:fixed; top:20px; right:20px;'><button onclick=\"window.print()\">Exportar a PDF</button> <button onclick=\"exportWord()\">Exportar a Word</button></div>",
         "<div class='page'>",
         f"<h1 contenteditable='true'>{titulo}</h1>",
-        "<div style='display:flex; align-items:flex-start; gap:20px;'>",
-        "<div style='flex:1;'>",
-        "<table>",
+        "<div style='display:flex; align-items:stretch; gap:20px; height:auto; min-height:270px;'>",
+        "<div style='flex:1; display:flex; align-items:center;'>",
+        "<table style='margin: 0;'>",
     ]
 
     for k, v in datos.items():
@@ -77,8 +77,8 @@ def generar_reporte_html(
         [
             "</table>",
             "</div>",
-            "<div style='flex:1; text-align:center;'>",
-            f"<img src='{section_rel or 'img_seccion_viga.png'}' class='imagen-centro' alt='Secci\u00f3n'>",
+            "<div style='flex:1; text-align:center; display:flex; align-items:center; justify-content:center;'>",
+            f'<img src="{section_rel or "img_seccion_viga.png"}" style="height:350px; width:auto; object-fit:contain; display:block; margin:auto;" alt="Sección">',
             "</div>",
             "</div>",
         ]
@@ -146,10 +146,22 @@ def generar_reporte_html(
         html.append(
             "<tr><th>Secci\u00f3n</th><th>As requerido</th><th>As dise\u00f1ado</th><th>Estado</th></tr>"
         )
+        as_min = float(resultados.get("as_min", {}).get("valor", 0))  # Asegúrate de tenerlo definido
+
         for sec, req, dis, est in tabla:
+            try:
+                req_val = float(req)
+            except (ValueError, TypeError):
+                req_val = 0
+
+            # Si As requerido es menor que As mínimo, usar As mínimo
+            req_mostrar = max(req_val, as_min)
+            req_fmt = f"{req_mostrar:.2f}"
+
             html.append(
-                f"<tr><td>{sec}</td><td>{req}</td><td>{dis}</td><td>{est}</td></tr>"
+                f"<tr><td>{sec}</td><td>{req_fmt}</td><td>{dis}</td><td>{est}</td></tr>"
             )
+        
         html.append("</table>")
 
     for img in img_views:
