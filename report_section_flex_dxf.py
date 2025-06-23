@@ -110,10 +110,8 @@ def _draw_dimension(
             y = a1[1]
             msp.add_line((x, y), (x - size, y - size), dxfattribs={"color": 7})
             msp.add_line((x, y), (x - size, y + size), dxfattribs={"color": 7})
-    txt = msp.add_text(text, dxfattribs={"height": 2.5})
-    txt.dxf.insert = text_pos
-    txt.dxf.halign = 1
-    txt.dxf.valign = 1
+    txt = msp.add_text(text, dxfattribs={"height": 2.5, "style": "Arial"})
+    txt.set_pos(text_pos, align="MIDDLE_CENTER")
 
 
 def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
@@ -127,6 +125,7 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
         - ``bars``: lista de dicts ``{"x", "y", "diam", "label"}``
     """
     doc = ezdxf.new()
+    doc.styles.new("Arial", dxfattribs={"font": "arial.ttf"})
     msp = doc.modelspace()
 
     secciones = list(secciones)
@@ -174,10 +173,11 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
         agregar_cotas(msp, offset_x, b, h)
 
         desc = _bars_summary(bars)
-        txt = msp.add_text(f"{nombre} - ({desc})", dxfattribs={"height": 4})
-        txt.dxf.insert = (offset_x + b / 2, h + 8)
-        txt.dxf.halign = 1
-        txt.dxf.valign = 2
+        txt = msp.add_text(
+            f"{nombre} - ({desc})",
+            dxfattribs={"height": 4, "style": "Arial"},
+        )
+        txt.set_pos((offset_x + b / 2, h + 8), align="MIDDLE_CENTER")
 
         offset_x += b + sep
 
@@ -192,18 +192,18 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
             hatch = msp.add_hatch(color=color)
             path = hatch.paths.add_edge_path()
             path.add_arc((x, y), d / 2, 0, 360)
-            t = msp.add_text(f"\u2300{key}", dxfattribs={"height": 2.5})
-            t.dxf.insert = (x + d, y)
-            t.dxf.halign = 0
-            t.dxf.valign = 1
+            t = msp.add_text(
+                f"\u2300{key}", dxfattribs={"height": 2.5, "style": "Arial"}
+            )
+            t.set_pos((x + d, y), align="MIDDLE_LEFT")
 
     total_width = offset_x - sep
     max_h = max(float(sec.get("h", 0)) for sec in secciones)
-    title = secciones[0].get("viga", "SECCION DE VIGA")
-    t = msp.add_text(title, dxfattribs={"height": 5})
-    t.dxf.insert = (total_width / 2, max_h + 20)
-    t.dxf.halign = 1
-    t.dxf.valign = 2
+    b0 = secciones[0].get("b", 0)
+    h0 = secciones[0].get("h", 0)
+    title = f"SECCION DE VIGA {int(b0)}x{int(h0)}"
+    t = msp.add_text(title, dxfattribs={"height": 5, "style": "Arial"})
+    t.set_pos((total_width / 2, max_h + 20), align="TOP_CENTER")
 
     doc.saveas(filename)
 
