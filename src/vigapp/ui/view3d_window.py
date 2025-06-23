@@ -155,9 +155,8 @@ class View3DWindow(QMainWindow):
                 handles=handles,
                 title="Di\u00e1metros",
                 loc="lower center",
-                bbox_to_anchor=(0.5, -0.08),
+                bbox_to_anchor=(0.5, 0.05),
                 ncol=len(handles),
-                
             )
 
         self.canvas.draw()
