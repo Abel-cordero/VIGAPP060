@@ -35,6 +35,7 @@ DIAM_COLOR_IDX = {k: _color_index(c) for k, c in DIAM_COLOR.items()}
 
 
 def _color_index(color: str | int) -> int:
+    """Return a valid DXF color index for ``color``."""
     if isinstance(color, int):
         return int(color)
     return _COLOR_MAP.get(str(color).lower(), 7)
