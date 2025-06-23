@@ -26,6 +26,11 @@ _COLOR_MAP = {
     "white": 7,
 }
 
+# Common text heights
+TITLE_HT = 2.0
+SUBTITLE_HT = 1.5
+SMALL_HT = 1.0
+
 
 def _color_index(color: str | int) -> int:
     """Return a valid DXF color index for ``color``."""
@@ -42,6 +47,17 @@ DIAM_COLOR = {
 }
 DIAM_COLOR_IDX = {k: _color_index(c) for k, c in DIAM_COLOR.items()}
 
+# Spanish colour names for legend
+_COLOR_NAME_ES = {
+    "red": "Rojo",
+    "yellow": "Amarillo",
+    "green": "Verde",
+    "cyan": "Cian",
+    "blue": "Azul",
+    "magenta": "Magenta",
+    "white": "Blanco",
+}
+
 
 def _bars_summary(bars: Iterable[Dict]) -> str:
     """Return a short description of bars grouped by diameter."""
@@ -51,7 +67,7 @@ def _bars_summary(bars: Iterable[Dict]) -> str:
         if not key:
             continue
         counts[key] = counts.get(key, 0) + 1
-    parts = [f"{n} de {key}" for key, n in counts.items()]
+    parts = [f"{n} \u00F8{key}" for key, n in counts.items()]
     return " + ".join(parts)
 
 
@@ -74,8 +90,32 @@ def dibujar_varillas(msp: ezdxf.layouts.Modelspace, bars: Iterable[Dict], offx: 
 
 def agregar_cotas(msp: ezdxf.layouts.Modelspace, offx: float, b: float, h: float) -> None:
     """Add basic horizontal and vertical dimensions."""
-    _draw_dimension(msp, (offx, 0), (offx + b, 0), -4, f"b = {b:.1f} cm")
-    _draw_dimension(msp, (offx, 0), (offx, h), -4, f"h = {h:.1f} cm", vertical=True)
+    _draw_dimension(msp, (offx, 0), (offx + b, 0), -5, f"b = {b:.1f} cm")
+    _draw_dimension(msp, (offx, 0), (offx, h), -5, f"h = {h:.1f} cm", vertical=True)
+
+
+def _draw_legend_table(msp: ezdxf.layouts.Modelspace, labels: List[str], base_y: float) -> None:
+    """Draw a simple colour legend table."""
+    if not labels:
+        return
+    row_h = 3.0
+    width = 40.0
+    top_y = base_y + row_h / 2
+    bottom_y = base_y - row_h * (len(labels) + 0.5)
+    msp.add_line((0, top_y), (width, top_y), dxfattribs={"color": 7})
+    for i, key in enumerate(labels):
+        y = base_y - row_h * (i + 1)
+        color = DIAM_COLOR_IDX.get(key, 7)
+        name = _COLOR_NAME_ES.get(DIAM_COLOR.get(key, ""), DIAM_COLOR.get(key, "").capitalize())
+        msp.add_text(
+            "■",
+            dxfattribs={"height": SMALL_HT, "style": "Arial", "color": color},
+        ).set_placement((1, y), align=TextEntityAlignment.MIDDLE_LEFT)
+        msp.add_text(
+            f"{name} \u00F8{key}",
+            dxfattribs={"height": SMALL_HT, "style": "Arial"},
+        ).set_placement((4, y), align=TextEntityAlignment.MIDDLE_LEFT)
+    msp.add_line((0, bottom_y), (width, bottom_y), dxfattribs={"color": 7})
 
 
 def _draw_dimension(
@@ -87,20 +127,18 @@ def _draw_dimension(
     *,
     vertical: bool = False,
 ) -> None:
-    """Draw a very small dimension line without arrowheads and centred text."""
+    """Draw a simple dimension line with centred text."""
     if vertical:
-        dx, dy = 0, offset
+        dx, dy = offset, 0
         text_pos = ((p1[0] + p2[0]) / 2 + offset, (p1[1] + p2[1]) / 2)
     else:
-        dx, dy = offset, 0
+        dx, dy = 0, offset
         text_pos = ((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2 + offset)
 
-    msp.add_line((p1[0], p1[1]), (p1[0] + dx, p1[1] + dy), dxfattribs={"color": 7})
-    msp.add_line((p2[0], p2[1]), (p2[0] + dx, p2[1] + dy), dxfattribs={"color": 7})
     a1 = (p1[0] + dx, p1[1] + dy)
     a2 = (p2[0] + dx, p2[1] + dy)
     msp.add_line(a1, a2, dxfattribs={"color": 7})
-    txt = msp.add_text(text, dxfattribs={"height": 1.5, "style": "Arial"})
+    txt = msp.add_text(text, dxfattribs={"height": SMALL_HT, "style": "Arial"})
     txt.set_placement(text_pos, align=TextEntityAlignment.MIDDLE_CENTER)
 
 
@@ -165,38 +203,24 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
         desc = _bars_summary(bars)
         txt = msp.add_text(
             f"{nombre} - ({desc})",
-            dxfattribs={"height": 2.5, "style": "Arial"},
+            dxfattribs={"height": SUBTITLE_HT, "style": "Arial"},
         )
         txt.set_placement(
-            (offset_x + b / 2, h + 4), align=TextEntityAlignment.MIDDLE_CENTER
+            (offset_x + b / 2, h + 2), align=TextEntityAlignment.MIDDLE_CENTER
         )
 
         offset_x += b + sep
 
     if legend:
-        base_x = 0.0
-        y = -12.0
-        for i, key in enumerate(legend):
-            d = DIAM_CM.get(key, 0)
-            color = DIAM_COLOR_IDX.get(key, 7)
-            x = base_x + i * 20.0
-            msp.add_circle((x, y), d / 2, dxfattribs={"color": color})
-            hatch = msp.add_hatch(color=color)
-            path = hatch.paths.add_edge_path()
-            path.add_arc((x, y), d / 2, 0, 360)
-            t = msp.add_text(
-                key,
-                dxfattribs={"height": 1.5, "style": "Arial"},
-            )
-            t.set_placement((x + d, y), align=TextEntityAlignment.MIDDLE_LEFT)
+        _draw_legend_table(msp, legend, -12.0)
 
     total_width = offset_x - sep
     max_h = max(float(sec.get("h", 0)) for sec in secciones)
     b0 = secciones[0].get("b", 0)
     h0 = secciones[0].get("h", 0)
     title = f"SECCION DE VIGA {int(b0)}x{int(h0)}"
-    t = msp.add_text(title, dxfattribs={"height": 3, "style": "Arial"})
-    t.set_placement((total_width / 2, max_h + 15), align=TextEntityAlignment.TOP_CENTER)
+    t = msp.add_text(title, dxfattribs={"height": TITLE_HT, "style": "Arial"})
+    t.set_placement((total_width / 2, max_h + 10), align=TextEntityAlignment.TOP_CENTER)
 
     doc.saveas(filename)
 
