@@ -78,13 +78,19 @@ class DesignWindow(QMainWindow):
         self.as_min_label.setText(f"{self.as_min:.2f}")
         self.as_max_label.setText(f"{self.as_max:.2f}")
 
-        as_n = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mn_corr]
-        as_p = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mp_corr]
+        # Raw areas computed directly from the general formula
+        as_n_raw = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mn_corr]
+        as_p_raw = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mp_corr]
 
-        as_n = np.clip(as_n, self.as_min, self.as_max)
-        as_p = np.clip(as_p, self.as_min, self.as_max)
+        # Store raw values for potential debugging/reporting purposes
+        self.as_n_raw = np.array(as_n_raw)
+        self.as_p_raw = np.array(as_p_raw)
 
-        return np.array(as_n), np.array(as_p)
+        # Enforce minimum and maximum reinforcement limits
+        as_n = np.clip(self.as_n_raw, self.as_min, self.as_max)
+        as_p = np.clip(self.as_p_raw, self.as_min, self.as_max)
+
+        return as_n, as_p
 
     def _design_areas(self):
         """Return current design steel areas for each section."""
