@@ -102,6 +102,7 @@ class BackgroundWidget(QWidget):
 
 from .moment_app import MomentApp
 from .design_window import DesignWindow
+from .shear_design_window import ShearDesignWindow
 from .view3d_window import View3DWindow
 from reporte_flexion_html import generar_reporte_html
 
@@ -245,7 +246,7 @@ class MenuWindow(QMainWindow):
 
         btn_flex.clicked.connect(self.open_diagrama)
         btn_torsion.clicked.connect(self.show_cortante_msg)
-        btn_cort.clicked.connect(self.show_cortante_msg)
+        btn_cort.clicked.connect(self.open_cortante)
         btn_mem.clicked.connect(self.open_memoria)
         btn_contact.clicked.connect(self.show_contact)
         btn_exit.clicked.connect(self.close)
@@ -307,6 +308,17 @@ class MenuWindow(QMainWindow):
             # Refresh drawings when returning to the sections page
             self.desarrollo_page.draw_views(reset_orders=True)
         self.stacked.setCurrentWidget(self.desarrollo_page)
+
+    # ------------------------------------------------------------------
+    def open_cortante(self):
+        if not hasattr(self, "cortante_page"):
+            defaults = {}
+            if hasattr(self, "design_page"):
+                for key in ("b (cm)", "h (cm)", "r (cm)", "f'c (kg/cm²)", "fy (kg/cm²)"):
+                    defaults[key] = self.design_page.edits.get(key, None).text() if key in self.design_page.edits else ""
+            self.cortante_page = ShearDesignWindow(defaults, show_window=False)
+            self.stacked.addWidget(self.cortante_page)
+        self.stacked.setCurrentWidget(self.cortante_page)
 
     # ------------------------------------------------------------------
     def open_memoria(self):
