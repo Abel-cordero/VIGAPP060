@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 
 from ..models.constants import DIAM_CM, BAR_DATA
 from ..models.utils import draw_beam_section_png
+import tempfile
 
 import math
 
@@ -120,7 +121,9 @@ class ShearDesignWindow(QMainWindow):
             db = DIAM_CM.get(self.cb_barra.currentText(), 0)
         except ValueError:
             return
-        path = draw_beam_section_png(b, h, r, de, db, "/tmp/sec.png")
+        tmp = tempfile.NamedTemporaryFile(prefix="sec_", suffix=".png", delete=False)
+        tmp.close()
+        path = draw_beam_section_png(b, h, r, de, db, tmp.name)
         self.ax.clear()
         img = plt.imread(path)
         self.ax.imshow(img)
