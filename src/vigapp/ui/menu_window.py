@@ -233,8 +233,8 @@ class MenuWindow(QMainWindow):
             btn_layout.addLayout(row)
 
         add_row(btn_flex, "DISE\u00d1O POR FLEXI\u00d3N")
-        add_row(btn_torsion, "DISE\u00d1O POR TORSI\u00d3N")
         add_row(btn_cort, "DISE\u00d1O POR CORTANTE")
+        add_row(btn_torsion, "DISE\u00d1O POR TORSI\u00d3N")
         add_row(btn_mem, "MEMORIA DE C\u00c1LCULO")
         add_row(btn_contact, "CONTACTO")
         btn_layout.addItem(
