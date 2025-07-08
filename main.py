@@ -5,8 +5,9 @@ import os
 import sys
 import ctypes
 
-# Allow importing the ``vigapp`` package from the ``src`` directory
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+# Asegurar que el paquete 'vigapp' se puede importar desde su ubicación real
+CURRENT_DIR = os.path.dirname(os.path.abspath(sys.argv[0]))
+sys.path.insert(0, CURRENT_DIR)
 
 from PyQt5.QtWidgets import QApplication, QSplashScreen
 from PyQt5.QtGui import QIcon, QPixmap, QFont
@@ -15,14 +16,9 @@ from PyQt5.QtCore import Qt, QTimer
 from vigapp.ui.menu_window import MenuWindow
 from vigapp.activation.tk_dialog import run_activation
 
-# Toggle for enabling or disabling the license check. Set to ``True`` to
-# require activation again.
+# Activación de licencia y splash opcionales
 ACTIVATION_ENABLED = False
-# Toggle the splash screen shown at startup. Set to ``False`` to
-# open the main window immediately.
 SPLASH_ENABLED = False
-
-
 
 
 def main():
@@ -34,15 +30,15 @@ def main():
 
     if os.name == "nt":
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("VigApp060")
-    icon_path = os.path.join(
-        os.path.dirname(__file__), "icon", "vigapp060.png")
+
+    icon_path = os.path.join(CURRENT_DIR, "icon", "vigapp060.png")
     if os.path.exists(icon_path):
         pix = QPixmap(icon_path).scaled(
             256, 256, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         app.setWindowIcon(QIcon(pix))
 
-
     app.setStyle("Fusion")
+
     if ACTIVATION_ENABLED and not run_activation():
         return
 

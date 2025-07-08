@@ -21,7 +21,7 @@ body {
 }
 h1, h2, h3 { text-align: left; margin-top: 1.5em; }
 .norma { font-size: 0.8em; color: #555; }
-table { border-collapse: collapse; width: 100%; margin-bottom: 1em; }
+table { border-collapse: collapse; width: 280px; margin-bottom: 1em; }
 td, th { border: 1px solid #000; padding: 5px 8px; }
 .formula, .reemplazo, .resultado { margin-left: 20px; font-size: 15px; }
 .imagen-centro { display: block; margin: 20px auto; max-width: 100%; }
@@ -34,9 +34,9 @@ function exportWord(){var html=document.documentElement.outerHTML;var blob=new B
 <div style='position:fixed; top:20px; right:20px;'><button onclick="window.print()">Exportar a PDF</button> <button onclick="exportWord()">Exportar a Word</button></div>
 <div class='page'>
 <h1 contenteditable='true'>DISEÑO A FLEXIÓN DE VIGA 30x50</h1>
-<div style='display:flex; align-items:flex-start; gap:20px;'>
-<div style='flex:1;'>
-<table>
+<div style='display:flex; align-items:stretch; gap:20px; height:auto; min-height:270px;'>
+<div style='flex:1; display:flex; align-items:center;'>
+<table style='margin: 0;'>
 <tr><td><b>b (cm)</b></td><td>30</td></tr>
 <tr><td><b>h (cm)</b></td><td>50</td></tr>
 <tr><td><b>r (cm)</b></td><td>4</td></tr>
@@ -47,8 +47,8 @@ function exportWord(){var html=document.documentElement.outerHTML;var blob=new B
 <tr><td><b>ϕ varilla (cm)</b></td><td>1.59</td></tr>
 </table>
 </div>
-<div style='flex:1; text-align:center;'>
-<img src='img_seccion_viga.png' class='imagen-centro' alt='Sección'>
+<div style='flex:1; text-align:center; display:flex; align-items:center; justify-content:center;'>
+<img src="img_seccion_viga.png" style="height:350px; width:auto; object-fit:contain; display:block; margin:auto;" alt="Sección">
 </div>
 </div>
 <h2>CALUCLOS</h2>
@@ -104,12 +104,12 @@ function exportWord(){var html=document.documentElement.outerHTML;var blob=new B
 <h2>Resumen de Verificación</h2>
 <table>
 <tr><th>Sección</th><th>As requerido</th><th>As diseñado</th><th>Estado</th></tr>
-<tr><td>M1-</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-<tr><td>M2-</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-<tr><td>M3-</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-<tr><td>M1+</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-<tr><td>M2+</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
-<tr><td>M3+</td><td>-0.00</td><td>3.21</td><td>✔ Cumple</td></tr>
+<tr><td>M1-</td><td>3.21</td><td>2.58</td><td>✖ No cumple</td></tr>
+<tr><td>M2-</td><td>3.21</td><td>2.58</td><td>✖ No cumple</td></tr>
+<tr><td>M3-</td><td>3.21</td><td>2.58</td><td>✖ No cumple</td></tr>
+<tr><td>M1+</td><td>3.21</td><td>2.58</td><td>✖ No cumple</td></tr>
+<tr><td>M2+</td><td>3.21</td><td>2.58</td><td>✖ No cumple</td></tr>
+<tr><td>M3+</td><td>3.21</td><td>2.58</td><td>✖ No cumple</td></tr>
 </table>
 <img src='img_view1.png' class='imagen-centro' alt='Corte'>
 </div>
