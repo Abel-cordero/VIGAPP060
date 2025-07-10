@@ -94,6 +94,7 @@ class View3DWindow(QMainWindow):
         )
         self.btn_capture = QPushButton()
         self.btn_capture.setIcon(QIcon(icon_path))
+        self.btn_capture.setFixedWidth(30)
         self.btn_capture.clicked.connect(self._capture_view)
         self.btn_exportar = QPushButton("Exportar CAD")
         self.btn_exportar.clicked.connect(self._on_exportar_cad)
