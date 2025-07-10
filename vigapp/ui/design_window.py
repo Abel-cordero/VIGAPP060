@@ -19,7 +19,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QGuiApplication, QFont, QIcon
 
 from .view3d_window import View3DWindow
-from reporte_flexion_html import generar_reporte_html
+from ..reports.reporte_flexion_html import generar_reporte_html
 from ..models.constants import DIAM_CM, BAR_DATA
 from ..models.utils import capture_widget_temp
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas

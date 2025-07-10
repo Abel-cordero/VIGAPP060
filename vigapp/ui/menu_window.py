@@ -103,7 +103,7 @@ class BackgroundWidget(QWidget):
 from .moment_app import MomentApp
 from .design_window import DesignWindow
 from .view3d_window import View3DWindow
-from reporte_flexion_html import generar_reporte_html
+from ..reports.reporte_flexion_html import generar_reporte_html
 
 
 class MenuWindow(QMainWindow):

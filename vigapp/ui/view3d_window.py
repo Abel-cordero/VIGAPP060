@@ -477,7 +477,7 @@ class View3DWindow(QMainWindow):
 
     def _on_exportar_cad(self):
         """Handle export button click."""
-        from report_section_flex_dxf import exportar_cad
+        from ..reports.report_section_flex_dxf import exportar_cad
 
         exportar_cad(self)
 
