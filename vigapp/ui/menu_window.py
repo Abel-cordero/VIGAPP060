@@ -283,8 +283,11 @@ class MenuWindow(QMainWindow):
                 show_window=False,
                 next_callback=self._design_next,
                 menu_callback=self.show_menu,
+                back_callback=self.show_diagram,
             )
             self.stacked.addWidget(self.design_page)
+        else:
+            self.design_page.update_moments(self.mn_corr, self.mp_corr)
         self.stacked.setCurrentWidget(self.design_page)
 
     def _design_next(self):
@@ -336,6 +339,10 @@ class MenuWindow(QMainWindow):
     def show_design(self):
         if hasattr(self, "design_page"):
             self.stacked.setCurrentWidget(self.design_page)
+
+    def show_diagram(self):
+        if hasattr(self, "diagram_page"):
+            self.stacked.setCurrentWidget(self.diagram_page)
 
     def show_cortante_msg(self):
         QMessageBox.information(self, "En desarrollo", "Módulo en desarrollo")
