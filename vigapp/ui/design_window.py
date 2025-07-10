@@ -13,8 +13,10 @@ from PyQt5.QtWidgets import (
     QScrollArea,
     QLayout,
 )
+import os
+
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QGuiApplication, QFont
+from PyQt5.QtGui import QGuiApplication, QFont, QIcon
 
 from .view3d_window import View3DWindow
 from reporte_flexion_html import generar_reporte_html
@@ -343,9 +345,13 @@ class DesignWindow(QMainWindow):
 
         layout.addLayout(self.combo_grid, row_start + 2, 0, 1, 8)
 
-        self.btn_capture = QPushButton("CAPTURA")
-        self.btn_memoria = QPushButton("REPORTES")
-        self.btn_view3d = QPushButton("SECCIONES")
+        icon_path = os.path.join(
+            os.path.dirname(__file__), "..", "..", "icon", "botones", "captura", "capture.png"
+        )
+        self.btn_capture = QPushButton()
+        self.btn_capture.setIcon(QIcon(icon_path))
+        self.btn_memoria = QPushButton("Reportes")
+        self.btn_view3d = QPushButton("Secciones")
         self.btn_menu = QPushButton("Menú")
 
         self.btn_capture.clicked.connect(self._capture_design)
