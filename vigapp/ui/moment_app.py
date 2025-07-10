@@ -34,6 +34,7 @@ class MomentApp(QMainWindow):
         self.setWindowTitle("Parte 1 – Momentos y Diagramas (NTP E.060)")
         self.mn_corr = None
         self.mp_corr = None
+        self.design_win = None
         self._build_ui()
         self.setFixedSize(700, 900)
         if show_window:
@@ -237,7 +238,15 @@ class MomentApp(QMainWindow):
         if self.next_callback:
             self.next_callback(self.mn_corr, self.mp_corr)
         else:
-            self.design_win = DesignWindow(self.mn_corr, self.mp_corr)
+            if self.design_win is not None:
+                self.design_win.close()
+                self.design_win = None
+            self.design_win = DesignWindow(
+                self.mn_corr,
+                self.mp_corr,
+                parent=self,
+            )
+            self.hide()
             self.design_win.show()
 
     def on_save(self):

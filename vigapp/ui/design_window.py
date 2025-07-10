@@ -353,16 +353,19 @@ class DesignWindow(QMainWindow):
         self.btn_memoria = QPushButton("Reportes")
         self.btn_view3d = QPushButton("Secciones")
         self.btn_menu = QPushButton("Menú")
+        self.btn_back = QPushButton("Retroceder")
 
         self.btn_capture.clicked.connect(self._capture_design)
         self.btn_memoria.clicked.connect(self.show_memoria)
         self.btn_view3d.clicked.connect(self.on_next)
         self.btn_menu.clicked.connect(self.on_menu)
+        self.btn_back.clicked.connect(self.on_back)
 
         layout.addWidget(self.btn_capture, row_start + 3, 0, 1, 2)
         layout.addWidget(self.btn_memoria, row_start + 3, 2, 1, 2)
         layout.addWidget(self.btn_view3d, row_start + 3, 4, 1, 2)
         layout.addWidget(self.btn_menu, row_start + 3, 6, 1, 2)
+        layout.addWidget(self.btn_back, row_start + 4, 0, 1, 8)
 
         for ed in self.edits.values():
             ed.editingFinished.connect(self._redraw)
@@ -648,7 +651,13 @@ class DesignWindow(QMainWindow):
         self.canvas_dist.draw()
 
     def _capture_design(self):
-        widgets = [self.btn_capture, self.btn_memoria, self.btn_view3d, self.btn_menu]
+        widgets = [
+            self.btn_capture,
+            self.btn_memoria,
+            self.btn_view3d,
+            self.btn_menu,
+            self.btn_back,
+        ]
         for w in widgets:
             w.hide()
         self.repaint()
@@ -883,3 +892,9 @@ class DesignWindow(QMainWindow):
     def on_menu(self):
         if self.menu_callback:
             self.menu_callback()
+
+    def on_back(self):
+        self.hide()
+        parent = self.parent()
+        if parent:
+            parent.show()
