@@ -1,8 +1,8 @@
-"""Compatibility wrapper exposing the ``src.pdf_engine`` package as ``pdf_engine``."""
+"""Compatibility wrapper exposing the ``vigapp.pdf_engine`` package as ``pdf_engine``."""
 
 from importlib import import_module
 
-_module = import_module("src.pdf_engine")
+_module = import_module("vigapp.pdf_engine")
 
 globals().update(_module.__dict__)
 
