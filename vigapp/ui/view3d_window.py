@@ -22,15 +22,19 @@ from matplotlib import patches
 import numpy as np
 
 from ..models.constants import DIAM_CM
+from ..graphics.utilities import (
+    CLEARANCE,
+    distribute_x,
+    layer_positions_bottom,
+    layer_positions_top,
+    bars_summary,
+)
 
 # Simple color mapping per diameter key using primary colors
 COLOR_MAP = {
     key: ["red", "blue", "yellow"][i % 3]
     for i, key in enumerate(DIAM_CM.keys())
 }
-
-# Clearance (cm) so bars do not overlap stirrups in the drawings
-CLEARANCE = 0.2
 
 # Pre-generated noise texture for concrete-like appearance
 
@@ -264,53 +268,7 @@ class View3DWindow(QMainWindow):
         lst.insert(new_idx, val)
         self.draw_views()
 
-    def _distribute_x(self, diams, b, r, de):
-        """Return X coordinates ensuring bars stay inside stirrups."""
-        n = len(diams)
-        if n == 1:
-            return [b / 2]
 
-        left = r + de + diams[0] / 2 + CLEARANCE
-        right = b - (r + de) - diams[-1] / 2 - CLEARANCE
-        if n == 2:
-            return [left, right]
-
-        width = right - left
-        spacing = width / (n - 1)
-        return [left + i * spacing for i in range(n)]
-
-    def _layer_positions_bottom(self, layers, r, de, offset=0.0):
-        """Return Y positions of each layer from the bottom."""
-        positions = {}
-        base = r + de + CLEARANCE + offset
-        prev_d = 0
-        for layer in sorted(layers):
-            diam_layer = max(d for d, _ in layers[layer])
-            base += prev_d + (2.5 if layer > 1 else 0)
-            positions[layer] = base + diam_layer / 2
-            prev_d = diam_layer
-        return positions
-
-    def _layer_positions_top(self, layers, r, de, h, offset=0.0):
-        """Return Y positions of each layer from the top."""
-        positions = {}
-        base = h - (r + de + CLEARANCE + offset)
-        prev_d = 0
-        for layer in sorted(layers):
-            diam_layer = max(d for d, _ in layers[layer])
-            base -= prev_d + (2.5 if layer > 1 else 0)
-            positions[layer] = base - diam_layer / 2
-            prev_d = diam_layer
-        return positions
-
-    def _bars_summary(self, layers):
-        """Return a short text description of bars in all layers."""
-        counts = {}
-        for bars in layers.values():
-            for _, key in bars:
-                counts[key] = counts.get(key, 0) + 1
-        parts = [f"{n}\u00f8{key}" for key, n in counts.items()]
-        return " + ".join(parts)
 
     def _plot_section(self, ax, neg_layers, pos_layers, b, h, r, de, title, idx):
         ax.clear()
@@ -335,14 +293,14 @@ class View3DWindow(QMainWindow):
         pos_counts = [len(pos_layers.get(layer, [])) for layer in sorted(pos_layers)]
         neg_counts = [len(neg_layers.get(layer, [])) for layer in sorted(neg_layers)]
 
-        pos_y = self._layer_positions_bottom(pos_layers, r, de)
-        neg_y = self._layer_positions_top(neg_layers, r, de, h)
+        pos_y = layer_positions_bottom(pos_layers, r, de)
+        neg_y = layer_positions_top(neg_layers, r, de, h)
 
         start = 0
         for layer in sorted(pos_layers):
             bars = orders_pos[start:start + pos_counts.pop(0)] or [key for _, key in pos_layers[layer]]
             diams = [DIAM_CM.get(k, 0) for k in bars]
-            xs = self._distribute_x(diams, b, r, de)
+            xs = distribute_x(diams, b, r, de)
             y = pos_y.get(layer, r + de)
             for j, (x, key) in enumerate(zip(xs, bars)):
                 d = DIAM_CM.get(key, 0)
@@ -364,7 +322,7 @@ class View3DWindow(QMainWindow):
         for layer in sorted(neg_layers):
             bars = orders_neg[start:start + neg_counts.pop(0)] or [key for _, key in neg_layers[layer]]
             diams = [DIAM_CM.get(k, 0) for k in bars]
-            xs = self._distribute_x(diams, b, r, de)
+            xs = distribute_x(diams, b, r, de)
             y = neg_y.get(layer, h - (r + de))
             for j, (x, key) in enumerate(zip(xs, bars)):
                 d = DIAM_CM.get(key, 0)
@@ -382,8 +340,8 @@ class View3DWindow(QMainWindow):
                 ax.add_patch(circ)
             start += len(bars)
 
-        neg_desc = self._bars_summary(neg_layers)
-        pos_desc = self._bars_summary(pos_layers)
+        neg_desc = bars_summary(neg_layers)
+        pos_desc = bars_summary(pos_layers)
         ax.text(b / 2, h + 1.5, f"{title}- ({neg_desc})", ha="center", va="bottom", fontsize=8, color="b")
         ax.text(b / 2, -1.5, f"{title}+ ({pos_desc})", ha="center", va="top", fontsize=8, color="r")
         ax.set_xlim(-5, b + 5)
@@ -451,7 +409,7 @@ class View3DWindow(QMainWindow):
             r = 0
             de = 0
         diams = [DIAM_CM.get(k, 0) for k in lst]
-        xs = self._distribute_x(diams, b, r, de)
+        xs = distribute_x(diams, b, r, de)
         new_idx = min(range(len(xs)), key=lambda i: abs(xs[i] - event.xdata))
         self.move_bar(sign, sec, idx, new_idx)
         self.selected = (sign, sec, new_idx)
@@ -477,7 +435,7 @@ class View3DWindow(QMainWindow):
 
     def _on_exportar_cad(self):
         """Handle export button click."""
-        from report_section_flex_dxf import exportar_cad
+        from ..graphics.utilities import exportar_cad
 
         exportar_cad(self)
 
