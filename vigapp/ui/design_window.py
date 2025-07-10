@@ -350,6 +350,7 @@ class DesignWindow(QMainWindow):
         )
         self.btn_capture = QPushButton()
         self.btn_capture.setIcon(QIcon(icon_path))
+        self.btn_capture.setFixedWidth(30)
         self.btn_memoria = QPushButton("Reportes")
         self.btn_view3d = QPushButton("Secciones")
         self.btn_menu = QPushButton("Menú")

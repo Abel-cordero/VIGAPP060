@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QComboBox,
 )
-from PyQt5.QtGui import QGuiApplication
+from PyQt5.QtGui import QGuiApplication, QIcon
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import sympy as sp
@@ -77,7 +77,12 @@ class FormulaWindow(QMainWindow):
         layout.addWidget(self.canvas)
 
         btns = QHBoxLayout()
-        self.btn_capture = QPushButton("Capturar")
+        icon_path = os.path.join(
+            os.path.dirname(__file__), "..", "..", "icon", "botones", "captura", "capture.png"
+        )
+        self.btn_capture = QPushButton()
+        self.btn_capture.setIcon(QIcon(icon_path))
+        self.btn_capture.setFixedWidth(30)
         self.btn_capture.clicked.connect(self.capture)
         self.btn_export = QPushButton("Exportar…")
         self.btn_export.clicked.connect(self.export)

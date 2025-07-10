@@ -12,7 +12,8 @@ from PyQt5.QtWidgets import (
     QMessageBox,
 )
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QGuiApplication
+from PyQt5.QtGui import QGuiApplication, QIcon
+import os
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import numpy as np
@@ -74,7 +75,12 @@ class MomentApp(QMainWindow):
 
         btn_calc = QPushButton("Diagramar")
         btn_next = QPushButton("Diseño")
-        btn_capture = QPushButton("Captura")
+        icon_path = os.path.join(
+            os.path.dirname(__file__), "..", "..", "icon", "botones", "captura", "capture.png"
+        )
+        btn_capture = QPushButton()
+        btn_capture.setIcon(QIcon(icon_path))
+        btn_capture.setFixedWidth(30)
         btn_menu = QPushButton("Menú")
 
         btn_calc.clicked.connect(self.on_calculate)
