@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import (
     QGraphicsColorizeEffect,
 )
 from PyQt5.QtCore import Qt, QSize
+from .shear_window import ShearDesignWindow
 from PyQt5.QtGui import QPixmap, QIcon
 
 
@@ -245,7 +246,7 @@ class MenuWindow(QMainWindow):
 
         btn_flex.clicked.connect(self.open_diagrama)
         btn_torsion.clicked.connect(self.show_cortante_msg)
-        btn_cort.clicked.connect(self.show_cortante_msg)
+        btn_cort.clicked.connect(self.open_cortante)
         btn_mem.clicked.connect(self.open_memoria)
         btn_contact.clicked.connect(self.show_contact)
         btn_exit.clicked.connect(self.close)
@@ -335,6 +336,19 @@ class MenuWindow(QMainWindow):
         seccion = data.get("section_img")
         dev_as = calc_sections[6:]
         generar_reporte_html(datos, resultados, tabla, imagenes, seccion, dev_as)
+
+    def open_cortante(self):
+        if not hasattr(self, "design_page"):
+            QMessageBox.warning(self, "Advertencia", "Primero complete el diseño por flexión")
+            return
+        self.cortante_page = ShearDesignWindow(
+            self.design_page,
+            show_window=False,
+            menu_callback=self.show_menu,
+            back_callback=self.show_design,
+        )
+        self.stacked.addWidget(self.cortante_page)
+        self.stacked.setCurrentWidget(self.cortante_page)
 
     def show_design(self):
         if hasattr(self, "design_page"):
