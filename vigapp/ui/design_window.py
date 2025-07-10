@@ -40,6 +40,7 @@ class DesignWindow(QMainWindow):
         next_callback=None,
         save_callback=None,
         menu_callback=None,
+        back_callback=None,
     ):
         """Create the design window using corrected moments."""
         super().__init__(parent)
@@ -49,11 +50,18 @@ class DesignWindow(QMainWindow):
         self.save_callback = save_callback
         self.menu_callback = menu_callback
         self.setWindowTitle("Parte 2 – Diseño de Acero")
+        self.back_callback = back_callback
         self._build_ui()
         # Provide enough vertical space so scrolling is rarely needed
         self.resize(800, 1500)
         if show_window:
             self.show()
+
+    def update_moments(self, mn_corr, mp_corr):
+        """Update the design moments and redraw plots."""
+        self.mn_corr = mn_corr
+        self.mp_corr = mp_corr
+        self._redraw()
 
     def _calc_as_req(self, Mu, fc, b, d, fy, phi):
         """Calculate required steel area for a single moment."""
@@ -362,11 +370,13 @@ class DesignWindow(QMainWindow):
         self.btn_menu.clicked.connect(self.on_menu)
         self.btn_back.clicked.connect(self.on_back)
 
-        layout.addWidget(self.btn_capture, row_start + 3, 0, 1, 2)
-        layout.addWidget(self.btn_memoria, row_start + 3, 2, 1, 2)
-        layout.addWidget(self.btn_view3d, row_start + 3, 4, 1, 2)
-        layout.addWidget(self.btn_menu, row_start + 3, 6, 1, 2)
-        layout.addWidget(self.btn_back, row_start + 4, 0, 1, 8)
+        self.btn_back.setFixedWidth(80)
+
+        layout.addWidget(self.btn_capture, row_start + 3, 0, 1, 1)
+        layout.addWidget(self.btn_memoria, row_start + 3, 1, 1, 2)
+        layout.addWidget(self.btn_view3d, row_start + 3, 3, 1, 2)
+        layout.addWidget(self.btn_menu, row_start + 3, 5, 1, 2)
+        layout.addWidget(self.btn_back, row_start + 3, 7, 1, 1)
 
         for ed in self.edits.values():
             ed.editingFinished.connect(self._redraw)
@@ -895,8 +905,11 @@ class DesignWindow(QMainWindow):
             self.menu_callback()
 
     def on_back(self):
-        """Close this window and return to the parent one."""
-        self.close()
-        parent = self.parent()
-        if parent:
-            parent.show()
+        """Go back to the previous window."""
+        if self.back_callback:
+            self.back_callback()
+        else:
+            self.close()
+            parent = self.parent()
+            if parent:
+                parent.show()
