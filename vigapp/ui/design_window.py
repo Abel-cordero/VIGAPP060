@@ -1,29 +1,32 @@
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
-    QWidget,
-    QGridLayout,
-    QLabel,
-    QLineEdit,
-    QPushButton,
     QMessageBox,
     QComboBox,
-    QVBoxLayout,
     QHBoxLayout,
-    QScrollArea,
-    QLayout,
+    QVBoxLayout,
+    QWidget,
+    QPushButton,
 )
 import os
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QGuiApplication, QFont, QIcon
+from PyQt5.QtGui import QGuiApplication
 
 from .view3d_window import View3DWindow
 from reporte_flexion_html import generar_reporte_html
 from ..models.constants import DIAM_CM, BAR_DATA
 from ..models.utils import capture_widget_temp
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from .design import (
+    build_ui,
+    calc_as_limits,
+    calc_as_req,
+    draw_section,
+    plot_design,
+    plot_required,
+)
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import numpy as np
 
 
@@ -63,15 +66,6 @@ class DesignWindow(QMainWindow):
         self.mp_corr = mp_corr
         self._redraw()
 
-    def _calc_as_req(self, Mu, fc, b, d, fy, phi):
-        """Calculate required steel area for a single moment."""
-        Mu_kgcm = abs(Mu) * 100000  # convert TN·m to kg·cm
-        term = 1.7 * fc * b * d / (2 * fy)
-        root = (2.89 * (fc * b * d) ** 2) / (fy**2) - (6.8 * fc * b * Mu_kgcm) / (
-            phi * (fy**2)
-        )
-        root = max(root, 0)
-        return term - 0.5 * np.sqrt(root)
 
     def _required_areas(self):
         try:
@@ -84,13 +78,13 @@ class DesignWindow(QMainWindow):
 
         d = self.calc_effective_depth()
 
-        self.as_min, self.as_max = self._calc_as_limits(fc, fy, b, d)
+        self.as_min, self.as_max = calc_as_limits(fc, fy, b, d)
         self.as_min_label.setText(f"{self.as_min:.2f}")
         self.as_max_label.setText(f"{self.as_max:.2f}")
 
         # Raw areas computed directly from the general formula
-        as_n_raw = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mn_corr]
-        as_p_raw = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mp_corr]
+        as_n_raw = [calc_as_req(m, fc, b, d, fy, phi) for m in self.mn_corr]
+        as_p_raw = [calc_as_req(m, fc, b, d, fy, phi) for m in self.mp_corr]
 
         # Store raw values for potential debugging/reporting purposes
         self.as_n_raw = np.array(as_n_raw)
@@ -118,12 +112,6 @@ class DesignWindow(QMainWindow):
             totals.append(total)
         return totals
 
-    def _calc_as_limits(self, fc, fy, b, d):
-        beta1 = 0.85 if fc <= 280 else 0.85 - ((fc - 280) / 70) * 0.05
-        as_min = 0.7 * (np.sqrt(fc) / fy) * b * d
-        pmax = 0.75 * ((0.85 * fc * beta1 / fy) * (6000 / (6000 + fy)))
-        as_max = pmax * b * d
-        return as_min, as_max
 
     def calc_effective_depth(self):
         """Return effective depth based on detected layers."""
@@ -191,192 +179,14 @@ class DesignWindow(QMainWindow):
         return d
 
     def _build_ui(self):
-        content = QWidget()
-        layout = QGridLayout(content)
-        layout.setVerticalSpacing(3)
-        layout.setSizeConstraint(QLayout.SetMinimumSize)
-
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        scroll.setWidget(content)
-        self.setCentralWidget(scroll)
-        self.scroll_area = scroll
-
-        labels = [
-            ("b (cm)", "30"),
-            ("h (cm)", "50"),
-            ("r (cm)", "4"),
-            ("d (cm)", ""),
-            ("f'c (kg/cm²)", "210"),
-            ("fy (kg/cm²)", "4200"),
-            ("φ", "0.9"),
-        ]
-
-        small_font = QFont()
-        small_font.setPointSize(8)
-        # Font for the manual design widgets at the bottom
-        self.row_font = QFont()
-        self.row_font.setPointSize(8)
-
-        self.edits = {}
-        for row, (text, val) in enumerate(labels):
-            lbl = QLabel(text)
-            lbl.setFont(small_font)
-            layout.addWidget(lbl, row, 0)
-            ed = QLineEdit(val)
-            ed.setFont(small_font)
-            ed.setAlignment(Qt.AlignRight)
-            ed.setFixedWidth(70)
-            if text == "d (cm)":
-                ed.setReadOnly(True)
-            layout.addWidget(ed, row, 1)
-            self.edits[text] = ed
-
-        # Combos para diámetro de estribo y de varilla
-        estribo_opts = ["8mm", '3/8"', '1/2"']
-        lbl_estribo = QLabel("ϕ estribo")
-        lbl_estribo.setFont(small_font)
-        layout.addWidget(lbl_estribo, len(labels), 0)
-        self.cb_estribo = QComboBox()
-        self.cb_estribo.setFont(small_font)
-        self.cb_estribo.addItems(estribo_opts)
-        self.cb_estribo.setCurrentText('3/8"')
-        layout.addWidget(self.cb_estribo, len(labels), 1)
-
-        varilla_opts = ['1/2"', '5/8"', '3/4"', '1"']
-        lbl_varilla = QLabel("ϕ varilla")
-        lbl_varilla.setFont(small_font)
-        layout.addWidget(lbl_varilla, len(labels) + 1, 0)
-        self.cb_varilla = QComboBox()
-        self.cb_varilla.setFont(small_font)
-        self.cb_varilla.addItems(varilla_opts)
-        self.cb_varilla.setCurrentText('5/8"')
-        layout.addWidget(self.cb_varilla, len(labels) + 1, 1)
-
-        lbl_capas = QLabel("N\u00b0 capas")
-        lbl_capas.setFont(small_font)
-        layout.addWidget(lbl_capas, len(labels) + 2, 0)
-        self.layer_combo = QComboBox()
-        self.layer_combo.setFont(small_font)
-        self.layer_combo.addItems(["1", "2", "3", "4"])
-        layout.addWidget(self.layer_combo, len(labels) + 2, 1)
-
-        pos_labels = ["M1-", "M2-", "M3-", "M1+", "M2+", "M3+"]
-        self.rebar_rows = [[] for _ in range(6)]
-        self.rows_layouts = []
-
-        self.combo_grid = QGridLayout()
-
-        for i, label in enumerate(pos_labels):
-            row = 0 if i < 3 else 1
-            col = i % 3
-
-            cell = QVBoxLayout()
-            cell.addWidget(QLabel(label), alignment=Qt.AlignCenter)
-
-            header = QGridLayout()
-
-            lbl_qty = QLabel("cant.")
-            lbl_qty.setFont(self.row_font)
-            lbl_qty.setAlignment(Qt.AlignCenter)
-            header.addWidget(lbl_qty, 0, 0)
-
-            lbl_dia = QLabel("\u00f8")
-            lbl_dia.setFont(self.row_font)
-            lbl_dia.setAlignment(Qt.AlignCenter)
-            header.addWidget(lbl_dia, 0, 1)
-
-            lbl_ncapas = QLabel("capa")
-            lbl_ncapas.setFont(self.row_font)
-            lbl_ncapas.setAlignment(Qt.AlignCenter)
-            header.addWidget(lbl_ncapas, 0, 2)
-
-            lbl_capas = QLabel("capas")
-            lbl_capas.setFont(self.row_font)
-            lbl_capas.setAlignment(Qt.AlignCenter)
-            header.addWidget(lbl_capas, 0, 3, 1, 2)
-            cell.addLayout(header)
-
-            rows_layout = QVBoxLayout()
-            cell.addLayout(rows_layout)
-            self.rows_layouts.append(rows_layout)
-
-            self.combo_grid.addLayout(cell, row, col)
-
-            self._add_rebar_row(i)
-
-        row_start = len(labels) + 3
-
-        info_layout = QHBoxLayout()
-        info_layout.setSpacing(5)
-        info_layout.setContentsMargins(0, 0, 0, 0)
-
-        lbl_as_min = QLabel("As min (cm²):")
-        lbl_as_min.setFont(small_font)
-        self.as_min_label = QLabel("0.00")
-        self.as_min_label.setFont(small_font)
-        info_layout.addWidget(lbl_as_min)
-        info_layout.addWidget(self.as_min_label)
-
-        lbl_as_max = QLabel("As max (cm²):")
-        lbl_as_max.setFont(small_font)
-        self.as_max_label = QLabel("0.00")
-        self.as_max_label.setFont(small_font)
-        info_layout.addWidget(lbl_as_max)
-        info_layout.addWidget(self.as_max_label)
-
-        lbl_base_req = QLabel("Base req. (cm):")
-        lbl_base_req.setFont(small_font)
-        self.base_req_label = QLabel("-")
-        self.base_req_label.setFont(small_font)
-        info_layout.addWidget(lbl_base_req)
-        info_layout.addWidget(self.base_req_label)
-
-        self.base_msg_label = QLabel("")
-        self.base_msg_label.setFont(small_font)
-        info_layout.addWidget(self.base_msg_label)
-
-        layout.addLayout(info_layout, row_start, 2, 1, 6)
-
-        self.fig_sec, self.ax_sec = plt.subplots(
-            figsize=(3, 3), constrained_layout=True
-        )
-        self.canvas_sec = FigureCanvas(self.fig_sec)
-        layout.addWidget(self.canvas_sec, 0, 2, len(labels) + 3, 4)
-
-        self.fig_dist, (self.ax_req, self.ax_des) = plt.subplots(
-            2, 1, figsize=(5, 6), constrained_layout=True
-        )
-        self.canvas_dist = FigureCanvas(self.fig_dist)
-        layout.addWidget(self.canvas_dist, row_start + 1, 0, 1, 8)
-
-        layout.addLayout(self.combo_grid, row_start + 2, 0, 1, 8)
-
-        icon_path = os.path.join(
-            os.path.dirname(__file__), "..", "..", "icon", "botones", "captura", "capture.png"
-        )
-        self.btn_capture = QPushButton()
-        self.btn_capture.setIcon(QIcon(icon_path))
-        self.btn_capture.setFixedWidth(30)
-        self.btn_memoria = QPushButton("Reportes")
-        self.btn_view3d = QPushButton("Secciones")
-        self.btn_menu = QPushButton("Menú")
-        self.btn_back = QPushButton("Atrás")
+        """Create widgets and connect signals."""
+        build_ui(self)
 
         self.btn_capture.clicked.connect(self._capture_design)
         self.btn_memoria.clicked.connect(self.show_memoria)
         self.btn_view3d.clicked.connect(self.on_next)
         self.btn_menu.clicked.connect(self.on_menu)
         self.btn_back.clicked.connect(self.on_back)
-
-        self.btn_back.setFixedWidth(80)
-
-        layout.addWidget(self.btn_capture, row_start + 3, 0, 1, 1)
-        layout.addWidget(self.btn_memoria, row_start + 3, 1, 1, 2)
-        layout.addWidget(self.btn_view3d, row_start + 3, 3, 1, 2)
-        layout.addWidget(self.btn_menu, row_start + 3, 5, 1, 2)
-        layout.addWidget(self.btn_back, row_start + 3, 7, 1, 1)
 
         for ed in self.edits.values():
             ed.editingFinished.connect(self._redraw)
@@ -450,7 +260,7 @@ class DesignWindow(QMainWindow):
         self.update_design_as()
 
     def draw_section(self):
-        """Draw a schematic beam section based on input dimensions."""
+        """Draw the beam section based on current inputs."""
         try:
             b = float(self.edits["b (cm)"].text())
             h = float(self.edits["h (cm)"].text())
@@ -459,56 +269,7 @@ class DesignWindow(QMainWindow):
             return
 
         d = self.calc_effective_depth()
-        y_d = h - d
-
-        self.ax_sec.clear()
-        self.ax_sec.set_aspect("equal")
-        self.ax_sec.plot([0, b, b, 0, 0], [0, 0, h, h, 0], "k-")
-        self.ax_sec.plot([r, b - r, b - r, r, r], [r, r, h - r, h - r, r], "r--")
-
-        self.ax_sec.annotate(
-            "", xy=(0, -5), xytext=(b, -5), arrowprops=dict(arrowstyle="<->")
-        )
-        self.ax_sec.text(
-            b / 2,
-            -6,
-            f"b = {b:.0f} cm",
-            ha="center",
-            va="top",
-            fontsize=8,
-        )
-
-        # Cota de peralte pegada a la viga
-        self.ax_sec.annotate(
-            "", xy=(-5, h), xytext=(-5, y_d), arrowprops=dict(arrowstyle="<->")
-        )
-        self.ax_sec.text(
-            -6,
-            (h + y_d) / 2,
-            f"d = {d:.1f} cm",
-            ha="right",
-            va="center",
-            rotation=90,
-            fontsize=8,
-        )
-
-        # Cota de altura total hacia la izquierda
-        self.ax_sec.annotate(
-            "", xy=(-12, 0), xytext=(-12, h), arrowprops=dict(arrowstyle="<->")
-        )
-        self.ax_sec.text(
-            -13,
-            h / 2,
-            f"h = {h:.0f} cm",
-            ha="right",
-            va="center",
-            rotation=90,
-            fontsize=8,
-        )
-
-        self.ax_sec.set_xlim(-15, b + 10)
-        self.ax_sec.set_ylim(-10, h + 10)
-        self.ax_sec.axis("off")
+        draw_section(self.ax_sec, b, h, r, d)
         self.canvas_sec.draw()
 
     def _redraw(self):
@@ -518,44 +279,8 @@ class DesignWindow(QMainWindow):
 
     def draw_required_distribution(self):
         """Plot the required steel areas along the beam length."""
-        x_ctrl = [0.0, 0.5, 1.0]
         areas_n, areas_p = self._required_areas()
-
-        self.ax_req.clear()
-        self.ax_req.plot([0, 1], [0, 0], "k-", lw=6)
-
-        y_off = 0.1 * max(np.max(areas_n), np.max(areas_p), 1)
-        label_off = 0.2 * y_off
-        for idx, (x, a_n) in enumerate(zip(x_ctrl, areas_n), 1):
-            self.ax_req.text(
-                x,
-                y_off,
-                f"As- {a_n:.2f}",
-                ha="center",
-                va="bottom",
-                color="b",
-                fontsize=9,
-            )
-            self.ax_req.text(
-                x, label_off, f"M{idx}-", ha="center", va="bottom", fontsize=7
-            )
-        for idx, (x, a_p) in enumerate(zip(x_ctrl, areas_p), 1):
-            self.ax_req.text(
-                x,
-                -y_off,
-                f"As+ {a_p:.2f}",
-                ha="center",
-                va="top",
-                color="r",
-                fontsize=9,
-            )
-            self.ax_req.text(
-                x, -label_off, f"M{idx}+", ha="center", va="top", fontsize=7
-            )
-
-        self.ax_req.set_xlim(-0.05, 1.05)
-        self.ax_req.set_ylim(-2 * y_off, 2 * y_off)
-        self.ax_req.axis("off")
+        plot_required(self.ax_req, areas_n, areas_p)
         self.canvas_dist.draw()
 
     def update_design_as(self):
@@ -623,42 +348,7 @@ class DesignWindow(QMainWindow):
 
     def draw_design_distribution(self, areas, statuses):
         """Plot chosen reinforcement distribution along the beam."""
-        x_ctrl = [0.0, 0.5, 1.0]
-        areas_n = areas[:3]
-        areas_p = areas[3:]
-        self.ax_des.clear()
-        self.ax_des.plot([0, 1], [0, 0], "k-", lw=6)
-        y_off = 0.1 * max(max(areas_n, default=0), max(areas_p, default=0), 1)
-        label_off = 0.2 * y_off
-        for idx, (x, a, st) in enumerate(zip(x_ctrl, areas_n, statuses[:3]), 1):
-            self.ax_des.text(
-                x,
-                y_off,
-                f"Asd- {a:.2f} {st}",
-                ha="center",
-                va="bottom",
-                color="g",
-                fontsize=9,
-            )
-            self.ax_des.text(
-                x, label_off, f"M{idx}-", ha="center", va="bottom", fontsize=7
-            )
-        for idx, (x, a, st) in enumerate(zip(x_ctrl, areas_p, statuses[3:]), 1):
-            self.ax_des.text(
-                x,
-                -y_off,
-                f"Asd+ {a:.2f} {st}",
-                ha="center",
-                va="top",
-                color="g",
-                fontsize=9,
-            )
-            self.ax_des.text(
-                x, -label_off, f"M{idx}+", ha="center", va="top", fontsize=7
-            )
-        self.ax_des.set_xlim(-0.05, 1.05)
-        self.ax_des.set_ylim(-2 * y_off, 2 * y_off)
-        self.ax_des.axis("off")
+        plot_design(self.ax_des, areas, statuses)
         self.canvas_dist.draw()
 
     def _capture_design(self):
@@ -728,12 +418,12 @@ class DesignWindow(QMainWindow):
 
         d = h - r - de - 0.5 * db
         beta1 = 0.85 if fc <= 280 else 0.85 - ((fc - 280) / 70) * 0.05
-        as_min, as_max = self._calc_as_limits(fc, fy, b, d)
+        as_min, as_max = calc_as_limits(fc, fy, b, d)
         p_bal = (0.85 * fc * beta1 / fy) * (6000 / (6000 + fy))
         p_max = 0.75 * p_bal
 
-        as_n_raw = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mn_corr]
-        as_p_raw = [self._calc_as_req(m, fc, b, d, fy, phi) for m in self.mp_corr]
+        as_n_raw = [calc_as_req(m, fc, b, d, fy, phi) for m in self.mn_corr]
+        as_p_raw = [calc_as_req(m, fc, b, d, fy, phi) for m in self.mp_corr]
         as_n = np.clip(as_n_raw, as_min, as_max)
         as_p = np.clip(as_p_raw, as_min, as_max)
 
