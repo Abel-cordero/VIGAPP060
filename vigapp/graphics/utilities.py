@@ -4,9 +4,23 @@ from __future__ import annotations
 
 from typing import Dict, Iterable, List, Tuple
 
-import ezdxf
-from ezdxf.enums import TextEntityAlignment
+try:  # Optional dependency
+    import ezdxf  # type: ignore
+    from ezdxf.enums import TextEntityAlignment  # type: ignore
+except Exception:  # pragma: no cover - handled at runtime
+    ezdxf = None  # type: ignore
+    TextEntityAlignment = None  # type: ignore
+
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
+
+
+def _require_ezdxf() -> None:
+    """Raise ImportError if :mod:`ezdxf` is not available."""
+    if ezdxf is None:
+        raise ImportError(
+            "The 'ezdxf' package is required for DXF export.\n"
+            "Install it using 'pip install ezdxf'."
+        )
 
 from ..models.constants import DIAM_CM
 
@@ -194,6 +208,7 @@ def _draw_dimension(
 
 def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
     """Create a DXF file with the given sections."""
+    _require_ezdxf()
     doc = ezdxf.new()
     doc.styles.new("Arial", dxfattribs={"font": "arial.ttf"})
     msp = doc.modelspace()
@@ -278,6 +293,7 @@ def exportar_cortes_a_dxf(secciones: Iterable[Dict], filename: str) -> None:
 
 def exportar_cad(view) -> None:
     """Collect data from a :class:`View3DWindow` and export a DXF file."""
+    _require_ezdxf()
     try:
         b = float(view.design.edits["b (cm)"].text())
         h = float(view.design.edits["h (cm)"].text())
