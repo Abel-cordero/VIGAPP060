@@ -160,7 +160,16 @@ def build_ui(win) -> None:
 
     layout.addLayout(win.combo_grid, row_start + 2, 0, 1, 8)
 
-    icon_path = os.path.join(os.path.dirname(__file__), "..", "..", "icon", "botones", "captura", "capture.png")
+    icon_path = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "..",
+        "..",
+        "icon",
+        "botones",
+        "captura",
+        "capture.png",
+    )
     win.btn_capture = QPushButton()
     win.btn_capture.setIcon(QIcon(icon_path))
     win.btn_capture.setFixedWidth(30)
