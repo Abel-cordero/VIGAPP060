@@ -9,10 +9,13 @@ from PyQt5.QtWidgets import (
     QLabel,
     QLineEdit,
     QPushButton,
+    QComboBox,
 )
 from PyQt5.QtCore import Qt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
+
+from ..graphics.shear_scheme import draw_shear_scheme
 
 
 class ShearDesignWindow(QMainWindow):
@@ -42,6 +45,8 @@ class ShearDesignWindow(QMainWindow):
         self.ed_vu.setAlignment(Qt.AlignRight)
         self.ed_ln = QLineEdit("5.0")
         self.ed_ln.setAlignment(Qt.AlignRight)
+        self.cb_type = QComboBox()
+        self.cb_type.addItems(["Apoyada", "Volado"])
 
         d_val = self.design_win.calc_effective_depth()
         self.ed_d = QLineEdit(f"{d_val:.2f}")
@@ -54,20 +59,23 @@ class ShearDesignWindow(QMainWindow):
         layout.addWidget(self.ed_ln, 1, 1)
         layout.addWidget(QLabel("d (cm)"), 2, 0)
         layout.addWidget(self.ed_d, 2, 1)
+        layout.addWidget(QLabel("Tipo"), 3, 0)
+        layout.addWidget(self.cb_type, 3, 1)
 
         btn_menu = QPushButton("Men\u00fa")
         btn_back = QPushButton("Atr\u00e1s")
-        layout.addWidget(btn_menu, 3, 0)
-        layout.addWidget(btn_back, 3, 1)
+        layout.addWidget(btn_menu, 4, 0)
+        layout.addWidget(btn_back, 4, 1)
 
         self.fig, self.ax = plt.subplots(figsize=(5, 3), constrained_layout=True)
         self.canvas = FigureCanvas(self.fig)
-        layout.addWidget(self.canvas, 4, 0, 1, 2)
+        layout.addWidget(self.canvas, 5, 0, 1, 2)
 
         self.ed_vu.editingFinished.connect(self.draw_diagram)
         self.ed_ln.editingFinished.connect(self.draw_diagram)
         btn_menu.clicked.connect(self.on_menu)
         btn_back.clicked.connect(self.on_back)
+        self.cb_type.currentIndexChanged.connect(self.draw_diagram)
 
         self.draw_diagram()
 
@@ -81,14 +89,9 @@ class ShearDesignWindow(QMainWindow):
             return
 
         d = d_cm / 100.0
-        x = [0, d, L - d, L]
-        y = [0, Vu, Vu, 0]
+        beam_type = "volado" if self.cb_type.currentText().lower() == "volado" else "apoyada"
 
-        self.ax.clear()
-        self.ax.plot(x, y, "b-", lw=2)
-        self.ax.set_xlabel("Longitud (m)")
-        self.ax.set_ylabel("Cortante (T)")
-        self.ax.grid(True)
+        draw_shear_scheme(self.ax, Vu, L, d, beam_type)
         self.canvas.draw()
 
     # ------------------------------------------------------------------
@@ -104,4 +107,5 @@ class ShearDesignWindow(QMainWindow):
             parent = self.parent()
             if parent:
                 parent.show()
+
 
