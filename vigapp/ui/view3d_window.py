@@ -12,8 +12,10 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QFileDialog,
 )
+import os
+
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QGuiApplication
+from PyQt5.QtGui import QGuiApplication, QIcon
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 from matplotlib import patches
@@ -87,15 +89,19 @@ class View3DWindow(QMainWindow):
         layout.addStretch()
 
         btn_layout = QHBoxLayout()
-        self.btn_capture = QPushButton("CAPTURA")
+        icon_path = os.path.join(
+            os.path.dirname(__file__), "..", "..", "icon", "botones", "captura", "capture.png"
+        )
+        self.btn_capture = QPushButton()
+        self.btn_capture.setIcon(QIcon(icon_path))
         self.btn_capture.clicked.connect(self._capture_view)
-        self.btn_update = QPushButton("ACTUALIZAR")
+        self.btn_update = QPushButton("Actualizar")
         self.btn_update.clicked.connect(lambda: self.draw_views(reset_orders=True))
-        self.btn_exportar = QPushButton("EXPORTAR CAD")
+        self.btn_exportar = QPushButton("Exportar CAD")
         self.btn_exportar.clicked.connect(self._on_exportar_cad)
-        self.btn_back = QPushButton("RETROCEDER")
+        self.btn_back = QPushButton("Atrás")
         self.btn_back.clicked.connect(self.on_back)
-        self.btn_menu = QPushButton("MENÚ")
+        self.btn_menu = QPushButton("Menú")
         self.btn_menu.clicked.connect(self.on_menu)
         btn_layout.addWidget(self.btn_capture)
         btn_layout.addWidget(self.btn_update)
