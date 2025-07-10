@@ -227,7 +227,7 @@ Los diagramas y resultados se actualizan cada vez que se modifican los datos o s
 
 ## Estructura del código y objetos principales
 
-El código se encuentra organizado en la carpeta `src/vigapp/` y se inicia desde `main.py`. El antiguo archivo `viga2.0.py` se eliminó en favor de `main.py` como punto de entrada. Los módulos principales son:
+El código se encuentra organizado en la carpeta `vigapp/` y se inicia desde `main.py`. El antiguo archivo `viga2.0.py` se eliminó en favor de `main.py` como punto de entrada. Los módulos principales son:
 
 - **`ui/length_input_toolbar.py`** — barra de entrada de longitud con atajos `L/3`, `L/2` y `L`.
 - **`graphics/section2d_view.py`** — vista 2D interactiva que permite arrastrar varillas.
@@ -240,7 +240,7 @@ El código se encuentra organizado en la carpeta `src/vigapp/` y se inicia desde
 - **`ui/view3d_window.py`** — vista tridimensional simplificada.
 Las clases principales son:
 
-- **`MomentApp`** (en `src/vigapp/ui/moment_app.py`)
+- **`MomentApp`** (en `vigapp/ui/moment_app.py`)
   - `get_moments()` — lee los valores ingresados.
   - `get_length()` — obtiene la longitud de la viga.
   - `correct_moments(mn, mp, sys_t)` — aplica la corrección de la NTP E.060.
@@ -248,7 +248,7 @@ Las clases principales son:
   - `on_calculate()` — coordina lectura y graficado.
   - `on_next()` — abre la ventana de diseño con los momentos corregidos.
 
-- **`DesignWindow`** (en `src/vigapp/ui/design_window.py`)
+- **`DesignWindow`** (en `vigapp/ui/design_window.py`)
   - `_calc_as_req()` y `_calc_as_limits()` — cálculos de acero requerido y límites.
   - `_required_areas()` — devuelve las áreas necesarias por posición.
   - `draw_section()`, `draw_required_distribution()` y `draw_design_distribution()` — funciones de representación gráfica.
@@ -256,10 +256,10 @@ Las clases principales son:
   - `_capture_design()` — copia la vista al portapapeles.
   - `show_view3d()` — abre una vista 3D simplificada.
 
-- **`View3DWindow`** (en `src/vigapp/ui/view3d_window.py`)
+- **`View3DWindow`** (en `vigapp/ui/view3d_window.py`)
   - `draw_views()` — genera la visualización 2D y 3D de la viga.
 
-- **`FormulaWindow`** (en `src/vigapp/ui/formula_window.py`)
+- **`FormulaWindow`** (en `vigapp/ui/formula_window.py`)
   - Permite escribir una fórmula en texto y visualizarla en formato LaTeX.
   - Botones para capturar la vista o exportarla a PNG/PDF/DOCX.
 

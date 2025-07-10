@@ -15,7 +15,7 @@ Este documento reúne pautas básicas para contribuir al proyecto y mantener una
 ## Organización del código
 
 - El archivo principal es `main.py`. Procura mantener cada función centrada en una tarea específica.
-- Si añades módulos nuevos colócalos en la carpeta `src/vigapp/` y mantenla limpia.
+- Si añades módulos nuevos colócalos en la carpeta `vigapp/` y mantenla limpia.
 - Documenta las funciones utilizando docstrings de una sola línea.
 
 ## Proceso de contribución
