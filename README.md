@@ -267,7 +267,7 @@ Esta organización modular facilita la comunicación y coordinación dentro del 
 
 ## Guía de desarrollo
 
-Consulta el archivo [DESARROLLO.md](DESARROLLO.md) para pautas sobre configuración del entorno y aportes al código.
+Consulta el archivo [DESARROLLO.md](DESARROLLO.md) para pautas sobre configuración del entorno y aportes al código. Si deseas ejecutar las pruebas automatizadas, revisa también [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Icono de la aplicación
 
