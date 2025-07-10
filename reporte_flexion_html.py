@@ -86,14 +86,14 @@ def generar_reporte_html(
 
     orden = [
         ("Cal. de Peralte <span class='norma'>(E060 Art. 17.5.2)</span>", "peralte"),
-        ("Cal. de \u00df1 <span class='norma'>(E060 Art. 10.2.7.3)</span>", "b1"),
-        ("C\u03c1<sub>bal</sub> <span class='norma'>(E060 Art. 10.3.32)</span>", "pbal"),
-        ("C\u03c1<sub>max</sub> <span class='norma'>(E060 Art. 10.3.4)</span>", "pmax"),
+        ("Cal. de β1 <span class='norma'>(E060 Art. 10.2.7.3)</span>", "b1"),
+        ("\u03c1<sub>bal</sub> <span class='norma'>(E060 Art. 10.3.32)</span>", "pbal"),
+        ("\u03c1<sub>max</sub> <span class='norma'>(E060 Art. 10.3.4)</span>", "pmax"),
         ("Cal. de As m\u00edn <span class='norma'>(E060 Art. 10.5.2)</span>", "as_min"),
         ("Cal. de As m\u00e1x <span class='norma'>(E060 Art. 10.3.4)</span>", "as_max"),
     ]
 
-    html.append("<h2>CALUCLOS</h2>")
+    html.append("<h2>C\u00c1LCULOS</h2>")
     sec_id = 0
     for subt, key in orden:
         info = resultados.get(key, {})
