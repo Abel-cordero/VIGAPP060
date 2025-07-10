@@ -354,7 +354,7 @@ class DesignWindow(QMainWindow):
         self.btn_memoria = QPushButton("Reportes")
         self.btn_view3d = QPushButton("Secciones")
         self.btn_menu = QPushButton("Menú")
-        self.btn_back = QPushButton("Retroceder")
+        self.btn_back = QPushButton("Atrás")
 
         self.btn_capture.clicked.connect(self._capture_design)
         self.btn_memoria.clicked.connect(self.show_memoria)
@@ -895,7 +895,8 @@ class DesignWindow(QMainWindow):
             self.menu_callback()
 
     def on_back(self):
-        self.hide()
+        """Close this window and return to the parent one."""
+        self.close()
         parent = self.parent()
         if parent:
             parent.show()
