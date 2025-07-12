@@ -23,7 +23,7 @@ def test_shear_diagram_offscreen(monkeypatch):
     shear2.ed_vu.setText("30")
     shear2.ed_ln.setText("6")
     shear2.draw_diagram()
-    assert not shear2.ed_d.isReadOnly()
+    assert shear2.ed_d.isReadOnly()
     app.quit()
 
 
