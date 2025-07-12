@@ -71,11 +71,24 @@ def generar_reporte_html(
         "<table style='margin: 0;'>",
     ]
 
+    units = {
+        "b (cm)": "cm",
+        "h (cm)": "cm",
+        "d (cm)": "cm",
+        "r (cm)": "cm",
+        "f'c (kg/cm²)": "kg/cm²",
+        "fy (kg/cm²)": "kg/cm²",
+        "ϕ estribo (cm)": "cm",
+        "ϕ varilla (cm)": "cm",
+    }
+
     for k, v in datos.items():
-        label = (
-            "h (cm)" if k in ("h", "Altura (h)", "Alto", "ALTO") else k
-        )
-        html.append(f"<tr><td><b>{label}</b></td><td>{_fmt(v)}</td></tr>")
+        label = "h (cm)" if k in ("h", "Altura (h)", "Alto", "ALTO") else k
+        val = _fmt(v)
+        unit = units.get(label)
+        if unit:
+            val = f"{val} {unit}"
+        html.append(f"<tr><td><b>{label}</b></td><td>{val}</td></tr>")
     html.extend(
         [
             "</table>",

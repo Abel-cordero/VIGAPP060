@@ -433,6 +433,7 @@ class DesignWindow(QMainWindow):
         data_section = [
             ["b (cm)", f"{b}"],
             ["h (cm)", f"{h}"],
+            ["d (cm)", f"{d:.2f}"],
             ["r (cm)", f"{r}"],
             ["f'c (kg/cm²)", f"{fc}"],
             ["fy (kg/cm²)", f"{fy}"],
