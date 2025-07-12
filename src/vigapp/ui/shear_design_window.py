@@ -16,7 +16,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 
 from ..models.constants import DIAM_CM, BAR_DATA
-from ..models.utils import draw_beam_section_png
+from ..models.utils import draw_beam_section_png, draw_beam_elevation_png
 
 import math
 
@@ -45,14 +45,17 @@ class ShearDesignWindow(QMainWindow):
         layout.addWidget(QLabel("VU"), 0, 0)
         self.ed_vu = QLineEdit("0.0")
         self.ed_vu.setAlignment(Qt.AlignRight)
+        self.ed_vu.setFixedWidth(70)
         layout.addWidget(self.ed_vu, 0, 1)
         self.cb_vu_unit = QComboBox()
         self.cb_vu_unit.addItems(["tnf", "kgf", "kN"])
+        self.cb_vu_unit.setFixedWidth(60)
         layout.addWidget(self.cb_vu_unit, 0, 2)
 
         layout.addWidget(QLabel("LN (m)"), 1, 0)
         self.ed_ln = QLineEdit("3.0")
         self.ed_ln.setAlignment(Qt.AlignRight)
+        self.ed_ln.setFixedWidth(70)
         layout.addWidget(self.ed_ln, 1, 1)
 
         self.rb_dual1 = QRadioButton("Dual 1")
@@ -65,13 +68,23 @@ class ShearDesignWindow(QMainWindow):
         layout.addWidget(self.rb_dual1, 2, 1)
         layout.addWidget(self.rb_dual2, 2, 2)
 
+        layout.addWidget(QLabel("Tipo:"), 3, 0)
+        self.rb_apoyada = QRadioButton("Apoyada")
+        self.rb_volado = QRadioButton("Volado")
+        self.rb_apoyada.setChecked(True)
+        bg_tipo = QButtonGroup(self)
+        bg_tipo.addButton(self.rb_apoyada)
+        bg_tipo.addButton(self.rb_volado)
+        layout.addWidget(self.rb_apoyada, 3, 1)
+        layout.addWidget(self.rb_volado, 3, 2)
+
         btn_calc = QPushButton("Calcular")
         btn_calc.clicked.connect(self.on_calculate)
-        layout.addWidget(btn_calc, 3, 2)
+        layout.addWidget(btn_calc, 4, 2)
 
         # Section info side panel
         side = QGridLayout()
-        layout.addLayout(side, 0, 3, 4, 1)
+        layout.addLayout(side, 0, 3, 7, 1)
 
         labels = [
             ("b (cm)", "30"),
@@ -86,6 +99,7 @@ class ShearDesignWindow(QMainWindow):
             side.addWidget(lbl, row, 0)
             ed = QLineEdit(self.section_defaults.get(text, val))
             ed.setAlignment(Qt.AlignRight)
+            ed.setFixedWidth(60)
             side.addWidget(ed, row, 1)
             self.section_edits[text] = ed
 
@@ -93,12 +107,14 @@ class ShearDesignWindow(QMainWindow):
         self.cb_estribo = QComboBox()
         self.cb_estribo.addItems(["8mm", '3/8"', '1/2"'])
         self.cb_estribo.setCurrentText('3/8"')
+        self.cb_estribo.setFixedWidth(60)
         side.addWidget(self.cb_estribo, len(labels), 1)
 
         side.addWidget(QLabel("\u03d5 barra"), len(labels)+1, 0)
         self.cb_barra = QComboBox()
         self.cb_barra.addItems(['1/2"', '5/8"', '3/4"', '1"'])
         self.cb_barra.setCurrentText('1/2"')
+        self.cb_barra.setFixedWidth(60)
         side.addWidget(self.cb_barra, len(labels)+1, 1)
 
         self.fig, self.ax = plt.subplots(figsize=(3,3), constrained_layout=True)
@@ -106,9 +122,24 @@ class ShearDesignWindow(QMainWindow):
         side.addWidget(self.canvas, 0, 2, len(labels)+2, 1)
         self.draw_section()
 
+        self.fig_beam, self.ax_beam = plt.subplots(figsize=(4,1.6), constrained_layout=True)
+        self.canvas_beam = FigureCanvas(self.fig_beam)
+        layout.addWidget(self.canvas_beam, 5, 0, 1, 3)
+        self.draw_beam()
+
         # Results label
         self.lbl_result = QLabel("")
-        layout.addWidget(self.lbl_result, 4, 0, 1, 4)
+        layout.addWidget(self.lbl_result, 6, 0, 1, 4)
+
+        for ed in self.section_edits.values():
+            ed.editingFinished.connect(self.draw_section)
+            ed.editingFinished.connect(self.draw_beam)
+        self.ed_ln.editingFinished.connect(self.draw_beam)
+        for cb in (self.cb_estribo, self.cb_barra):
+            cb.currentIndexChanged.connect(self.draw_section)
+            cb.currentIndexChanged.connect(self.draw_beam)
+        for rb in (self.rb_apoyada, self.rb_volado):
+            rb.toggled.connect(self.draw_beam)
 
     # ------------------------------------------------------------------
     def draw_section(self):
@@ -126,6 +157,20 @@ class ShearDesignWindow(QMainWindow):
         self.ax.imshow(img)
         self.ax.axis("off")
         self.canvas.draw()
+
+    def draw_beam(self):
+        try:
+            L = float(self.ed_ln.text()) * 100
+            h = float(self.section_edits["h (cm)"].text())
+        except ValueError:
+            return
+        cant = self.rb_volado.isChecked()
+        path = draw_beam_elevation_png(L, h, cant, "/tmp/beam_elev.png")
+        self.ax_beam.clear()
+        img = plt.imread(path)
+        self.ax_beam.imshow(img)
+        self.ax_beam.axis("off")
+        self.canvas_beam.draw()
 
     # ------------------------------------------------------------------
     def _vu_tons(self):
@@ -183,6 +228,7 @@ class ShearDesignWindow(QMainWindow):
         )
         self.lbl_result.setText(txt)
         self.draw_section()
+        self.draw_beam()
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ from typing import Optional
 
 from matplotlib.figure import Figure
 from PyQt5.QtWidgets import QWidget
+from matplotlib.patches import Rectangle
 
 
 def color_for_diameter(diam):
@@ -92,6 +93,52 @@ def draw_beam_section_png(b: float, h: float, r: float, de: float, db: float, pa
 
     ax.set_xlim(-15, b + 20)
     ax.set_ylim(-10, h + 10)
+
+    fig.savefig(path, dpi=300, bbox_inches="tight")
+    fig.clf()
+    return path
+
+
+def draw_beam_elevation_png(L: float, h: float, cantilever: bool, path: str) -> str:
+    """Draw a simple beam elevation with one or two columns."""
+    fig = Figure(figsize=(4.0, 1.6))
+    ax = fig.add_subplot(111)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    col_w = 30.0
+    lw = 0.6
+
+    # Beam outline
+    ax.plot([0, L, L, 0, 0], [0, 0, h, h, 0], "k-", linewidth=lw)
+
+    col_h = h * 1.2
+    y_base = -0.2 * h
+    cols = [0] if cantilever else [0, L]
+    for x in cols:
+        rect = Rectangle((x - col_w / 2, y_base), col_w, col_h,
+                         edgecolor="0.3", facecolor="0.85", linewidth=lw)
+        ax.add_patch(rect)
+
+    tick = h * 0.05
+
+    def _dim_h(x1, x2, y, label):
+        ax.plot([x1, x2], [y, y], color="black", linewidth=lw)
+        ax.plot([x1, x1], [y - tick, y + tick], color="black", linewidth=lw)
+        ax.plot([x2, x2], [y - tick, y + tick], color="black", linewidth=lw)
+        ax.text((x1 + x2) / 2, y - 2 * tick, label, ha="center", va="top", fontsize=6)
+
+    def _dim_v(x, y1, y2, label):
+        ax.plot([x, x], [y1, y2], color="black", linewidth=lw)
+        ax.plot([x - tick, x + tick], [y1, y1], color="black", linewidth=lw)
+        ax.plot([x - tick, x + tick], [y2, y2], color="black", linewidth=lw)
+        ax.text(x + 2 * tick, (y1 + y2) / 2, label, va="center", fontsize=6)
+
+    _dim_h(0, L, y_base - 3 * tick, f"l = {L/100:.2f} m")
+    _dim_v(L + 4 * tick, 0, h, f"h = {h:.0f} cm")
+
+    ax.set_xlim(-col_w, L + col_w)
+    ax.set_ylim(y_base - 4 * tick, h + col_h * 0.1)
 
     fig.savefig(path, dpi=300, bbox_inches="tight")
     fig.clf()
