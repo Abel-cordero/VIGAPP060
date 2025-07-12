@@ -72,7 +72,10 @@ def generar_reporte_html(
     ]
 
     for k, v in datos.items():
-        html.append(f"<tr><td><b>{k}</b></td><td>{_fmt(v)}</td></tr>")
+        label = (
+            "h (cm)" if k in ("h", "Altura (h)", "Alto", "ALTO") else k
+        )
+        html.append(f"<tr><td><b>{label}</b></td><td>{_fmt(v)}</td></tr>")
     html.extend(
         [
             "</table>",
@@ -85,12 +88,12 @@ def generar_reporte_html(
     )
 
     orden = [
-        ("Cal. de Peralte <span class='norma'>(E060 Art. 17.5.2)</span>", "peralte"),
-        ("Cal. de β1 <span class='norma'>(E060 Art. 10.2.7.3)</span>", "b1"),
+        ("Calculo de Peralte <span class='norma'>(E060 Art. 17.5.2)</span>", "peralte"),
+        ("Calculo de β1 <span class='norma'>(E060 Art. 10.2.7.3)</span>", "b1"),
         ("\u03c1<sub>bal</sub> <span class='norma'>(E060 Art. 10.3.32)</span>", "pbal"),
         ("\u03c1<sub>max</sub> <span class='norma'>(E060 Art. 10.3.4)</span>", "pmax"),
-        ("Cal. de As m\u00edn <span class='norma'>(E060 Art. 10.5.2)</span>", "as_min"),
-        ("Cal. de As m\u00e1x <span class='norma'>(E060 Art. 10.3.4)</span>", "as_max"),
+        ("Calculo de As m\u00edn <span class='norma'>(E060 Art. 10.5.2)</span>", "as_min"),
+        ("Calculo de As m\u00e1x <span class='norma'>(E060 Art. 10.3.4)</span>", "as_max"),
     ]
 
     html.append("<h2>C\u00c1LCULOS</h2>")
@@ -124,7 +127,7 @@ def generar_reporte_html(
             )
 
     if calc_sections:
-        html.append("<h2>DESARROLLO AS REQUERIDO</h2>")
+        html.append("<h2>CALCULO DE AS REQUERIDO</h2>")
         for tit, formulas in calc_sections:
             sec_id += 1
             hid = f"h{sec_id}"
@@ -141,10 +144,10 @@ def generar_reporte_html(
         html.append("</div><div class='page'>")
 
     if tabla:
-        html.append("<h2>Resumen de Verificaci\u00f3n</h2>")
+        html.append("<h2>RESUMEN DE ACERO</h2>")
         html.append("<table>")
         html.append(
-            "<tr><th>Secci\u00f3n</th><th>As requerido</th><th>As dise\u00f1ado</th><th>Estado</th></tr>"
+            "<tr><th>Secci\u00f3n</th><th>AS REQUERIDO</th><th>AS DISE\u00d1O</th><th>Estado</th></tr>"
         )
         as_min = float(resultados.get("as_min", {}).get("valor", 0))  # Asegúrate de tenerlo definido
 

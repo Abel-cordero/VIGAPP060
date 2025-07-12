@@ -518,7 +518,7 @@ class DesignWindow(QMainWindow):
             calc = term - 0.5 * np.sqrt(root)
             calc_sections.append(
                 (
-                    f"As para {lab}",
+                    f"Calculo para {lab}",
                     [
                         rf"$M_u = {m:.2f}\,\text{{TN·m}} = {Mu_kgcm:.0f}\,\text{{kg·cm}}$",
                         rf"$A_s^{{\text{{calc}}}} = {calc:.2f}\,\text{{cm}}^2$",
