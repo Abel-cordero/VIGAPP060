@@ -3,6 +3,8 @@
 
 Este módulo realiza el diseño por corte para vigas de concreto armado según normativa vigente. Está basado en el esquema de distribución mínima de estribos para vigas **tipo Dual 1 y Dual 2**, y considera casos de **vigas apoyadas o voladas**.
 
+La ventana de diseño por corte muestra ahora lateralmente la sección de la viga con sus dimensiones básicas y los diámetros seleccionados de varilla y estribo.
+
 ---
 
 ## 1. DATOS DE ENTRADA
