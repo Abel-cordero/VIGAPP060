@@ -36,3 +36,5 @@ def test_required_areas_offscreen(monkeypatch):
     assert np.all(as_p >= win.as_min)
     assert np.all(as_p <= win.as_max)
 
+    app.quit()
+
