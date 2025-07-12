@@ -25,3 +25,11 @@ def test_shear_diagram_offscreen(monkeypatch):
     shear2.draw_diagram()
     assert not shear2.ed_d.isReadOnly()
     app.quit()
+
+
+def test_section_canvas_exists(monkeypatch):
+    monkeypatch.setenv("QT_QPA_PLATFORM", "offscreen")
+    app = QApplication([])
+    shear = ShearDesignWindow(None, show_window=False)
+    assert hasattr(shear, "canvas_sec")
+    app.quit()
