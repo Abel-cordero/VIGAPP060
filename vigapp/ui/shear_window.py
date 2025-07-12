@@ -21,7 +21,7 @@ from ..graphics.shear_scheme import draw_shear_scheme
 class ShearDesignWindow(QMainWindow):
     """UI to input Vu and plot a linear shear diagram."""
 
-    def __init__(self, design_win, parent=None, *, show_window=True,
+    def __init__(self, design_win=None, parent=None, *, show_window=True,
                  menu_callback=None, back_callback=None):
         super().__init__(parent)
         self.design_win = design_win
@@ -48,9 +48,13 @@ class ShearDesignWindow(QMainWindow):
         self.cb_type = QComboBox()
         self.cb_type.addItems(["Apoyada", "Volado"])
 
-        d_val = self.design_win.calc_effective_depth()
-        self.ed_d = QLineEdit(f"{d_val:.2f}")
-        self.ed_d.setReadOnly(True)
+        if self.design_win is not None:
+            d_val = self.design_win.calc_effective_depth()
+            self.ed_d = QLineEdit(f"{d_val:.2f}")
+            self.ed_d.setReadOnly(True)
+        else:
+            self.ed_d = QLineEdit("50.0")
+            self.ed_d.setReadOnly(False)
         self.ed_d.setAlignment(Qt.AlignRight)
 
         layout.addWidget(QLabel("Vu (T)"), 0, 0)
