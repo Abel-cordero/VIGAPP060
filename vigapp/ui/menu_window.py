@@ -338,14 +338,12 @@ class MenuWindow(QMainWindow):
         generar_reporte_html(datos, resultados, tabla, imagenes, seccion, dev_as)
 
     def open_cortante(self):
-        if not hasattr(self, "design_page"):
-            QMessageBox.warning(self, "Advertencia", "Primero complete el diseño por flexión")
-            return
+        design_win = getattr(self, "design_page", None)
         self.cortante_page = ShearDesignWindow(
-            self.design_page,
+            design_win,
             show_window=False,
             menu_callback=self.show_menu,
-            back_callback=self.show_design,
+            back_callback=self.show_design if design_win else None,
         )
         self.stacked.addWidget(self.cortante_page)
         self.stacked.setCurrentWidget(self.cortante_page)
