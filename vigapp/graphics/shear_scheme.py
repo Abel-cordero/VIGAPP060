@@ -43,16 +43,27 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
 
     h = 0.4
     support_w = 0.2
+    column_h = h * 1.2
     y0 = 0
     margin = ln * 0.1
     arrow_len = margin * 0.4
     dim_y1 = y0 - margin * 0.2
     dim_y2 = y0 - margin * 0.4
 
-    # Beam rectangle
+    # Beam rectangle and supports
     if beam_type == "volado":
         ax.add_patch(Rectangle((0, y0), ln, h, edgecolor="black", facecolor="none"))
-        ax.add_patch(Rectangle((-support_w, y0), support_w, h, facecolor="0.7"))
+        ax.add_patch(
+            Rectangle(
+                (-support_w, y0 - column_h),
+                support_w,
+                column_h,
+                facecolor="0.85",
+                edgecolor="black",
+                linewidth=2,
+                hatch="//",
+            )
+        )
 
         x_vu = ln - d
         ax.annotate(
@@ -79,6 +90,28 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
         ax.set_xlim(-support_w - margin, ln + margin)
     else:
         ax.add_patch(Rectangle((0, y0), ln, h, edgecolor="black", facecolor="none"))
+        ax.add_patch(
+            Rectangle(
+                (-support_w, y0 - column_h),
+                support_w,
+                column_h,
+                facecolor="0.85",
+                edgecolor="black",
+                linewidth=2,
+                hatch="//",
+            )
+        )
+        ax.add_patch(
+            Rectangle(
+                (ln, y0 - column_h),
+                support_w,
+                column_h,
+                facecolor="0.85",
+                edgecolor="black",
+                linewidth=2,
+                hatch="//",
+            )
+        )
 
         x_vu_left = d
         x_vu_right = ln - d
@@ -102,10 +135,6 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
         # Compression line
         ax.plot([0, ln], [h, 0], color="blue", lw=1)
 
-        # Support marks
-        mark_h = h * 0.25
-        ax.plot([0, 0], [y0, y0 - mark_h], color="black", lw=1)
-        ax.plot([ln, ln], [y0, y0 - mark_h], color="black", lw=1)
 
         # Dimension lines
         _dim_line(ax, 0, d, dim_y1, "d")
