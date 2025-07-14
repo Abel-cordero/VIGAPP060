@@ -78,8 +78,7 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
                 ln,
                 h,
                 edgecolor="black",
-                facecolor="0.85",
-                hatch="//",
+                facecolor="0.9",
                 linewidth=1,
                 zorder=1,
             )
@@ -128,8 +127,7 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
                 ln,
                 h,
                 edgecolor="black",
-                facecolor="0.85",
-                hatch="//",
+                facecolor="0.9",
                 linewidth=1,
                 zorder=1,
             )
@@ -138,7 +136,7 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
             Rectangle(
                 (-support_w, y0 - column_h),
                 support_w,
-                column_h + h,
+                column_h,
                 facecolor="0.85",
                 edgecolor="black",
                 hatch="//",
@@ -150,7 +148,7 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
             Rectangle(
                 (ln, y0 - column_h),
                 support_w,
-                column_h + h,
+                column_h,
                 facecolor="0.85",
                 edgecolor="black",
                 hatch="//",
@@ -177,7 +175,8 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
                 va="bottom",
                 fontsize=9,
             )
-            _dim_vline(ax, h, h + arrow_len, x_vu + 0.1, "d")
+
+        _dim_vline(ax, h, h + arrow_len, x_vu_left + 0.1, "d")
 
         # Compression line
         ax.plot([0, ln], [h, 0], color="blue", lw=1)
@@ -185,7 +184,6 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
 
         # Dimension lines
         _dim_line(ax, 0, d, dim_y1, "d")
-        _dim_line(ax, ln - d, ln, dim_y1, "d")
         _dim_line(ax, ln / 2, ln, dim_y1, "ln/2")
         _dim_line(ax, 0, ln, dim_y2, f"ln = {ln:.2f} m")
 
