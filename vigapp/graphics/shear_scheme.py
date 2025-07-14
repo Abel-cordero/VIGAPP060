@@ -4,6 +4,26 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
 
+def _dim_vline(ax, y1, y2, x, label, offset=0.05):
+    """Draw a vertical dimension line with a centered label."""
+    ax.annotate(
+        "",
+        xy=(x, y1),
+        xytext=(x, y2),
+        arrowprops=dict(arrowstyle="<->", color="black", lw=1),
+        annotation_clip=False,
+    )
+    ax.text(
+        x + offset,
+        (y1 + y2) / 2,
+        label,
+        ha="left",
+        va="center",
+        rotation=90,
+        fontsize=9,
+    )
+
+
 def _dim_line(ax, x1, x2, y, label, offset=0.15):
     """Draw a dimension line with a centered label."""
     ax.annotate(
@@ -42,8 +62,8 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
     ax.clear()
 
     h = 0.4
-    support_w = 0.2
-    column_h = h * 1.2
+    support_w = 0.5
+    column_h = 2.0
     y0 = 0
     margin = ln * 0.1
     arrow_len = margin * 0.4
@@ -52,16 +72,28 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
 
     # Beam rectangle and supports
     if beam_type == "volado":
-        ax.add_patch(Rectangle((0, y0), ln, h, edgecolor="black", facecolor="none"))
+        ax.add_patch(
+            Rectangle(
+                (0, y0),
+                ln,
+                h,
+                edgecolor="black",
+                facecolor="0.85",
+                hatch="//",
+                linewidth=1,
+                zorder=1,
+            )
+        )
         ax.add_patch(
             Rectangle(
                 (-support_w, y0 - column_h),
                 support_w,
-                column_h,
+                column_h + h,
                 facecolor="0.85",
                 edgecolor="black",
-                linewidth=2,
                 hatch="//",
+                linewidth=1,
+                zorder=2,
             )
         )
 
@@ -85,31 +117,45 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
         ax.plot([0, ln], [0, h], color="blue", lw=1)
 
         _dim_line(ax, x_vu, ln, dim_y1, "d")
+        _dim_vline(ax, h, h + arrow_len, x_vu + 0.1, "d")
         _dim_line(ax, 0, ln, dim_y2, f"ln = {ln:.2f} m")
 
         ax.set_xlim(-support_w - margin, ln + margin)
     else:
-        ax.add_patch(Rectangle((0, y0), ln, h, edgecolor="black", facecolor="none"))
+        ax.add_patch(
+            Rectangle(
+                (0, y0),
+                ln,
+                h,
+                edgecolor="black",
+                facecolor="0.85",
+                hatch="//",
+                linewidth=1,
+                zorder=1,
+            )
+        )
         ax.add_patch(
             Rectangle(
                 (-support_w, y0 - column_h),
                 support_w,
-                column_h,
+                column_h + h,
                 facecolor="0.85",
                 edgecolor="black",
-                linewidth=2,
                 hatch="//",
+                linewidth=1,
+                zorder=2,
             )
         )
         ax.add_patch(
             Rectangle(
                 (ln, y0 - column_h),
                 support_w,
-                column_h,
+                column_h + h,
                 facecolor="0.85",
                 edgecolor="black",
-                linewidth=2,
                 hatch="//",
+                linewidth=1,
+                zorder=2,
             )
         )
 
@@ -131,6 +177,7 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
                 va="bottom",
                 fontsize=9,
             )
+            _dim_vline(ax, h, h + arrow_len, x_vu + 0.1, "d")
 
         # Compression line
         ax.plot([0, ln], [h, 0], color="blue", lw=1)
@@ -138,6 +185,7 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
 
         # Dimension lines
         _dim_line(ax, 0, d, dim_y1, "d")
+        _dim_line(ax, ln - d, ln, dim_y1, "d")
         _dim_line(ax, ln / 2, ln, dim_y1, "ln/2")
         _dim_line(ax, 0, ln, dim_y2, f"ln = {ln:.2f} m")
 
