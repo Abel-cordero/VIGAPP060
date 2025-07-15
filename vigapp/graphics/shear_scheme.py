@@ -66,7 +66,7 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
     column_h = 2.0
     y0 = 0
     margin = ln * 0.1
-    arrow_len = margin * 0.4
+    arrow_len = 0.25
     dim_y1 = y0 - margin * 0.2
     dim_y2 = y0 - margin * 0.4
 
@@ -99,9 +99,9 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
         x_vu = ln - d
         ax.annotate(
             "",
-            xy=(x_vu, h),
-            xytext=(x_vu, h + arrow_len),
-            arrowprops=dict(arrowstyle="-|>", color="red", lw=2),
+            xy=(x_vu + arrow_len / 2, h + arrow_len),
+            xytext=(x_vu - arrow_len / 2, h + arrow_len),
+            arrowprops=dict(arrowstyle="<->", color="red", lw=2),
         )
         ax.text(
             x_vu,
@@ -115,8 +115,7 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
 
         ax.plot([0, ln], [0, h], color="blue", lw=1)
 
-        _dim_line(ax, x_vu, ln, dim_y1, "d")
-        _dim_vline(ax, h, h + arrow_len, x_vu + 0.1, "d")
+        _dim_vline(ax, 0, h, -support_w - margin * 0.3, "h")
         _dim_line(ax, 0, ln, dim_y2, f"ln = {ln:.2f} m")
 
         ax.set_xlim(-support_w - margin, ln + margin)
@@ -162,9 +161,9 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
         for x_vu in (x_vu_left, x_vu_right):
             ax.annotate(
                 "",
-                xy=(x_vu, h),
-                xytext=(x_vu, h + arrow_len),
-                arrowprops=dict(arrowstyle="-|>", color="red", lw=2),
+                xy=(x_vu + arrow_len / 2, h + arrow_len),
+                xytext=(x_vu - arrow_len / 2, h + arrow_len),
+                arrowprops=dict(arrowstyle="<->", color="red", lw=2),
             )
             ax.text(
                 x_vu,
@@ -176,15 +175,12 @@ def draw_shear_scheme(ax: plt.Axes, Vu: float, ln: float, d: float, beam_type: s
                 fontsize=9,
             )
 
-        _dim_vline(ax, h, h + arrow_len, x_vu_left + 0.1, "d")
-
         # Compression line
         ax.plot([0, ln], [h, 0], color="blue", lw=1)
 
 
         # Dimension lines
-        _dim_line(ax, 0, d, dim_y1, "d")
-        _dim_line(ax, ln / 2, ln, dim_y1, "ln/2")
+        _dim_vline(ax, 0, h, -margin * 0.3, "h")
         _dim_line(ax, 0, ln, dim_y2, f"ln = {ln:.2f} m")
 
         ax.set_xlim(-margin, ln + margin)

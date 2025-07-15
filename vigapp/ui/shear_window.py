@@ -46,8 +46,10 @@ class ShearDesignWindow(QMainWindow):
 
         self.ed_vu = QLineEdit("0.0")
         self.ed_vu.setAlignment(Qt.AlignRight)
+        self.ed_vu.setFixedWidth(70)
         self.ed_ln = QLineEdit("5.0")
         self.ed_ln.setAlignment(Qt.AlignRight)
+        self.ed_ln.setFixedWidth(70)
         self.cb_type = QComboBox()
         self.cb_type.addItems(["Apoyada", "Volado"])
 
@@ -72,12 +74,16 @@ class ShearDesignWindow(QMainWindow):
 
         self.ed_b = QLineEdit(b_def)
         self.ed_b.setAlignment(Qt.AlignRight)
+        self.ed_b.setFixedWidth(70)
         self.ed_h = QLineEdit(h_def)
         self.ed_h.setAlignment(Qt.AlignRight)
+        self.ed_h.setFixedWidth(70)
         self.ed_fc = QLineEdit(fc_def)
         self.ed_fc.setAlignment(Qt.AlignRight)
+        self.ed_fc.setFixedWidth(70)
         self.ed_fy = QLineEdit(fy_def)
         self.ed_fy.setAlignment(Qt.AlignRight)
+        self.ed_fy.setFixedWidth(70)
 
         self.cb_varilla = QComboBox()
         self.cb_varilla.addItems(['1/2"', '5/8"', '3/4"', '1"'])
@@ -94,6 +100,7 @@ class ShearDesignWindow(QMainWindow):
         self.ed_d = QLineEdit()
         self.ed_d.setReadOnly(True)
         self.ed_d.setAlignment(Qt.AlignRight)
+        self.ed_d.setFixedWidth(70)
 
         layout.addWidget(QLabel("Vu (T)"), 0, 0)
         layout.addWidget(self.ed_vu, 0, 1)
