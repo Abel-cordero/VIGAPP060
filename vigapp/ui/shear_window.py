@@ -129,15 +129,18 @@ class ShearDesignWindow(QMainWindow):
         btn_back = QPushButton("Atr\u00e1s")
         self.btn_calc = QPushButton("Calcular dise\u00f1o por corte")
         self.btn_pdf = QPushButton("Exportar reporte PDF")
+        self.btn_html = QPushButton("Exportar reporte HTML")
         self.btn_dxf = QPushButton("Exportar archivo DXF")
         self.btn_pdf.setEnabled(False)
+        self.btn_html.setEnabled(False)
         self.btn_dxf.setEnabled(False)
 
         layout.addWidget(btn_menu, 11, 0)
         layout.addWidget(btn_back, 11, 1)
         layout.addWidget(self.btn_calc, 12, 0, 1, 2)
         layout.addWidget(self.btn_pdf, 13, 0, 1, 2)
-        layout.addWidget(self.btn_dxf, 14, 0, 1, 2)
+        layout.addWidget(self.btn_html, 14, 0, 1, 2)
+        layout.addWidget(self.btn_dxf, 15, 0, 1, 2)
 
         self.fig, self.ax = plt.subplots(figsize=(5, 3), constrained_layout=True)
         self.canvas = FigureCanvas(self.fig)
@@ -162,6 +165,7 @@ class ShearDesignWindow(QMainWindow):
         self.cb_type.currentIndexChanged.connect(self.draw_diagram)
         self.btn_calc.clicked.connect(self.calculate)
         self.btn_pdf.clicked.connect(self.export_pdf)
+        self.btn_html.clicked.connect(self.export_html)
         self.btn_dxf.clicked.connect(self.export_dxf)
 
         self.update_depth()
@@ -210,10 +214,12 @@ class ShearDesignWindow(QMainWindow):
             fy=fy,
             stirrup_diam=self.cb_estribo.currentText(),
             phi_long=DIAM_CM.get(self.cb_varilla.currentText(), 0),
+            beam_type=self.cb_type.currentText().lower(),
         )
 
         self.draw_diagram()
         self.btn_pdf.setEnabled(True)
+        self.btn_html.setEnabled(True)
         self.btn_dxf.setEnabled(True)
 
     # ------------------------------------------------------------------
@@ -233,6 +239,24 @@ class ShearDesignWindow(QMainWindow):
             "fy": self.ed_fy.text(),
         }
         generate_shear_pdf(data, self.result, fig_path, "reporte_cortante.pdf")
+
+    # ------------------------------------------------------------------
+    def export_html(self):
+        from ..reporte_cortante_html import generar_reporte_cortante_html
+        if not hasattr(self, "result"):
+            return
+        fig_path = "shear_plot.png"
+        self.fig.savefig(fig_path, dpi=150)
+        data = {
+            "Vu": self.ed_vu.text(),
+            "Ln": self.ed_ln.text(),
+            "d": self.ed_d.text(),
+            "b": self.ed_b.text(),
+            "h": self.ed_h.text(),
+            "f'c": self.ed_fc.text(),
+            "fy": self.ed_fy.text(),
+        }
+        generar_reporte_cortante_html(data, self.result, fig_path)
 
     # ------------------------------------------------------------------
     def export_dxf(self):

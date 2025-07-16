@@ -12,6 +12,7 @@ def test_shear_design_sample():
         h=60,
         fc=210,
         phi_long=1.27,
+        beam_type="apoyada",
     )
     assert res.ok
     assert abs(res.S_sc - 12.55) < 0.1
@@ -24,3 +25,20 @@ def test_min_spacing():
     sr = max_spacing_sr(50)
     assert sc <= 15
     assert sr <= 25
+
+
+def test_stirrup_distribution():
+    res = shear_design(
+        Vu=40,
+        Ln=6,
+        d=50,
+        b=30,
+        h=60,
+        fc=210,
+        phi_long=1.27,
+        beam_type="apoyada",
+    )
+    assert res.n_sc > 0
+    assert res.n_sr > 0
+    assert res.sep_sc_real > 0
+    assert res.sep_sr_real > 0
