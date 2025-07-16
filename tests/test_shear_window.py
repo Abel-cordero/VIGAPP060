@@ -16,13 +16,15 @@ def test_shear_diagram_offscreen(monkeypatch):
     shear = ShearDesignWindow(design, show_window=False)
     shear.ed_vu.setText("30")
     shear.ed_ln.setText("6")
-    shear.draw_diagram()
+    shear.calculate()
     assert shear.ed_d.isReadOnly()
+    assert shear.btn_pdf.isEnabled()
+    assert shear.btn_dxf.isEnabled()
 
     shear2 = ShearDesignWindow(None, show_window=False)
     shear2.ed_vu.setText("30")
     shear2.ed_ln.setText("6")
-    shear2.draw_diagram()
+    shear2.calculate()
     assert shear2.ed_d.isReadOnly()
     app.quit()
 

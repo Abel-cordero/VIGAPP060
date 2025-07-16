@@ -127,20 +127,29 @@ class ShearDesignWindow(QMainWindow):
 
         btn_menu = QPushButton("Men\u00fa")
         btn_back = QPushButton("Atr\u00e1s")
+        self.btn_calc = QPushButton("Calcular dise\u00f1o por corte")
+        self.btn_pdf = QPushButton("Exportar reporte PDF")
+        self.btn_dxf = QPushButton("Exportar archivo DXF")
+        self.btn_pdf.setEnabled(False)
+        self.btn_dxf.setEnabled(False)
+
         layout.addWidget(btn_menu, 11, 0)
         layout.addWidget(btn_back, 11, 1)
+        layout.addWidget(self.btn_calc, 12, 0, 1, 2)
+        layout.addWidget(self.btn_pdf, 13, 0, 1, 2)
+        layout.addWidget(self.btn_dxf, 14, 0, 1, 2)
 
         self.fig, self.ax = plt.subplots(figsize=(5, 3), constrained_layout=True)
         self.canvas = FigureCanvas(self.fig)
-        layout.addWidget(self.canvas, 12, 0, 1, 2)
+        layout.addWidget(self.canvas, 15, 0, 1, 2)
 
         # Section figure displayed on the right side
         self.fig_sec, self.ax_sec = plt.subplots(figsize=(3, 3), constrained_layout=True)
         self.canvas_sec = FigureCanvas(self.fig_sec)
-        layout.addWidget(self.canvas_sec, 0, 2, 12, 1)
+        layout.addWidget(self.canvas_sec, 0, 2, 15, 1)
         self.lbl_props = QLabel("")
         self.lbl_props.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
-        layout.addWidget(self.lbl_props, 12, 2)
+        layout.addWidget(self.lbl_props, 15, 2)
 
         self.ed_vu.editingFinished.connect(self.draw_diagram)
         self.ed_ln.editingFinished.connect(self.draw_diagram)
@@ -151,6 +160,9 @@ class ShearDesignWindow(QMainWindow):
         btn_menu.clicked.connect(self.on_menu)
         btn_back.clicked.connect(self.on_back)
         self.cb_type.currentIndexChanged.connect(self.draw_diagram)
+        self.btn_calc.clicked.connect(self.calculate)
+        self.btn_pdf.clicked.connect(self.export_pdf)
+        self.btn_dxf.clicked.connect(self.export_dxf)
 
         self.update_depth()
         self.draw_diagram()
@@ -167,9 +179,74 @@ class ShearDesignWindow(QMainWindow):
         d = d_cm / 100.0
         beam_type = "volado" if self.cb_type.currentText().lower() == "volado" else "apoyada"
 
-        draw_shear_scheme(self.ax, Vu, L, d, beam_type)
+        h = float(self.ed_h.text()) / 100.0
+        draw_shear_scheme(self.ax, Vu, L, d, h, beam_type)
         self.canvas.draw()
         self.update_section()
+
+    # ------------------------------------------------------------------
+    def calculate(self):
+        """Run shear design calculations and enable exports."""
+        try:
+            Vu = float(self.ed_vu.text())
+            Ln = float(self.ed_ln.text())
+            d = float(self.ed_d.text())
+            b = float(self.ed_b.text())
+            h = float(self.ed_h.text())
+            fc = float(self.ed_fc.text())
+            fy = float(self.ed_fy.text())
+        except ValueError:
+            return
+
+        from ..models.shear_design import shear_design
+
+        self.result = shear_design(
+            Vu=Vu,
+            Ln=Ln,
+            d=d,
+            b=b,
+            h=h,
+            fc=fc,
+            fy=fy,
+            stirrup_diam=self.cb_estribo.currentText(),
+            phi_long=DIAM_CM.get(self.cb_varilla.currentText(), 0),
+        )
+
+        self.draw_diagram()
+        self.btn_pdf.setEnabled(True)
+        self.btn_dxf.setEnabled(True)
+
+    # ------------------------------------------------------------------
+    def export_pdf(self):
+        from ..pdf_engine.shear_report import generate_shear_pdf
+        if not hasattr(self, "result"):
+            return
+        fig_path = "shear_plot.png"
+        self.fig.savefig(fig_path, dpi=150)
+        data = {
+            "Vu": self.ed_vu.text(),
+            "Ln": self.ed_ln.text(),
+            "d": self.ed_d.text(),
+            "b": self.ed_b.text(),
+            "h": self.ed_h.text(),
+            "f'c": self.ed_fc.text(),
+            "fy": self.ed_fy.text(),
+        }
+        generate_shear_pdf(data, self.result, fig_path, "reporte_cortante.pdf")
+
+    # ------------------------------------------------------------------
+    def export_dxf(self):
+        from ..graphics.shear_dxf import export_shear_dxf
+        if not hasattr(self, "result"):
+            return
+        export_shear_dxf(
+            "esquema_cortante.dxf",
+            float(self.ed_vu.text()),
+            float(self.ed_ln.text()),
+            float(self.ed_d.text()) / 100.0,
+            float(self.ed_h.text()) / 100.0,
+            "volado" if self.cb_type.currentText().lower() == "volado" else "apoyada",
+        )
 
     # ------------------------------------------------------------------
     def on_menu(self):
