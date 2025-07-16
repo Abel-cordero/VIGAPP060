@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from math import sqrt
+from math import sqrt, ceil
 
 
 # Available stirrup diameters and areas (cm^2)
@@ -34,6 +34,10 @@ class ShearDesignResult:
     Lo: float
     Lc: float
     ok: bool
+    n_sc: int = 0
+    n_sr: int = 0
+    sep_sc_real: float = 0.0
+    sep_sr_real: float = 0.0
 
 
 def calc_vc(fc: float, b: float, d: float) -> float:
@@ -44,7 +48,7 @@ def calc_vc(fc: float, b: float, d: float) -> float:
 
 def min_spacing_sc(d: float, phi_long: float, phi_stirr: float) -> float:
     """Return minimum stirrup spacing for the confinement zone (cm)."""
-    opts = [max(d / 4.0, 15.0), 10.0 * phi_long, 24.0 * phi_stirr, 30.0]
+    opts = [d / 4.0, 10.0 * phi_long, 24.0 * phi_stirr, 30.0]
     return min(opts)
 
 
@@ -67,6 +71,7 @@ def shear_design(
     stirrup_diam: str = '3/8"',
     phi_long: float = 1.0,
     n_legs: int = 2,
+    beam_type: str = "apoyada",
 ) -> ShearDesignResult:
     """Compute stirrup spacing for a reinforced concrete beam."""
 
@@ -98,10 +103,33 @@ def shear_design(
     ok = Vu <= phi_Vc_Vs
 
     if system.lower() == "dual1":
-        Lo = 2.0 * h / 100.0
+        Lo_cm = 2.0 * h
     else:
-        Lo = 2.0 * d / 100.0
-    Lc = max(Ln - 2.0 * Lo, 0.0)
+        Lo_cm = 2.0 * d
+    Ln_cm = Ln * 100.0
+    if Ln_cm < 0:
+        Ln_cm = 0.0
+
+    if Ln_cm - (2.0 * Lo_cm) < 0:
+        Lc_cm = 0.0
+    else:
+        Lc_cm = Ln_cm - (2.0 * Lo_cm)
+
+    # Number of stirrups by zone and real spacing (cm)
+    if system.lower() == "volado":
+        Lc_cm = Ln_cm - Lo_cm
+        n_sc = ceil(Lo_cm / S_sc) if S_sc > 0 else 0
+        sep_sc = Lo_cm / n_sc if n_sc else 0.0
+        n_sr = ceil(Lc_cm / S_sr) if S_sr > 0 else 0
+        sep_sr = Lc_cm / n_sr if n_sr else 0.0
+    else:
+        n_sc = ceil(Lo_cm / S_sc) if S_sc > 0 else 0
+        sep_sc = Lo_cm / n_sc if n_sc else 0.0
+        n_sr = ceil(Lc_cm / S_sr) if S_sr > 0 else 0
+        sep_sr = Lc_cm / n_sr if n_sr else 0.0
+
+    Lo = Lo_cm / 100.0
+    Lc = Lc_cm / 100.0
 
     return ShearDesignResult(
         Vc=Vc,
@@ -113,5 +141,9 @@ def shear_design(
         Lo=Lo,
         Lc=Lc,
         ok=ok,
+        n_sc=n_sc,
+        n_sr=n_sr,
+        sep_sc_real=sep_sc,
+        sep_sr_real=sep_sr,
     )
 

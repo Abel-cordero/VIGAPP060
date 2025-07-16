@@ -130,3 +130,39 @@ def draw_shear_scheme(
     ax.set_ylim(y0 - column_h - margin * 0.3, h + margin * 0.6)
 
 
+def draw_stirrup_distribution(
+    ax: plt.Axes,
+    ln: float,
+    result,
+    beam_type: str = "apoyada",
+) -> None:
+    """Draw stirrup positions along the beam span."""
+
+    ax.clear()
+    x = 0.0
+    sc = result.sep_sc_real / 100.0
+    sr = result.sep_sr_real / 100.0
+
+    if beam_type == "volado":
+        for _ in range(result.n_sc):
+            ax.plot([x, x], [0, 1], color="k")
+            x += sc
+        for _ in range(result.n_sr):
+            ax.plot([x, x], [0, 1], color="k")
+            x += sr
+    else:
+        for _ in range(result.n_sc):
+            ax.plot([x, x], [0, 1], color="k")
+            x += sc
+        for _ in range(result.n_sr):
+            ax.plot([x, x], [0, 1], color="k")
+            x += sr
+        for _ in range(result.n_sc):
+            ax.plot([x, x], [0, 1], color="k")
+            x += sc
+
+    ax.set_xlim(0, ln)
+    ax.set_ylim(0, 1)
+    ax.axis("off")
+
+
