@@ -87,7 +87,7 @@ class ActivationDialog(QDialog):
             self,
             "Contacto",
             (
-                "COMUNICARSE AL SIGUIENTE CORREO PARA SOLICTAR LA CLAVE DE "
+                "COMUNICARSE AL SIGUIENTE CORREO PARA SOLICITAR LA CLAVE DE "
                 "ACTIVACION: abelcorderotineo99@gmail.com  cel y wsp : 922148420"
             ),
         )
