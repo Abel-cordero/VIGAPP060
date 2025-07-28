@@ -230,6 +230,7 @@ class ShearDesignWindow(QMainWindow):
             Ln,
             Vu=Vu,
             beam_type=self.cb_type.currentText().lower(),
+            h=float(self.ed_h.text()) / 100.0,
             show_window=True,
         )
 

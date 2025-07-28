@@ -133,36 +133,100 @@ def draw_shear_scheme(
 def draw_stirrup_distribution(
     ax: plt.Axes,
     ln: float,
+    h: float,
     result,
     beam_type: str = "apoyada",
 ) -> None:
-    """Draw stirrup positions along the beam span."""
+    """Draw stirrup positions along a shaded beam."""
 
     ax.clear()
-    x = 0.0
+
+    column_h = h + 0.2
+    column_w = 0.2
+    y0 = 0.0
+
+    if beam_type == "volado":
+        structure_pts = [
+            (-column_w, y0 - column_h),
+            (0, y0 - column_h),
+            (0, y0),
+            (ln, y0),
+            (ln, y0 + h),
+            (0, y0 + h),
+            (-column_w, y0 + h),
+        ]
+    else:
+        structure_pts = [
+            (-column_w, y0 - column_h),
+            (0, y0 - column_h),
+            (0, y0),
+            (ln, y0),
+            (ln, y0 - column_h),
+            (ln + column_w, y0 - column_h),
+            (ln + column_w, y0 + h),
+            (ln, y0 + h),
+            (0, y0 + h),
+            (-column_w, y0 + h),
+        ]
+
+    ax.add_patch(
+        Polygon(structure_pts, closed=True, facecolor="0.9", edgecolor="black", lw=1)
+    )
+
     sc = result.sep_sc_real / 100.0
     sr = result.sep_sr_real / 100.0
 
-    if beam_type == "volado":
+    # Left side
+    x = sc
+    for _ in range(result.n_sc):
+        if x >= ln:
+            break
+        ax.plot([x, x], [0, h], color="k")
+        x += sc
+
+    for _ in range(result.n_sr):
+        if x >= ln:
+            break
+        ax.plot([x, x], [0, h], color="k")
+        x += sr
+
+    if beam_type != "volado":
+        x = ln - sc * result.n_sc
         for _ in range(result.n_sc):
-            ax.plot([x, x], [0, 1], color="k")
-            x += sc
-        for _ in range(result.n_sr):
-            ax.plot([x, x], [0, 1], color="k")
-            x += sr
-    else:
-        for _ in range(result.n_sc):
-            ax.plot([x, x], [0, 1], color="k")
-            x += sc
-        for _ in range(result.n_sr):
-            ax.plot([x, x], [0, 1], color="k")
-            x += sr
-        for _ in range(result.n_sc):
-            ax.plot([x, x], [0, 1], color="k")
+            if x >= ln:
+                break
+            ax.plot([x, x], [0, h], color="k")
             x += sc
 
-    ax.set_xlim(0, ln)
-    ax.set_ylim(0, 1)
+    dim_y = y0 - 0.15 * h
+    if beam_type == "volado":
+        _dim_line(ax, 0, result.Lo, dim_y, f"Lo = {result.Lo:.2f} m")
+        _dim_line(
+            ax,
+            result.Lo,
+            result.Lo + result.Lc,
+            dim_y,
+            f"Lc = {result.Lc:.2f} m",
+        )
+    else:
+        _dim_line(ax, 0, result.Lo, dim_y, f"Lo = {result.Lo:.2f} m")
+        _dim_line(
+            ax,
+            result.Lo,
+            result.Lo + result.Lc,
+            dim_y,
+            f"Lc = {result.Lc:.2f} m",
+        )
+        _dim_line(
+            ax,
+            result.Lo + result.Lc,
+            ln,
+            dim_y,
+            f"Lo = {result.Lo:.2f} m",
+        )
+
+    ax.set_xlim(-column_w, ln + column_w)
+    ax.set_ylim(y0 - column_h - 0.1 * h, y0 + h + 0.1 * h)
     ax.axis("off")
 
 
