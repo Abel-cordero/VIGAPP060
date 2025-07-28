@@ -7,9 +7,9 @@ from vigapp.ui.shear_window import ShearDesignWindow
 import numpy as np
 
 
-def test_shear_diagram_offscreen(monkeypatch):
+def test_shear_diagram_offscreen(qapp, monkeypatch):
     monkeypatch.setenv("QT_QPA_PLATFORM", "offscreen")
-    app = QApplication([])
+    app = qapp
     mn = np.array([-10.0, -15.0, -20.0])
     mp = np.array([5.0, 10.0, 15.0])
     design = DesignWindow(mn, mp, show_window=False)
@@ -26,12 +26,10 @@ def test_shear_diagram_offscreen(monkeypatch):
     shear2.ed_ln.setText("6")
     shear2.calculate()
     assert shear2.ed_d.isReadOnly()
-    app.quit()
 
 
-def test_section_canvas_exists(monkeypatch):
+def test_section_canvas_exists(qapp, monkeypatch):
     monkeypatch.setenv("QT_QPA_PLATFORM", "offscreen")
-    app = QApplication([])
+    app = qapp
     shear = ShearDesignWindow(None, show_window=False)
     assert hasattr(shear, "canvas_sec")
-    app.quit()

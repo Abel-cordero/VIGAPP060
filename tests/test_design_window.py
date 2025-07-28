@@ -11,13 +11,12 @@ def test_calc_as_req_sample():
     assert abs(result - 13.2991) < 1e-4
 
 
-def test_required_areas_offscreen(monkeypatch):
+def test_required_areas_offscreen(qapp, monkeypatch):
     """Ensure required areas use the general formula with limits."""
     monkeypatch.setenv("QT_QPA_PLATFORM", "offscreen")
-    from PyQt5.QtWidgets import QApplication
     import numpy as np
 
-    app = QApplication([])
+    app = qapp
     mn = np.array([-10.0, -15.0, -20.0])
     mp = np.array([5.0, 10.0, 15.0])
     win = DesignWindow(mn, mp, show_window=False)
@@ -35,6 +34,4 @@ def test_required_areas_offscreen(monkeypatch):
     assert np.all(as_n <= win.as_max)
     assert np.all(as_p >= win.as_min)
     assert np.all(as_p <= win.as_max)
-
-    app.quit()
 
