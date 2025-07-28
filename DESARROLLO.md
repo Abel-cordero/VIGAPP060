@@ -26,7 +26,7 @@ Este documento reúne pautas básicas para contribuir al proyecto y mantener una
 
 ## Pruebas
 
-Aún no se cuenta con un conjunto formal de pruebas automatizadas. Si añades pruebas, guárdalas en una carpeta `tests/` y procura que puedan ejecutarse con `pytest`.
+Las pruebas unitarias se encuentran en la carpeta `tests/` y pueden ejecutarse con `pytest`.
 
 ## Extensión 3D
 
