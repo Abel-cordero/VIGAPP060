@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 from ..graphics.shear_scheme import draw_shear_scheme
 from .design.plots import draw_section
 from ..models.constants import DIAM_CM
+from .shear_result_window import ShearResultWindow
 
 
 class ShearDesignWindow(QMainWindow):
@@ -29,6 +30,7 @@ class ShearDesignWindow(QMainWindow):
         self.design_win = design_win
         self.menu_callback = menu_callback
         self.back_callback = back_callback
+        self.show_window = show_window
         self.setWindowTitle("Dise\u00f1o por Cortante")
         self._build_ui()
         # Wider window to display the beam section alongside the inputs
@@ -127,9 +129,9 @@ class ShearDesignWindow(QMainWindow):
 
         btn_menu = QPushButton("Men\u00fa")
         btn_back = QPushButton("Atr\u00e1s")
-        self.btn_calc = QPushButton("Calcular dise\u00f1o por corte")
-        self.btn_pdf = QPushButton("Exportar reporte PDF")
-        self.btn_html = QPushButton("Exportar reporte HTML")
+        self.btn_calc = QPushButton("Calcular")
+        self.btn_pdf = QPushButton("Reporte PDF")
+        self.btn_html = QPushButton("Reporte HTML")
         self.btn_dxf = QPushButton("Exportar archivo DXF")
         self.btn_pdf.setEnabled(False)
         self.btn_html.setEnabled(False)
@@ -221,6 +223,15 @@ class ShearDesignWindow(QMainWindow):
         self.btn_pdf.setEnabled(True)
         self.btn_html.setEnabled(True)
         self.btn_dxf.setEnabled(True)
+
+        # Show results window
+        self.result_win = ShearResultWindow(
+            self.result,
+            Ln,
+            Vu=Vu,
+            beam_type=self.cb_type.currentText().lower(),
+            show_window=self.show_window,
+        )
 
     # ------------------------------------------------------------------
     def export_pdf(self):
