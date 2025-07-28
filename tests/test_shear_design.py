@@ -42,3 +42,23 @@ def test_stirrup_distribution():
     assert res.n_sr > 0
     assert res.sep_sc_real > 0
     assert res.sep_sr_real > 0
+
+def test_cantilever_design():
+    """Shear design for a cantilever beam returns positive spacing."""
+    Ln = 6
+    res = shear_design(
+        Vu=25,
+        Ln=Ln,
+        d=45,
+        b=30,
+        h=60,
+        fc=210,
+        phi_long=1.27,
+        beam_type="volado",
+    )
+    assert res.ok
+    assert abs(res.Lc - (Ln - res.Lo)) < 1e-6
+    assert res.n_sc > 0
+    assert res.n_sr > 0
+    assert res.sep_sc_real > 0
+    assert res.sep_sr_real > 0
