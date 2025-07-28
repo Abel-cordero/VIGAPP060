@@ -230,7 +230,7 @@ class ShearDesignWindow(QMainWindow):
             Ln,
             Vu=Vu,
             beam_type=self.cb_type.currentText().lower(),
-            show_window=self.show_window,
+            show_window=True,
         )
 
     # ------------------------------------------------------------------
@@ -253,7 +253,7 @@ class ShearDesignWindow(QMainWindow):
 
     # ------------------------------------------------------------------
     def export_html(self):
-        from ..reporte_cortante_html import generar_reporte_cortante_html
+        from reporte_cortante_html import generar_reporte_cortante_html
         if not hasattr(self, "result"):
             return
         fig_path = "shear_plot.png"
