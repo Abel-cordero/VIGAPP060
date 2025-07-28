@@ -9,11 +9,12 @@ from ..graphics.shear_scheme import draw_stirrup_distribution
 class ShearResultWindow(QMainWindow):
     """Window that displays stirrup distribution and a summary."""
 
-    def __init__(self, result, ln, *, Vu=0.0, beam_type="apoyada", parent=None, show_window=True):
+    def __init__(self, result, ln, *, Vu=0.0, beam_type="apoyada", h=0.0, parent=None, show_window=True):
         super().__init__(parent)
         self.result = result
         self.ln = ln
         self.Vu = Vu
+        self.h = h
         self.beam_type = beam_type
         self.setWindowTitle("Resultados Cortante")
         self._build_ui()
@@ -25,7 +26,7 @@ class ShearResultWindow(QMainWindow):
         self.setCentralWidget(central)
         layout = QVBoxLayout(central)
 
-        self.fig, self.ax = plt.subplots(figsize=(6, 3))
+        self.fig, self.ax = plt.subplots(figsize=(8, 3))
         self.canvas = FigureCanvas(self.fig)
         layout.addWidget(self.canvas)
 
@@ -40,7 +41,9 @@ class ShearResultWindow(QMainWindow):
         self.lbl_summary.setAlignment(Qt.AlignTop)
         layout.addWidget(self.lbl_summary)
 
-        draw_stirrup_distribution(self.ax, self.ln, self.result, self.beam_type)
+        draw_stirrup_distribution(self.ax, self.ln, self.h, self.result, self.beam_type)
         self.ax.set_title("Distribuci\u00f3n de estribos")
         self.canvas.draw()
+
+        self.resize(900, 400)
 
