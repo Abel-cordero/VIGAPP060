@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QWidget,
     QGridLayout,
+    QHBoxLayout,
+    QVBoxLayout,
     QLabel,
     QLineEdit,
     QPushButton,
@@ -42,9 +44,23 @@ class ShearDesignWindow(QMainWindow):
     def _build_ui(self):
         central = QWidget()
         self.setCentralWidget(central)
-        layout = QGridLayout(central)
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setHorizontalSpacing(10)
+
+        # Main vertical layout: top area (inputs + section) and bottom area
+        main_layout = QVBoxLayout(central)
+        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setSpacing(10)
+
+        top_layout = QHBoxLayout()
+        top_layout.setSpacing(10)
+        main_layout.addLayout(top_layout)
+
+        # ------------------------------------------------------------------
+        # Part 1 - compact input data on the top-left
+        data_widget = QWidget()
+        data_layout = QGridLayout(data_widget)
+        data_layout.setContentsMargins(0, 0, 0, 0)
+        data_layout.setHorizontalSpacing(5)
+        data_layout.setVerticalSpacing(2)
 
         self.ed_vu = QLineEdit("0.0")
         self.ed_vu.setAlignment(Qt.AlignRight)
@@ -104,28 +120,28 @@ class ShearDesignWindow(QMainWindow):
         self.ed_d.setAlignment(Qt.AlignRight)
         self.ed_d.setFixedWidth(70)
 
-        layout.addWidget(QLabel("Vu (T)"), 0, 0)
-        layout.addWidget(self.ed_vu, 0, 1)
-        layout.addWidget(QLabel("Ln (m)"), 1, 0)
-        layout.addWidget(self.ed_ln, 1, 1)
-        layout.addWidget(QLabel("b (cm)"), 2, 0)
-        layout.addWidget(self.ed_b, 2, 1)
-        layout.addWidget(QLabel("h (cm)"), 3, 0)
-        layout.addWidget(self.ed_h, 3, 1)
-        layout.addWidget(QLabel("d (cm)"), 4, 0)
-        layout.addWidget(self.ed_d, 4, 1)
-        layout.addWidget(QLabel("f'c (kg/cm²)"), 5, 0)
-        layout.addWidget(self.ed_fc, 5, 1)
-        layout.addWidget(QLabel("fy (kg/cm²)"), 6, 0)
-        layout.addWidget(self.ed_fy, 6, 1)
-        layout.addWidget(QLabel("\u03c6 varilla"), 7, 0)
-        layout.addWidget(self.cb_varilla, 7, 1)
-        layout.addWidget(QLabel("\u03c6 estribo"), 8, 0)
-        layout.addWidget(self.cb_estribo, 8, 1)
-        layout.addWidget(QLabel("N\u00b0 capas"), 9, 0)
-        layout.addWidget(self.cb_layers, 9, 1)
-        layout.addWidget(QLabel("Tipo"), 10, 0)
-        layout.addWidget(self.cb_type, 10, 1)
+        data_layout.addWidget(QLabel("Vu (T)"), 0, 0)
+        data_layout.addWidget(self.ed_vu, 0, 1)
+        data_layout.addWidget(QLabel("Ln (m)"), 1, 0)
+        data_layout.addWidget(self.ed_ln, 1, 1)
+        data_layout.addWidget(QLabel("b (cm)"), 2, 0)
+        data_layout.addWidget(self.ed_b, 2, 1)
+        data_layout.addWidget(QLabel("h (cm)"), 3, 0)
+        data_layout.addWidget(self.ed_h, 3, 1)
+        data_layout.addWidget(QLabel("d (cm)"), 4, 0)
+        data_layout.addWidget(self.ed_d, 4, 1)
+        data_layout.addWidget(QLabel("f'c (kg/cm²)"), 5, 0)
+        data_layout.addWidget(self.ed_fc, 5, 1)
+        data_layout.addWidget(QLabel("fy (kg/cm²)"), 6, 0)
+        data_layout.addWidget(self.ed_fy, 6, 1)
+        data_layout.addWidget(QLabel("\u03c6 varilla"), 7, 0)
+        data_layout.addWidget(self.cb_varilla, 7, 1)
+        data_layout.addWidget(QLabel("\u03c6 estribo"), 8, 0)
+        data_layout.addWidget(self.cb_estribo, 8, 1)
+        data_layout.addWidget(QLabel("N\u00b0 capas"), 9, 0)
+        data_layout.addWidget(self.cb_layers, 9, 1)
+        data_layout.addWidget(QLabel("Tipo"), 10, 0)
+        data_layout.addWidget(self.cb_type, 10, 1)
 
         btn_menu = QPushButton("Men\u00fa")
         btn_back = QPushButton("Atr\u00e1s")
@@ -137,24 +153,37 @@ class ShearDesignWindow(QMainWindow):
         self.btn_html.setEnabled(False)
         self.btn_dxf.setEnabled(False)
 
-        layout.addWidget(btn_menu, 11, 0)
-        layout.addWidget(btn_back, 11, 1)
-        layout.addWidget(self.btn_calc, 12, 0, 1, 2)
-        layout.addWidget(self.btn_pdf, 13, 0, 1, 2)
-        layout.addWidget(self.btn_html, 14, 0, 1, 2)
-        layout.addWidget(self.btn_dxf, 15, 0, 1, 2)
+        data_layout.addWidget(btn_menu, 11, 0)
+        data_layout.addWidget(btn_back, 11, 1)
+        data_layout.addWidget(self.btn_calc, 12, 0, 1, 2)
+        data_layout.addWidget(self.btn_pdf, 13, 0, 1, 2)
+        data_layout.addWidget(self.btn_html, 14, 0, 1, 2)
+        data_layout.addWidget(self.btn_dxf, 15, 0, 1, 2)
 
-        self.fig, self.ax = plt.subplots(figsize=(5, 3), constrained_layout=True)
-        self.canvas = FigureCanvas(self.fig)
-        layout.addWidget(self.canvas, 15, 0, 1, 2)
+        top_layout.addWidget(data_widget)
 
-        # Section figure displayed on the right side
+        # Section figure displayed on the top-right
         self.fig_sec, self.ax_sec = plt.subplots(figsize=(3, 3), constrained_layout=True)
         self.canvas_sec = FigureCanvas(self.fig_sec)
-        layout.addWidget(self.canvas_sec, 0, 2, 15, 1)
         self.lbl_props = QLabel("")
         self.lbl_props.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
-        layout.addWidget(self.lbl_props, 15, 2)
+        sec_widget = QWidget()
+        sec_layout = QVBoxLayout(sec_widget)
+        sec_layout.setContentsMargins(0, 0, 0, 0)
+        sec_layout.addWidget(self.canvas_sec)
+        sec_layout.addWidget(self.lbl_props)
+        top_layout.addWidget(sec_widget)
+
+        # Distribute space evenly between top widgets and between top/bottom
+        top_layout.setStretch(0, 1)
+        top_layout.setStretch(1, 1)
+        main_layout.setStretch(0, 1)
+        main_layout.setStretch(1, 1)
+
+        # Bottom part - shear diagram across the width
+        self.fig, self.ax = plt.subplots(figsize=(5, 3), constrained_layout=True)
+        self.canvas = FigureCanvas(self.fig)
+        main_layout.addWidget(self.canvas)
 
         self.ed_vu.editingFinished.connect(self.draw_diagram)
         self.ed_ln.editingFinished.connect(self.draw_diagram)
