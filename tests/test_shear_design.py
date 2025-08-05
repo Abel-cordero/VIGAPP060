@@ -15,7 +15,8 @@ def test_shear_design_sample():
         beam_type="apoyada",
     )
     assert res.ok
-    assert abs(res.S_sc - 12.55) < 0.1
+    assert res.S_sc == int(res.S_sc)
+    assert abs(res.S_sc - 12) < 1e-6
     assert abs(res.Lc - 4.0) < 1e-6
     assert res.phi_Vc_Vs >= 30
 
