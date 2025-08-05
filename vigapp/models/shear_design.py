@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from math import sqrt, ceil
+from math import sqrt, ceil, floor
 
 
 # Available stirrup diameters and areas (cm^2)
@@ -97,6 +97,10 @@ def shear_design(
 
     S_sc = min(S_req, sc_min)
     S_sr = min(S_req, sr_max)
+
+    # Use whole-centimeter spacing for confinement and remaining zones
+    S_sc = max(floor(S_sc), 1.0)
+    S_sr = max(floor(S_sr), 1.0)
 
     Vs_prov = Av * fy * d / min(S_sc, S_sr) / 1000.0
     phi_Vc_Vs = phi * (Vc + Vs_prov)

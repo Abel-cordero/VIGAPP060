@@ -5,14 +5,9 @@ from matplotlib.patches import Polygon
 
 
 def _dim_vline(ax, y1, y2, x, label, offset=0.05):
-    """Draw a vertical dimension line with a centered label."""
-    ax.annotate(
-        "",
-        xy=(x, y1),
-        xytext=(x, y2),
-        arrowprops=dict(arrowstyle="<->", color="black", lw=1),
-        annotation_clip=False,
-    )
+    """Draw a vertical dimension line with circular end markers."""
+    ax.plot([x, x], [y1, y2], color="black", lw=1)
+    ax.scatter([x, x], [y1, y2], s=20, facecolors="white", edgecolors="black", zorder=3)
     ax.text(
         x + offset,
         (y1 + y2) / 2,
@@ -25,14 +20,9 @@ def _dim_vline(ax, y1, y2, x, label, offset=0.05):
 
 
 def _dim_line(ax, x1, x2, y, label, offset=0.15):
-    """Draw a dimension line with a centered label."""
-    ax.annotate(
-        "",
-        xy=(x1, y),
-        xytext=(x2, y),
-        arrowprops=dict(arrowstyle="<->", color="black", lw=1),
-        annotation_clip=False,
-    )
+    """Draw a horizontal dimension line with circular end markers."""
+    ax.plot([x1, x2], [y, y], color="black", lw=1)
+    ax.scatter([x1, x2], [y, y], s=20, facecolors="white", edgecolors="black", zorder=3)
     ax.text(
         (x1 + x2) / 2,
         y - offset,
@@ -197,32 +187,40 @@ def draw_stirrup_distribution(
                 break
             ax.plot([x, x], [0, h], color="k")
             x += sc
+    # Spacing dimensions
+    dim_y_sep = y0 - 0.05 * h
+    if result.n_sc > 0:
+        _dim_line(ax, 0, sc, dim_y_sep, f"S_sc \u2248 {result.S_sc:.0f} cm")
+        if beam_type != "volado":
+            _dim_line(ax, ln - sc, ln, dim_y_sep, f"S_sc \u2248 {result.S_sc:.0f} cm")
+    if result.n_sr > 0:
+        _dim_line(ax, result.Lo, result.Lo + sr, dim_y_sep, f"S_sr \u2248 {result.S_sr:.0f} cm")
 
     dim_y = y0 - 0.15 * h
     if beam_type == "volado":
-        _dim_line(ax, 0, result.Lo, dim_y, f"Lo = {result.Lo:.2f} m")
+        _dim_line(ax, 0, result.Lo, dim_y, f"Lo = {result.Lo:.2f} m (zona de confinamiento)")
         _dim_line(
             ax,
             result.Lo,
             result.Lo + result.Lc,
             dim_y,
-            f"Lc = {result.Lc:.2f} m",
+            f"Lc = {result.Lc:.2f} m (zona central)",
         )
     else:
-        _dim_line(ax, 0, result.Lo, dim_y, f"Lo = {result.Lo:.2f} m")
+        _dim_line(ax, 0, result.Lo, dim_y, f"Lo = {result.Lo:.2f} m (zona de confinamiento)")
         _dim_line(
             ax,
             result.Lo,
             result.Lo + result.Lc,
             dim_y,
-            f"Lc = {result.Lc:.2f} m",
+            f"Lc = {result.Lc:.2f} m (zona central)",
         )
         _dim_line(
             ax,
             result.Lo + result.Lc,
             ln,
             dim_y,
-            f"Lo = {result.Lo:.2f} m",
+            f"Lo = {result.Lo:.2f} m (zona de confinamiento)",
         )
 
     ax.set_xlim(-column_w, ln + column_w)
