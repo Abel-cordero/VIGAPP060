@@ -165,15 +165,17 @@ def draw_stirrup_distribution(
 
     sc = result.sep_sc_real / 100.0
     sr = result.sep_sr_real / 100.0
+    offset = 0.05
 
     # Left side
-    x = sc
+    x = offset
     for _ in range(result.n_sc):
         if x >= ln:
             break
         ax.plot([x, x], [0, h], color="k")
         x += sc
 
+    x = result.Lo + sr
     for _ in range(result.n_sr):
         if x >= ln:
             break
@@ -181,7 +183,7 @@ def draw_stirrup_distribution(
         x += sr
 
     if beam_type != "volado":
-        x = ln - sc * result.n_sc
+        x = ln - offset - sc * (result.n_sc - 1)
         for _ in range(result.n_sc):
             if x >= ln:
                 break
@@ -190,9 +192,9 @@ def draw_stirrup_distribution(
     # Spacing dimensions
     dim_y_sep = y0 - 0.05 * h
     if result.n_sc > 0:
-        _dim_line(ax, 0, sc, dim_y_sep, f"S_sc \u2248 {result.S_sc:.0f} cm")
+        _dim_line(ax, offset, offset + sc, dim_y_sep, f"S_sc \u2248 {result.S_sc:.0f} cm")
         if beam_type != "volado":
-            _dim_line(ax, ln - sc, ln, dim_y_sep, f"S_sc \u2248 {result.S_sc:.0f} cm")
+            _dim_line(ax, ln - offset - sc, ln - offset, dim_y_sep, f"S_sc \u2248 {result.S_sc:.0f} cm")
     if result.n_sr > 0:
         _dim_line(ax, result.Lo, result.Lo + sr, dim_y_sep, f"S_sr \u2248 {result.S_sr:.0f} cm")
 

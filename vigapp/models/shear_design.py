@@ -119,16 +119,13 @@ def shear_design(
         Lc_cm = max(Ln_cm - (2.0 * Lo_cm), 0.0)
 
     # Number of stirrups by zone and real spacing (cm)
-    if beam_type.lower() == "volado":
-        n_sc = ceil(Lo_cm / S_sc) if S_sc > 0 else 0
-        sep_sc = Lo_cm / n_sc if n_sc else 0.0
-        n_sr = ceil(Lc_cm / S_sr) if S_sr > 0 else 0
-        sep_sr = Lc_cm / n_sr if n_sr else 0.0
-    else:
-        n_sc = ceil(Lo_cm / S_sc) if S_sc > 0 else 0
-        sep_sc = Lo_cm / n_sc if n_sc else 0.0
-        n_sr = ceil(Lc_cm / S_sr) if S_sr > 0 else 0
-        sep_sr = Lc_cm / n_sr if n_sr else 0.0
+    offset_cm = 5.0  # first stirrup 5 cm from column face
+    sc_len = max(Lo_cm - offset_cm, 0.0)
+    n_sc = ceil(sc_len / S_sc) if S_sc > 0 else 0
+    sep_sc = sc_len / n_sc if n_sc else 0.0
+
+    n_sr = ceil(Lc_cm / S_sr) if S_sr > 0 else 0
+    sep_sr = Lc_cm / n_sr if n_sr else 0.0
 
     Lo = Lo_cm / 100.0
     Lc = Lc_cm / 100.0
