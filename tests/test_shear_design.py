@@ -63,3 +63,33 @@ def test_cantilever_design():
     assert res.n_sr > 0
     assert res.sep_sc_real > 0
     assert res.sep_sr_real > 0
+
+
+def test_first_stirrup_offset_supported():
+    res = shear_design(
+        Vu=35,
+        Ln=5,
+        d=45,
+        b=30,
+        h=55,
+        fc=210,
+        phi_long=1.27,
+        beam_type="apoyada",
+    )
+    offset = res.Lo * 100 - res.n_sc * res.sep_sc_real
+    assert abs(offset - 5) < 1e-6
+
+
+def test_first_stirrup_offset_cantilever():
+    res = shear_design(
+        Vu=25,
+        Ln=5,
+        d=40,
+        b=30,
+        h=50,
+        fc=210,
+        phi_long=1.27,
+        beam_type="volado",
+    )
+    offset = res.Lo * 100 - res.n_sc * res.sep_sc_real
+    assert abs(offset - 5) < 1e-6
