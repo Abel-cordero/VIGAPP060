@@ -21,6 +21,8 @@ Puedes instalar todas las dependencias de desarrollo con:
 pip install -r requirements-dev.txt
 ```
 
+`tests/conftest.py` ajusta automáticamente `PYTHONPATH` para que el paquete `vigapp` pueda importarse durante las pruebas, por lo que no es necesario modificar `sys.path` en los archivos de test.
+
 En entornos sin interfaz gráfica (por ejemplo, servidores de integración continua) establece `QT_QPA_PLATFORM=offscreen` para que Qt no requiera pantalla:
 
 ```bash
