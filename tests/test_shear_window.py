@@ -1,10 +1,6 @@
-import os
-import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from PyQt5.QtWidgets import QApplication
+import numpy as np
 from vigapp.ui.design_window import DesignWindow
 from vigapp.ui.shear_window import ShearDesignWindow
-import numpy as np
 
 
 def test_shear_diagram_offscreen(qapp, monkeypatch):

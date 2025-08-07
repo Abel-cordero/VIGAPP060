@@ -1,5 +1,3 @@
-import os, sys
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from vigapp.models.shear_design import shear_design, min_spacing_sc, max_spacing_sr
 
 
