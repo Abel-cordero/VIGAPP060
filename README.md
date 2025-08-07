@@ -60,6 +60,12 @@ Ejecuta las pruebas con:
 pytest
 ```
 
+## Integración continua
+
+Cada push o *pull request* activa un flujo de GitHub Actions que instala las dependencias (`pip install -r requirements.txt`) y ejecuta `pytest` con la variable `QT_QPA_PLATFORM=offscreen`.
+
+En la pestaña **Actions** se puede consultar el historial de ejecuciones. Un ✔️ verde indica que todas las pruebas pasaron; un ❌ rojo significa que alguna falló. Haz clic en **Details** para revisar los registros y corregir errores.
+
 ## Licencia
 
 Este proyecto se distribuye bajo los t\u00e9rminos de la [Licencia MIT](LICENSE).
