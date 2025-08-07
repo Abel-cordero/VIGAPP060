@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Reporte</title>
+<script src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+.page {
+  width: 21cm;
+  min-height: 29.7cm;
+  padding: 2.5cm 3cm;
+  margin: 1cm auto;
+  background: white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+h1, h2, h3 { text-align: left; margin-top: 1.5em; }
+.norma { font-size: 0.8em; color: #555; }
+table { border-collapse: collapse; width: 280px; margin-bottom: 1em; }
+td, th { border: 1px solid #000; padding: 5px 8px; }
+.formula, .reemplazo, .resultado { margin-left: 20px; font-size: 15px; }
+.imagen-centro { display: block; margin: 20px auto; max-width: 100%; }
+@media print { button { display: none; } body { background: white; } }
+</style>
+<script>
+function toggleEdit(btn,id){
+  var e=document.getElementById(id);
+  if(!e)return;
+  var ed=e.getAttribute('contenteditable')==='true';
+  e.setAttribute('contenteditable', ed?'false':'true');
+  btn.textContent=ed?'Editar':'Listo';
+}
+function exportWord(){
+  var html=document.documentElement.outerHTML;
+  var blob=new Blob(['\ufeff',html],{type:'application/msword'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='reporte.doc';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</head>
+<body>
+<div style='position:fixed; top:20px; right:20px;'><button onclick="window.print()">Exportar a PDF</button> <button onclick="exportWord()">Exportar a Word</button></div>
+<div class='page'>
+<h1 contenteditable='true'>{{ titulo }}</h1>
+<div style='display:flex; align-items:stretch; gap:20px; height:auto; min-height:270px;'>
+<div style='flex:1; display:flex; align-items:center;'>
+<table style='margin: 0;'>
+{% for item in datos %}
+<tr><td><b>{{ item.label }}</b></td><td>{{ item.value }}</td></tr>
+{% endfor %}
+</table>
+</div>
+<div style='flex:1; text-align:center; display:flex; align-items:center; justify-content:center;'>
+<img src="{{ section_rel or 'img_seccion_viga.png' }}" style="height:350px; width:auto; object-fit:contain; display:block; margin:auto;" alt="Sección">
+</div>
+</div>
+
+<h2>CÁLCULOS</h2>
+{% for block in blocks %}
+<h3 id="{{ block.hid }}" contenteditable='false'>{{ block.subt }} <button onclick="toggleEdit(this,'{{ block.hid }}')">Editar</button></h3>
+{% if block.gen %}
+<div id="{{ block.fid }}" class='formula' contenteditable='false'>$$ {{ block.gen }} $$ <button onclick="toggleEdit(this,'{{ block.fid }}')">Editar</button></div>
+{% endif %}
+{% if block.rep %}
+<div id="{{ block.rid }}" class='reemplazo' contenteditable='false'>$$ {{ block.rep }} $$ <button onclick="toggleEdit(this,'{{ block.rid }}')">Editar</button></div>
+{% endif %}
+{% if block.res %}
+<div id="{{ block.sid }}" class='resultado' contenteditable='false'>$$ {{ block.res }} $$ <button onclick="toggleEdit(this,'{{ block.sid }}')">Editar</button></div>
+{% endif %}
+{% endfor %}
+
+{% if calc_sections %}
+<h2>CALCULO DE AS REQUERIDO</h2>
+{% for cs in calc_sections %}
+<h3 id="{{ cs.hid }}" contenteditable='false'>{{ cs.title }} <button onclick="toggleEdit(this,'{{ cs.hid }}')">Editar</button></h3>
+{% for frm in cs.formulas %}
+<div id="{{ frm.id }}" class='formula' contenteditable='false'>$$ {{ frm.expr }} $$ <button onclick="toggleEdit(this,'{{ frm.id }}')">Editar</button></div>
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+{% if tabla or img_views %}
+</div><div class='page'>
+{% endif %}
+
+{% if tabla %}
+<h2>RESUMEN DE ACERO</h2>
+<table>
+<tr><th>Sección</th><th>AS REQUERIDO</th><th>AS DISEÑO</th><th>Estado</th></tr>
+{% for row in tabla %}
+<tr><td>{{ row.sec }}</td><td>{{ row.req }}</td><td>{{ row.dis }}</td><td>{{ row.est }}</td></tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% for img in img_views %}
+<img src='{{ img }}' class='imagen-centro' alt='Corte'>
+{% endfor %}
+
+</div>
+</body>
+</html>
