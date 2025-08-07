@@ -5,10 +5,7 @@ from typing import Optional
 from matplotlib.figure import Figure
 from PyQt5.QtWidgets import QWidget
 
-
-def color_for_diameter(diam):
-    """Return a color associated with a rebar diameter."""
-    return "#000000"
+from ..utils import color_for_diameter
 
 
 def latex_image(latex: str, fontsize: int = 6) -> str:

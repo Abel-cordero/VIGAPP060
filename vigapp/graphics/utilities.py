@@ -23,6 +23,7 @@ def _require_ezdxf() -> None:
         )
 
 from ..models.constants import DIAM_CM
+from ..utils import DIAM_COLOR
 
 # Clearance (cm) so bars do not overlap stirrups
 CLEARANCE = 0.2
@@ -111,8 +112,6 @@ def _color_index(color: str | int) -> int:
     return _COLOR_MAP.get(str(color).lower(), 7)
 
 
-_COLOR_ORDER = ["red", "blue", "yellow"]
-DIAM_COLOR = {key: _COLOR_ORDER[i % len(_COLOR_ORDER)] for i, key in enumerate(DIAM_CM.keys())}
 DIAM_COLOR_IDX = {k: _color_index(c) for k, c in DIAM_COLOR.items()}
 _COLOR_NAME_ES = {
     "red": "Rojo",
