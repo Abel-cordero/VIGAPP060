@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import webbrowser
 from typing import Any, Dict, List
@@ -16,7 +17,6 @@ def generar_reporte_html(
 ) -> None:
     """Genera un reporte HTML profesional usando una plantilla Jinja2."""
     os.makedirs("html_report", exist_ok=True)
-    import shutil
 
     img_views: List[str] = []
     if imagenes:
