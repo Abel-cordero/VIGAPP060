@@ -16,6 +16,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
+from math import ceil
 
 from ..graphics.shear_scheme import draw_shear_scheme
 from .design.plots import draw_section
@@ -149,6 +150,7 @@ class ShearDesignWindow(QMainWindow):
         self.btn_pdf = QPushButton("Reporte PDF")
         self.btn_html = QPushButton("Reporte HTML")
         self.btn_dxf = QPushButton("Exportar archivo DXF")
+        self.btn_manual = QPushButton("Cálculo manual")
         self.btn_pdf.setEnabled(False)
         self.btn_html.setEnabled(False)
         self.btn_dxf.setEnabled(False)
@@ -159,6 +161,38 @@ class ShearDesignWindow(QMainWindow):
         data_layout.addWidget(self.btn_pdf, 13, 0, 1, 2)
         data_layout.addWidget(self.btn_html, 14, 0, 1, 2)
         data_layout.addWidget(self.btn_dxf, 15, 0, 1, 2)
+        data_layout.addWidget(self.btn_manual, 16, 0, 1, 2)
+
+        self.manual_widget = QWidget()
+        manual_layout = QGridLayout(self.manual_widget)
+        self.ed_sep_ini = QLineEdit("5")
+        self.ed_sep_ini.setReadOnly(True)
+        self.ed_sep_ini.setAlignment(Qt.AlignRight)
+        self.ed_sep_ini.setFixedWidth(70)
+        self.ed_sep_conf_man = QLineEdit()
+        self.ed_sep_conf_man.setAlignment(Qt.AlignRight)
+        self.ed_sep_conf_man.setFixedWidth(70)
+        self.ed_sep_rest_man = QLineEdit()
+        self.ed_sep_rest_man.setAlignment(Qt.AlignRight)
+        self.ed_sep_rest_man.setFixedWidth(70)
+        self.ed_manual_result = QLineEdit()
+        self.ed_manual_result.setReadOnly(True)
+        self.ed_manual_result.setAlignment(Qt.AlignRight)
+        self.ed_manual_result.setFixedWidth(70)
+
+        manual_layout.addWidget(QLabel("Sep.ini (cm)"), 0, 0)
+        manual_layout.addWidget(self.ed_sep_ini, 0, 1)
+        manual_layout.addWidget(QLabel("Sep.zona.conf.man (cm)"), 1, 0)
+        manual_layout.addWidget(self.ed_sep_conf_man, 1, 1)
+        manual_layout.addWidget(QLabel("Sep.zona.rest.man (cm)"), 2, 0)
+        manual_layout.addWidget(self.ed_sep_rest_man, 2, 1)
+        manual_layout.addWidget(QLabel("Resultado"), 3, 0)
+        manual_layout.addWidget(self.ed_manual_result, 3, 1)
+
+        self.btn_manual_calc = QPushButton("Calcular")
+        manual_layout.addWidget(self.btn_manual_calc, 4, 0, 1, 2)
+        self.manual_widget.setVisible(False)
+        data_layout.addWidget(self.manual_widget, 17, 0, 1, 2)
 
         top_layout.addWidget(data_widget)
 
@@ -198,6 +232,8 @@ class ShearDesignWindow(QMainWindow):
         self.btn_pdf.clicked.connect(self.export_pdf)
         self.btn_html.clicked.connect(self.export_html)
         self.btn_dxf.clicked.connect(self.export_dxf)
+        self.btn_manual.clicked.connect(self.toggle_manual)
+        self.btn_manual_calc.clicked.connect(self.calculate_manual)
 
         self.update_depth()
         self.draw_diagram()
@@ -311,6 +347,56 @@ class ShearDesignWindow(QMainWindow):
             float(self.ed_d.text()) / 100.0,
             float(self.ed_h.text()) / 100.0,
             "volado" if self.cb_type.currentText().lower() == "volado" else "apoyada",
+        )
+
+    # ------------------------------------------------------------------
+    def toggle_manual(self):
+        self.manual_widget.setVisible(not self.manual_widget.isVisible())
+
+    # ------------------------------------------------------------------
+    def calculate_manual(self):
+        try:
+            Ln = float(self.ed_ln.text())
+            h = float(self.ed_h.text())
+            d = float(self.ed_d.text())
+            sep_conf = float(self.ed_sep_conf_man.text())
+            sep_rest = float(self.ed_sep_rest_man.text())
+        except ValueError:
+            return
+
+        from ..models.shear_design import shear_design
+
+        result = shear_design(
+            Vu=float(self.ed_vu.text() or 0),
+            Ln=Ln,
+            d=d,
+            b=float(self.ed_b.text() or 0),
+            h=h,
+            fc=float(self.ed_fc.text() or 0),
+            fy=float(self.ed_fy.text() or 0),
+            stirrup_diam=self.cb_estribo.currentText(),
+            phi_long=DIAM_CM.get(self.cb_varilla.currentText(), 0),
+            beam_type=self.cb_type.currentText().lower(),
+        )
+
+        Lo_cm = result.Lo * 100.0
+        Ln_cm = Ln * 100.0
+        sep_ini = 5.0
+        cant_conf = ceil(max(Lo_cm - sep_ini, 0.0) / sep_conf) if sep_conf > 0 else 0
+        if self.cb_type.currentText().lower() == "apoyada":
+            cant_total_conf = cant_conf * 2
+            lon_conf = cant_total_conf * sep_conf + 10.0
+        else:
+            cant_total_conf = cant_conf
+            lon_conf = cant_total_conf * sep_conf + 5.0
+
+        lon_rest = max(Ln_cm - lon_conf, 0.0)
+        cant_rest = ceil(lon_rest / sep_rest) - 1 if sep_rest > 0 else 0
+        if cant_rest < 0:
+            cant_rest = 0
+
+        self.ed_manual_result.setText(
+            f"Ct={cant_total_conf},Lc={lon_conf:.0f},Lr={lon_rest:.0f},Cr={cant_rest}"
         )
 
     # ------------------------------------------------------------------
